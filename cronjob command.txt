@@ -1,0 +1,1 @@
+/usr/bin/curl --silent https://namadomain.com/arsip/set_inactive_retensi_arsip	
