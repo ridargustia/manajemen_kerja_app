@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title><?php echo $page_title.' | '.$company_data->company_name ?></title>
+  <title><?php echo $page_title . ' | ' . $company_data->company_name ?></title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!-- Tell the browser to be responsive to screen width -->
@@ -20,5 +21,16 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <!-- Favicon -->
-  <link rel="shortcut icon" href="<?php echo base_url('assets/images/company/'.$company_data->company_photo_thumb) ?>" />
+  <link rel="shortcut icon" href="<?php echo base_url('assets/images/company/' . $company_data->company_photo) ?>" />
+  <style>
+    .bg {
+      /* The image used */
+      background-image: url("../assets/images/bg2.jpg");
+
+      /* Center and scale the image nicely */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
 </head>
