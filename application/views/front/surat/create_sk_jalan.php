@@ -22,7 +22,7 @@
                         <div class="col-lg-12">
                             <div class="box box-primary box-solid">
                                 <div class="box-header">
-                                    Form Pembuatan Surat Keterangan Domisili
+                                    Form Pembuatan Surat Keterangan Jalan
                                 </div>
                                 <div class="box-body">
                                     <div class="row">
@@ -54,25 +54,19 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Jenis Kelamin*</label>
                                                 <?php echo form_dropdown('', $gender_value, '', $gender) ?>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Status*</label>
-                                                <?php echo form_dropdown('', $status_value, '', $status) ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Agama*</label>
                                                 <?php echo form_dropdown('', $agama_value, '', $agama) ?>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Kebangsaan*</label>
                                                 <?php echo form_dropdown('', $kebangsaan_value, '', $kebangsaan) ?>
@@ -80,12 +74,48 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label">Pekerjaan*</label>
-                                        <?php echo form_input($pekerjaan) ?>
-                                    </div>
-                                    <div class="form-group">
                                         <label class="control-label">Alamat*</label>
                                         <?php echo form_textarea($address) ?>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Kepentingan*</label>
+                                                <?php echo form_input($kepentingan) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Tempat Tujuan*</label>
+                                                <?php echo form_input($tempat_tujuan) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Tanggal Berangkat*</label>
+                                                <?php echo form_input($tgl_berangkat) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Barang Yang Dibawa</label>
+                                                <?php echo form_input($barang_dibawa) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Lama Pergi</label>
+                                        <?php echo form_input($lama_pergi) ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Pengikut</label>
+                                        <?php echo form_input($pengikut) ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Lain-lain (Opsional)</label>
+                                        <?php echo form_input($lain_lain) ?>
                                     </div>
                                 </div>
                                 <div class="box-footer">
@@ -122,6 +152,13 @@
             });
 
             $('#birthdate').datepicker({
+                autoclose: true,
+                format: 'dd-mm-yyyy',
+                zIndexOffset: 9999,
+                todayHighlight: true,
+            });
+
+            $('#tgl_berangkat').datepicker({
                 autoclose: true,
                 format: 'dd-mm-yyyy',
                 zIndexOffset: 9999,

@@ -53,9 +53,10 @@ class Sk_domisili extends CI_Controller
             'name'          => 'gender',
             'id'            => 'gender',
             'class'         => 'form-control',
+            'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '-',
+            '0'             => '',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -63,9 +64,10 @@ class Sk_domisili extends CI_Controller
             'name'          => 'status',
             'id'            => 'status',
             'class'         => 'form-control',
+            'required'      => '',
         ];
         $this->data['status_value'] = [
-            '0'             => '-',
+            '0'             => '',
             '1'             => 'Belum Kawin',
             '2'             => 'Kawin',
             '3'             => 'Cerai Hidup',
@@ -75,9 +77,10 @@ class Sk_domisili extends CI_Controller
             'name'          => 'agama',
             'id'            => 'agama',
             'class'         => 'form-control',
+            'required'      => '',
         ];
         $this->data['agama_value'] = [
-            '0'             => '-',
+            '0'             => '',
             '1'             => 'Islam',
             '2'             => 'Kristen Protestan',
             '3'             => 'Kristen Katolik',
@@ -89,23 +92,26 @@ class Sk_domisili extends CI_Controller
             'name'          => 'kebangsaan',
             'id'            => 'kebangsaan',
             'class'         => 'form-control',
+            'required'      => '',
         ];
         $this->data['kebangsaan_value'] = [
-            '0'             => '-',
-            '1'             => 'WNI',
-            '2'             => 'WNA',
+            '0'             => '',
+            '1'             => 'Warga Negara Indonesia',
+            '2'             => 'Warga Negara Asing',
         ];
         $this->data['pekerjaan'] = [
             'name'          => 'pekerjaan',
             'id'            => 'pekerjaan',
             'class'         => 'form-control',
+            'required'      => '',
         ];
         $this->data['address'] = [
             'name'          => 'address',
             'id'            => 'address',
             'class'         => 'form-control',
             'autocomplete'  => 'off',
-            'rows'           => '2',
+            'rows'          => '2',
+            'required'      => '',
         ];
 
         $this->load->view('front/surat/create_sk_domisili', $this->data);

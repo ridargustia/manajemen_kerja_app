@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Skck extends CI_Controller
+class Sk_jalan extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
 
-        $this->data['module'] = 'Surat Keterangan (SKCK)';
+        $this->data['module'] = 'Surat Keterangan Jalan';
 
         $this->data['company_data']      = $this->Company_model->company_profile();
         $this->data['footer']            = $this->Footer_model->footer();
@@ -19,7 +19,7 @@ class Skck extends CI_Controller
 
     function create()
     {
-        $this->data['page_title'] = 'Surat Keterangan (SKCK)';
+        $this->data['page_title'] = 'Surat Keterangan Jalan';
 
         $this->data['name'] = [
             'name'          => 'name',
@@ -60,19 +60,6 @@ class Skck extends CI_Controller
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
-        $this->data['status'] = [
-            'name'          => 'status',
-            'id'            => 'status',
-            'class'         => 'form-control',
-            'required'      => '',
-        ];
-        $this->data['status_value'] = [
-            '0'             => '',
-            '1'             => 'Belum Kawin',
-            '2'             => 'Kawin',
-            '3'             => 'Cerai Hidup',
-            '4'             => 'Cerai Mati',
-        ];
         $this->data['agama'] = [
             'name'          => 'agama',
             'id'            => 'agama',
@@ -88,35 +75,16 @@ class Skck extends CI_Controller
             '5'             => 'Hindu',
             '6'             => 'Konghucu',
         ];
-        $this->data['pekerjaan'] = [
-            'name'          => 'pekerjaan',
-            'id'            => 'pekerjaan',
+        $this->data['kebangsaan'] = [
+            'name'          => 'kebangsaan',
+            'id'            => 'kebangsaan',
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['pekerjaan_value'] = [
+        $this->data['kebangsaan_value'] = [
             '0'             => '',
-            '1'             => 'PNS',
-            '2'             => 'Wiraswasta',
-            '3'             => 'Karyawan Swasta',
-            '4'             => 'Pensiunan',
-            '5'             => 'Belum/Tidak Bekerja',
-            '6'             => 'Pelajar/Mahasiswa',
-            '7'             => 'Lainnya',
-        ];
-        $this->data['pendidikan_akhir'] = [
-            'name'          => 'pendidikan_akhir',
-            'id'            => 'pendidikan_akhir',
-            'class'         => 'form-control',
-            'required'      => '',
-        ];
-        $this->data['pendidikan_akhir_value'] = [
-            '0'             => '',
-            '1'             => 'SD',
-            '2'             => 'SMP',
-            '3'             => 'SMA/SMK',
-            '4'             => 'Perguruan Tinggi',
-            '5'             => 'Lainnya',
+            '1'             => 'Warga Negara Indonesia',
+            '2'             => 'Warga Negara Asing',
         ];
         $this->data['address'] = [
             'name'          => 'address',
@@ -126,7 +94,45 @@ class Skck extends CI_Controller
             'rows'          => '2',
             'required'      => '',
         ];
+        $this->data['kepentingan'] = [
+            'name'          => 'kepentingan',
+            'id'            => 'kepentingan',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+        $this->data['tempat_tujuan'] = [
+            'name'          => 'tempat_tujuan',
+            'id'            => 'tempat_tujuan',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+        $this->data['tgl_berangkat'] = [
+            'name'          => 'tgl_berangkat',
+            'id'            => 'tgl_berangkat',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+        $this->data['barang_dibawa'] = [
+            'name'          => 'barang_dibawa',
+            'id'            => 'barang_dibawa',
+            'class'         => 'form-control',
+        ];
+        $this->data['lama_pergi'] = [
+            'name'          => 'lama_pergi',
+            'id'            => 'lama_pergi',
+            'class'         => 'form-control',
+        ];
+        $this->data['pengikut'] = [
+            'name'          => 'pengikut',
+            'id'            => 'pengikut',
+            'class'         => 'form-control',
+        ];
+        $this->data['lain_lain'] = [
+            'name'          => 'lain_lain',
+            'id'            => 'lain_lain',
+            'class'         => 'form-control',
+        ];
 
-        $this->load->view('front/surat/create_skck', $this->data);
+        $this->load->view('front/surat/create_sk_jalan', $this->data);
     }
 }
