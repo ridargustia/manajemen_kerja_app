@@ -192,6 +192,24 @@ class Sk_pindah extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
         ];
+        $this->data['nik_pengikut'] = [
+            'name'          => 'nik_pengikut[]',
+            'id'            => 'nik_pengikut',
+            'class'         => 'form-control',
+            'placeholder'   => 'NIK',
+        ];
+        $this->data['pengikut_name'] = [
+            'name'          => 'pengikut_name[]',
+            'id'            => 'pengikut_name',
+            'class'         => 'form-control',
+            'placeholder'   => 'Nama',
+        ];
+        $this->data['keterangan'] = [
+            'name'          => 'keterangan[]',
+            'id'            => 'keterangan',
+            'class'         => 'form-control',
+            'placeholder'   => 'Keterangan',
+        ];
 
         $this->load->view('front/surat/create_sk_pindah', $this->data);
     }

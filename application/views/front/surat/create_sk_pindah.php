@@ -152,6 +152,43 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Data Pengikut</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-sm btn-success add-more pull-right" type="button">
+                                                <i class="glyphicon glyphicon-plus"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row after-add-more">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <?php echo form_input($nik_pengikut) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <?php echo form_input($pengikut_name) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <?php echo form_input($keterangan) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="box-footer">
                                     <div class="pull-right">
                                         <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
@@ -163,6 +200,30 @@
                     </div>
                     <?php echo form_close() ?>
                     <!-- /.box -->
+
+                    <div class="copy hide">
+                        <div class="row add-row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <?php echo form_input($nik_pengikut) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <?php echo form_input($pengikut_name) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <?php echo form_input($keterangan) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-sm btn-danger remove" type="button"><i class="glyphicon glyphicon-remove"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
                 </section>
                 <!-- /.content -->
             </div>
@@ -183,6 +244,16 @@
         <script>
             $(document).ready(function() {
                 $('#dataTable').DataTable();
+
+                $(".add-more").click(function() {
+                    var html = $(".copy").html();
+                    $(".after-add-more").after(html);
+                });
+
+                //TODO Saat tombol remove dklik control group akan dihapus
+                $("body").on("click", ".remove", function() {
+                    $(this).parents(".add-row").remove();
+                });
             });
 
             $('#birthdate').datepicker({
