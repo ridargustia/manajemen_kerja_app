@@ -11,9 +11,9 @@ class Dashboard extends CI_Controller
 		$this->load->model(array('Peminjaman_model', 'Pengembalian_model', 'Arsip_model', 'Rak_model', 'Baris_model', 'Box_model', 'Map_model'));
 
 		$this->data['company_data']             = $this->Company_model->company_profile();
-    $this->data['layout_template']          = $this->Template_model->layout();
-    $this->data['skins_template']           = $this->Template_model->skins();
-    $this->data['footer']                   = $this->Footer_model->footer();
+		$this->data['layout_template']          = $this->Template_model->layout();
+		$this->data['skins_template']           = $this->Template_model->skins();
+		$this->data['footer']                   = $this->Footer_model->footer();
 
 		is_login();
 

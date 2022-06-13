@@ -20,54 +20,71 @@ class Auth extends CI_Controller
 
   function login()
   {
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Login';
     $this->data['action']     = 'auth/login';
 
+    //TODO Membuat validasi form
     $this->form_validation->set_rules('username', 'Username', 'trim|required');
     $this->form_validation->set_rules('password', 'Password', 'required');
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
-
+    //? Apakah data yang diinput sudah valid?
     if ($this->form_validation->run() === TRUE) {
+      //TODO Ambil data users berdasarkan username
       $row = $this->Auth_model->get_by_username($this->input->post('username'));
 
+      //TODO Cek status aktif instansi dari user
       $instansi_is_active_check = $this->Auth_model->get_user_by_instansi($this->input->post('username'));
 
+      //TODO Ambil data-data yang diperlukan
       $usertype_id = $this->Usertype_model->get_by_id($row->usertype_id);
       $instansi_id = $this->Instansi_model->get_by_id($row->instansi_id);
-      $cabang_id   = $this->Cabang_model->get_by_id($row->cabang_id);
       $divisi_id   = $this->Divisi_model->get_by_id($row->divisi_id);
 
-      if (!$row->username) {
+      if (!$row->username) {  //?Apakah username ada?
+        //TODO Kondisi dimana username tersedia
         $this->session->set_flashdata('message', '<div class="alert alert-danger">Username tidak ditemukan</div>');
         redirect('auth/login');
-      } elseif ($instansi_is_active_check->is_active == '0') {
+      } elseif ($instansi_is_active_check->is_active == '0') {  //? Apakah instansi aktif?
+        //TODO Kondisi dimana instansi status inaktif
         $this->session->set_flashdata('message', '<div class="alert alert-danger">Instansi Anda sedang tidak aktif, silahkan perpanjang dan hubungi MASTERADMIN dulu</div>');
         redirect('auth/login');
-      } elseif ($row->is_active == 0) {
+      } elseif ($row->is_active == 0) { //? Apakah akun ybs status aktif?
+        //TODO Kondisi dimana akun ybs status inaktif
         $this->session->set_flashdata('message', '<div class="alert alert-danger">Akun Anda sedang tidak Aktif</div>');
         redirect('auth/login');
-      } elseif (!password_verify($this->input->post('password'), $row->password)) {
+      } elseif (!password_verify($this->input->post('password'), $row->password)) { //? Apakah inputan password cocok dengan password data user dengan username ybs dari database?
+        //TODO Kondisi inputan password tidak cocok dengan password user dari database (Status Gagal Login)
+        //TODO Hitung jumlah percobaan login by username di database
         $log = $this->Auth_model->get_total_login_attempts_per_user($this->input->post('username'));
 
-        // kunci akun kalau gagal input password 3x
+        //TODO Kunci/block akun Jika gagal input password 3x
         if ($log > 2) {
+          //TODO Kunci/block akun dengan update status is_active menjadi 0
           $this->Auth_model->lock_account($this->input->post('username'), array('is_active' => '0'));
 
+          //TODO Hapus data user by username pada database tabel login_attemps (catatan gagal login)
           $this->Auth_model->clear_login_attempt($this->input->post('username'));
 
+          //TODO Tampilkan notifikasi akun diblokir
           $this->session->set_flashdata('message', '<div class="alert alert-danger">Terlalu banyak percobaan login, akun Anda kami nonaktifkan sementara. Silahkan kontak SUPERADMIN untuk membukanya kembali.</div>');
           redirect('auth/login');
         } else {
+          //TODO Simpan catatan gagal login ke database
           $this->Auth_model->insert_login_attempt(array('ip_address' => $this->input->ip_address(), 'username' => $this->input->post('username')));
 
+          //TODO Tampilkan notifikasi dan redirect
           $this->session->set_flashdata('message', '<div class="alert alert-danger">Password Salah</div>');
           redirect('auth/login');
         }
       } else {
+        //TODO Kondisi proses login SUKSES/BERHASIL
+        //TODO Hapus data user by username pada database tabel login_attemps (catatan gagal login)
         $this->Auth_model->clear_login_attempt($this->input->post('username'));
 
+        //TODO Buat Session dengan value sebagai berikut
         $session = array(
           'id_users'            => $row->id_users,
           'name'                => $row->name,
@@ -79,20 +96,20 @@ class Auth extends CI_Controller
           'instansi_name'       => $instansi_id->instansi_name,
           'instansi_img'        => $instansi_id->instansi_img,
           'instansi_img_thumb'  => $instansi_id->instansi_img_thumb,
-          'cabang_id'           => $row->cabang_id,
-          'cabang_name'         => $cabang_id->cabang_name,
           'divisi_id'           => $row->divisi_id,
           'divisi_name'         => $divisi_id->divisi_name,
           'photo'               => $row->photo,
-          'photo_thumb'         => $row->photo_thumb,          
+          'photo_thumb'         => $row->photo_thumb,
           'created_at'          => $row->created_at,
         );
 
+        //TODO setup userdata
         $this->session->set_userdata($session);
 
+        //TODO update data last login
         $this->Auth_model->update($this->session->id_users, array('last_login' => date('Y-m-d H:i:s')));
 
-        redirect('home');
+        redirect('admin/dashboard');
       }
     } else {
       $this->data['username'] = [
@@ -412,7 +429,7 @@ class Auth extends CI_Controller
           ];
 
           $this->load->library('email', $config);
-        
+
           // sender / from
           $this->email->from($this->data['company_data']->company_email, $this->data['company_data']->company_name);
           // target / mail receiver

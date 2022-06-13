@@ -20,7 +20,7 @@
   <style>
     .bg {
       /* The image used */
-      background-image: url("../assets/images/bg.jpg");
+      background-image: url("../assets/images/bg2.jpg");
 
       /* Center and scale the image nicely */
       background-position: center;
@@ -47,9 +47,9 @@
 <body class="hold-transition login-page bg">
   <div class="login-box">
     <div class="login-logo">
-      <img src="<?php echo base_url('assets/images/company/') . $company_data->company_photo ?>" width="200px" class="img-circle" alt="company-logo">
+      <img src="<?php echo base_url('assets/images/company/') . $company_data->company_photo ?>" width="130px" alt="company-logo">
     </div>
-    <div class="login-box-body">
+    <div class="login-box-body bg-gray-light">
       <p class="login-box-msg">Silahkan Isi Username dan Password Anda untuk Masuk ke Sistem</p>
       <?php if ($this->session->flashdata('message')) {
         echo $this->session->flashdata('message');
