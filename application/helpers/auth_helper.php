@@ -66,32 +66,6 @@ function is_superadmin()
   return null;
 }
 
-function is_admin()
-{
-  $CI = &get_instance();
-
-  $usertype = $CI->session->usertype_id;
-
-  if ($usertype == '3') {
-    return $usertype;
-  }
-
-  return null;
-}
-
-function is_pegawai()
-{
-  $CI = &get_instance();
-
-  $usertype = $CI->session->usertype_id;
-
-  if ($usertype == '4') {
-    return $usertype;
-  }
-
-  return null;
-}
-
 function is_read()
 {
   $CI = &get_instance();

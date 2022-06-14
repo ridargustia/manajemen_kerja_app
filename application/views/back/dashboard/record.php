@@ -1,83 +1,124 @@
 <!-- Small boxes (Stat box) -->
 <div class="row">
-  <div class="col-lg-4 col-sm-4 col-xs-12">
-    <div class="small-box bg-aqua">
+  <div class="col-lg-3 col-sm-3 col-xs-12">
+    <div class="small-box bg-blue">
       <div class="inner">
-        <h3><?php echo $get_total_peminjaman ?></h3>
-        <p>Peminjaman</p>
+        <h3><?php echo $get_total_skck ?></h3>
+        <p>SKCK</p>
       </div>
-      <div class="icon"><i class="fa fa-edit"></i></div>
-      <a href="<?php echo base_url('admin/peminjaman/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/skck/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-sm-3 col-xs-12">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3><?php echo $get_total_sk_domisili ?></h3>
+        <p>Surat Keterangan Domisili</p>
+      </div>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/sk_domisili/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-sm-3 col-xs-12">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3><?php echo $get_total_sk_jalan ?></h3>
+        <p>Surat Keterangan Jalan</p>
+      </div>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-sm-3 col-xs-12">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3><?php echo $get_total_sk_hilang_ktp ?></h3>
+        <p>SK Kehilangan KTP</p>
+      </div>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/skck/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-3 col-sm-3 col-xs-12">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3><?php echo $get_total_sk_meninggal_dunia ?></h3>
+        <p>SK Meninggal Dunia</p>
+      </div>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/sk_domisili/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-sm-3 col-xs-12">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3><?php echo $get_total_sk_nikah ?></h3>
+        <p>Surat Keterangan Nikah</p>
+      </div>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-sm-3 col-xs-12">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3><?php echo $get_total_sk_pindah ?></h3>
+        <p>Surat Keterangan Pindah</p>
+      </div>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/skck/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-sm-3 col-xs-12">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3><?php echo $get_total_sk_usaha ?></h3>
+        <p>Surat Keterangan Usaha</p>
+      </div>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/sk_domisili/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-4 col-sm-4 col-xs-12">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3><?php echo $get_total_surat_pengantar_nikah ?></h3>
+        <p>Surat Pengantar Nikah</p>
+      </div>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-4 col-sm-4 col-xs-12">
     <div class="small-box bg-blue">
       <div class="inner">
-        <h3><?php echo $get_total_pengembalian ?></h3>
-        <p>Pengembalian</p>
+        <h3><?php echo $get_total_surat_pernyataan_miskin ?></h3>
+        <p>Surat Pernyataan Miskin</p>
       </div>
-      <div class="icon"><i class="fa fa-edit"></i></div>
-      <a href="<?php echo base_url('admin/pengembalian/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-4 col-sm-4 col-xs-12">
-    <div class="small-box bg-maroon">
+    <div class="small-box bg-blue">
       <div class="inner">
-        <h3><?php echo $get_total_arsip ?></h3>
-        <p>Arsip</p>
+        <h3><?php echo $get_total_surat_rekomendasi ?></h3>
+        <p>Surat Rekomendasi</p>
       </div>
-      <div class="icon"><i class="fa fa-archive"></i></div>
-      <a href="<?php echo base_url('admin/arsip/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <div class="icon"><i class="fa fa-file-text-o"></i></div>
+      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
 </div>
 
-<?php if(!is_admin()){ ?>
-  <div class="row">
-  <div class="col-lg-3 col-xs-6">
-    <div class="small-box bg-green">
-      <div class="inner">
-        <h3><?php echo $get_total_rak ?></h3>
-        <p>Rak</p>
-      </div>
-      <div class="icon"><i class="fa fa-building"></i></div>
-      <a href="<?php echo base_url('admin/rak/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-xs-6">
-    <div class="small-box bg-green">
-      <div class="inner">
-        <h3><?php echo $get_total_baris ?></h3>
-        <p>Baris</p>
-      </div>
-      <div class="icon"><i class="fa fa-book"></i></div>
-      <a href="<?php echo base_url('admin/baris/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-xs-6">
-    <div class="small-box bg-teal">
-      <div class="inner">
-        <h3><?php echo $get_total_box ?></h3>
-        <p>Box</p>
-      </div>
-      <div class="icon"><i class="fa fa-inbox"></i></div>
-      <a href="<?php echo base_url('admin/box/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-xs-6">
-    <div class="small-box bg-teal">
-      <div class="inner">
-        <h3><?php echo $get_total_map ?></h3>
-        <p>Map</p>
-      </div>
-      <div class="icon"><i class="fa fa-bookmark"></i></div>
-      <a href="<?php echo base_url('admin/map/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-</div>
-<?php } ?>
-
-<?php if(is_grandadmin()){ ?>
+<?php if (is_grandadmin()) { ?>
   <div class="row">
     <div class="col-lg-3 col-xs-6">
       <div class="small-box bg-orange">
@@ -90,7 +131,7 @@
       </div>
     </div>
     <div class="col-lg-3 col-xs-6">
-      <div class="small-box bg-navy">
+      <div class="small-box bg-maroon">
         <div class="inner">
           <h3><?php echo $get_total_submenu ?></h3>
           <p>SubMenu</p>
@@ -117,20 +158,6 @@
         </div>
         <div class="icon"><i class="fa fa-legal"></i></div>
         <a href="<?php echo base_url('admin/usertype/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-  </div>
-
-<?php }elseif(is_masteradmin() and is_superadmin()){ ?>
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="small-box bg-red">
-        <div class="inner">
-          <h3><?php echo $get_total_user ?></h3>
-          <p>User</p>
-        </div>
-        <div class="icon"><i class="fa fa-user"></i></div>
-        <a href="<?php echo base_url('admin/auth/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
       </div>
     </div>
   </div>

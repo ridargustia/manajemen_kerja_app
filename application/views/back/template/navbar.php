@@ -3,11 +3,11 @@
   <a href="<?php echo base_url('admin/dashboard') ?>" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <span class="logo-mini">
-      <img src="<?php echo base_url('assets/images/company/'.$company_data->company_photo_thumb) ?>" alt="Company Logo" class="img-circle">
+      <img src="<?php echo base_url('assets/images/company/' . $company_data->company_photo_thumb) ?>" alt="Company Logo" style="width:40px">
     </span>
     <!-- logo for regular state and mobile devices -->
     <span class="logo-lg">
-      <img src="<?php echo base_url('assets/images/company/'.$company_data->company_photo_thumb) ?>" alt="Company Logo" class="img-circle">
+      <img src="<?php echo base_url('assets/images/company/' . $company_data->company_photo_thumb) ?>" alt="Company Logo" style="width:40px">
       <?php echo $company_data->company_name ?>
     </span>
   </a>
@@ -22,20 +22,20 @@
       <ul class="nav navbar-nav">
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <?php if($this->session->photo_thumb == NULL){ ?>
+            <?php if ($this->session->photo_thumb == NULL) { ?>
               <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" class="user-image" alt="User Image">
-            <?php } else{ ?>
-              <img src="<?php echo base_url('assets/images/user/'.$this->session->photo_thumb) ?>" class="user-image" alt="User Image">
+            <?php } else { ?>
+              <img src="<?php echo base_url('assets/images/user/' . $this->session->photo_thumb) ?>" class="user-image" alt="User Image">
             <?php } ?>
             <span class="hidden-xs"><?php echo $this->session->name ?></span>
           </a>
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
-              <?php if($this->session->photo_thumb == NULL){ ?>
+              <?php if ($this->session->photo_thumb == NULL) { ?>
                 <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" class="img-circle" alt="User Image" style="height:60px; width:60px;">
-              <?php } else{ ?>
-                <img src="<?php echo base_url('assets/images/user/'.$this->session->photo_thumb) ?>" class="img-circle" alt="User Image" style="height:60px; width:60px;">
+              <?php } else { ?>
+                <img src="<?php echo base_url('assets/images/user/' . $this->session->photo_thumb) ?>" class="img-circle" alt="User Image" style="height:60px; width:60px;">
               <?php } ?>
               <p>
                 <?php echo $this->session->username ?> - <?php echo $this->session->usertype_name ?>
@@ -48,7 +48,7 @@
             <li class="user-body">
               <div class="row">
                 <div class="col-xs-6 text-center">
-                  <a href="<?php echo base_url('admin/auth/update_profile/'.$this->session->id_users) ?>">Update Profile</a>
+                  <a href="<?php echo base_url('admin/auth/update_profile/' . $this->session->id_users) ?>">Update Profile</a>
                 </div>
                 <div class="col-xs-6 text-center">
                   <a href="<?php echo base_url('admin/auth/change_password') ?>">Ubah Password</a>
