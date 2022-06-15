@@ -9,10 +9,14 @@ class Skck extends CI_Controller
 
         $this->data['module'] = 'Surat Keterangan (SKCK)';
 
+        $this->load->model(array(
+            'Status_model', 'Agama_model', 'Pekerjaan_model', 'Pendidikan_akhir_model', 'Skck_model'
+        ));
+
         $this->data['company_data']      = $this->Company_model->company_profile();
         $this->data['footer']            = $this->Footer_model->footer();
 
-        $this->data['btn_submit'] = 'Submit';
+        $this->data['btn_submit'] = 'Kirim';
         $this->data['btn_reset']  = 'Reset';
         $this->data['btn_add']    = 'Tambah Data';
     }
@@ -20,6 +24,12 @@ class Skck extends CI_Controller
     function create()
     {
         $this->data['page_title'] = 'Surat Keterangan (SKCK)';
+        $this->data['action']     = 'skck/create_action';
+
+        $this->data['get_all_combobox_status'] = $this->Status_model->get_all_combobox();
+        $this->data['get_all_combobox_agama'] = $this->Agama_model->get_all_combobox();
+        $this->data['get_all_combobox_pekerjaan'] = $this->Pekerjaan_model->get_all_combobox();
+        $this->data['get_all_combobox_pendidikan_akhir'] = $this->Pendidikan_akhir_model->get_all_combobox();
 
         $this->data['name'] = [
             'name'          => 'name',
@@ -56,7 +66,7 @@ class Skck extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '',
+            '0'             => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -66,27 +76,11 @@ class Skck extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['status_value'] = [
-            '0'             => '',
-            '1'             => 'Belum Kawin',
-            '2'             => 'Kawin',
-            '3'             => 'Cerai Hidup',
-            '4'             => 'Cerai Mati',
-        ];
         $this->data['agama'] = [
             'name'          => 'agama',
             'id'            => 'agama',
             'class'         => 'form-control',
             'required'      => '',
-        ];
-        $this->data['agama_value'] = [
-            '0'             => '',
-            '1'             => 'Islam',
-            '2'             => 'Kristen Protestan',
-            '3'             => 'Kristen Katolik',
-            '4'             => 'Buddha',
-            '5'             => 'Hindu',
-            '6'             => 'Konghucu',
         ];
         $this->data['pekerjaan'] = [
             'name'          => 'pekerjaan',
@@ -94,29 +88,11 @@ class Skck extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['pekerjaan_value'] = [
-            '0'             => '',
-            '1'             => 'PNS',
-            '2'             => 'Wiraswasta',
-            '3'             => 'Karyawan Swasta',
-            '4'             => 'Pensiunan',
-            '5'             => 'Belum/Tidak Bekerja',
-            '6'             => 'Pelajar/Mahasiswa',
-            '7'             => 'Lainnya',
-        ];
         $this->data['pendidikan_akhir'] = [
             'name'          => 'pendidikan_akhir',
             'id'            => 'pendidikan_akhir',
             'class'         => 'form-control',
             'required'      => '',
-        ];
-        $this->data['pendidikan_akhir_value'] = [
-            '0'             => '',
-            '1'             => 'SD',
-            '2'             => 'SMP',
-            '3'             => 'SMA/SMK',
-            '4'             => 'Perguruan Tinggi',
-            '5'             => 'Lainnya',
         ];
         $this->data['address'] = [
             'name'          => 'address',
@@ -128,5 +104,47 @@ class Skck extends CI_Controller
         ];
 
         $this->load->view('front/surat/create_skck', $this->data);
+    }
+
+    function create_action()
+    {
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
+        $this->form_validation->set_rules('agama', 'Agama', 'required');
+        $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
+        $this->form_validation->set_rules('pendidikan_akhir', 'Pendidikan Terakhir', 'required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        if ($this->form_validation->run() === FALSE) {
+            $this->create();
+        } else {
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'nik'                   => $this->input->post('nik'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'gender'                => $this->input->post('gender'),
+                'status_id'             => $this->input->post('status'),
+                'agama_id'              => $this->input->post('agama'),
+                'pekerjaan_id'          => $this->input->post('pekerjaan'),
+                'pendidikan_akhir_id'   => $this->input->post('pendidikan_akhir'),
+                'address'               => $this->input->post('address'),
+            );
+
+            $this->Skck_model->insert($data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil di kirim. Mohon ditunggu hasilnya.</div>');
+            redirect('skck/create');
+        }
     }
 }

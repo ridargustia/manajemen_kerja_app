@@ -112,6 +112,7 @@ class Auth extends CI_Controller
         redirect('admin/dashboard');
       }
     } else {
+      //TODO Kondisi menampilkan halaman login
       $this->data['username'] = [
         'name'              => 'username',
         'id'                => 'username',
