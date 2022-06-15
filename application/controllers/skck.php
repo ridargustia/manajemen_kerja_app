@@ -23,14 +23,17 @@ class Skck extends CI_Controller
 
     function create()
     {
+        //TODO Inisialisasi variabel
         $this->data['page_title'] = 'Surat Keterangan (SKCK)';
         $this->data['action']     = 'skck/create_action';
 
+        //TODO Get data untuk dropdown reference
         $this->data['get_all_combobox_status'] = $this->Status_model->get_all_combobox();
         $this->data['get_all_combobox_agama'] = $this->Agama_model->get_all_combobox();
         $this->data['get_all_combobox_pekerjaan'] = $this->Pekerjaan_model->get_all_combobox();
         $this->data['get_all_combobox_pendidikan_akhir'] = $this->Pendidikan_akhir_model->get_all_combobox();
 
+        //TODO Rancangan form
         $this->data['name'] = [
             'name'          => 'name',
             'id'            => 'name',
@@ -103,11 +106,13 @@ class Skck extends CI_Controller
             'required'      => '',
         ];
 
+        //TODO Load view dengan mengirim data
         $this->load->view('front/surat/create_skck', $this->data);
     }
 
     function create_action()
     {
+        //TODO sistem validasi data inputan
         $this->form_validation->set_rules('name', 'Nama', 'trim|required');
         $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
         $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
@@ -123,9 +128,12 @@ class Skck extends CI_Controller
 
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+        //?Apakah validasi gagal?
         if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
         } else {
+            //TODO Simpan data ke array
             $data = array(
                 'name'                  => $this->input->post('name'),
                 'nik'                   => $this->input->post('nik'),
@@ -139,10 +147,12 @@ class Skck extends CI_Controller
                 'address'               => $this->input->post('address'),
             );
 
+            //TODO Post to database with model
             $this->Skck_model->insert($data);
 
             write_log();
 
+            //TODO Tampilkan notifikasi dan redirect
             $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil di kirim. Mohon ditunggu hasilnya.</div>');
             redirect('skck/create');
         }

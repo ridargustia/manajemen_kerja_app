@@ -10,7 +10,7 @@ function is_login()
   if ($username == NULL) {
     $CI->session->set_flashdata('message', '<div class="alert alert-danger">Anda harus login dulu</div>');
 
-    redirect('admin/auth/login');
+    redirect('auth/login');
   }
 }
 

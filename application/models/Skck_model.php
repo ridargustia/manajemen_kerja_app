@@ -11,4 +11,15 @@ class Skck_model extends CI_Model
     {
         $this->db->insert($this->table, $data);
     }
+
+    function get_all()
+    {
+        $this->db->select('skck.nik, skck.name, skck.created_at, skck.is_readed');
+
+        $this->db->where('skck.is_delete', '0');
+
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
 }
