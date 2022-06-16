@@ -93,6 +93,13 @@
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
+                  <?php
+                  }
+                } elseif ($m->menu_controller === 'sk_hilang_ktp') {
+                  $count = $this->Sk_hilang_ktp_model->total_rows_is_not_readed();
+                  if ($count > 0) {
+                  ?>
+                    <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                 <?php
                   }
                 }
