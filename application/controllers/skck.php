@@ -9,10 +9,6 @@ class Skck extends CI_Controller
 
         $this->data['module'] = 'Surat Keterangan (SKCK)';
 
-        $this->load->model(array(
-            'Status_model', 'Agama_model', 'Pekerjaan_model', 'Pendidikan_akhir_model', 'Skck_model'
-        ));
-
         $this->data['company_data']      = $this->Company_model->company_profile();
         $this->data['footer']            = $this->Footer_model->footer();
 
