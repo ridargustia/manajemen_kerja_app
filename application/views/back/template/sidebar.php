@@ -108,11 +108,13 @@
                     <i class="fa fa-circle-o"></i> <?php echo $sm->submenu_name ?>
                     <?php
                     if ($sm->submenu_function == 'index') {
+                      if ($count > 0) {
                     ?>
-                      <!-- <span class="pull-right-container"> -->
-                      <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:#696969;"><?php echo $count ?></span>
-                      <!-- </span> -->
-                    <?php } ?>
+                        <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:#696969;"><?php echo $count ?></span>
+                    <?php
+                      }
+                    }
+                    ?>
                   </a>
                 </li>
               <?php } ?>

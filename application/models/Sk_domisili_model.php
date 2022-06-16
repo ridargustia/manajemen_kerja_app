@@ -12,6 +12,17 @@ class Sk_domisili_model extends CI_Model
         $this->db->insert($this->table, $data);
     }
 
+    function get_all()
+    {
+        $this->db->select('sk_domisili.nik, sk_domisili.name, sk_domisili.created_at, sk_domisili.is_readed');
+
+        $this->db->where('sk_domisili.is_delete', '0');
+
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
     function total_rows_is_not_readed()
     {
         $this->db->where('sk_domisili.is_readed', '0');
