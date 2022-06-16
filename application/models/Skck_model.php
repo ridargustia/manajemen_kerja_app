@@ -22,4 +22,12 @@ class Skck_model extends CI_Model
 
         return $this->db->get($this->table)->result();
     }
+
+    function total_rows_is_not_readed()
+    {
+        $this->db->where('skck.is_readed', '0');
+        $this->db->where('skck.is_delete', '0');
+
+        return $this->db->get($this->table)->num_rows();
+    }
 }

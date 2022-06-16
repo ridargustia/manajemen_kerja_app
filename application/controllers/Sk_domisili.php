@@ -12,15 +12,22 @@ class Sk_domisili extends CI_Controller
         $this->data['company_data']      = $this->Company_model->company_profile();
         $this->data['footer']            = $this->Footer_model->footer();
 
-        $this->data['btn_submit'] = 'Submit';
+        $this->data['btn_submit'] = 'Kirim';
         $this->data['btn_reset']  = 'Reset';
         $this->data['btn_add']    = 'Tambah Data';
     }
 
     function create()
     {
+        //TODO Inisialisasi variabel
         $this->data['page_title'] = 'Surat Keterangan Domisili';
+        $this->data['action']     = 'sk_domisili/create_action';
 
+        //TODO Get data untuk dropdown reference
+        $this->data['get_all_combobox_status'] = $this->Status_model->get_all_combobox();
+        $this->data['get_all_combobox_agama'] = $this->Agama_model->get_all_combobox();
+
+        //TODO Rancangan form
         $this->data['name'] = [
             'name'          => 'name',
             'id'            => 'name',
@@ -56,7 +63,7 @@ class Sk_domisili extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '',
+            '0'             => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -66,27 +73,11 @@ class Sk_domisili extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['status_value'] = [
-            '0'             => '',
-            '1'             => 'Belum Kawin',
-            '2'             => 'Kawin',
-            '3'             => 'Cerai Hidup',
-            '4'             => 'Cerai Mati',
-        ];
         $this->data['agama'] = [
             'name'          => 'agama',
             'id'            => 'agama',
             'class'         => 'form-control',
             'required'      => '',
-        ];
-        $this->data['agama_value'] = [
-            '0'             => '',
-            '1'             => 'Islam',
-            '2'             => 'Kristen Protestan',
-            '3'             => 'Kristen Katolik',
-            '4'             => 'Buddha',
-            '5'             => 'Hindu',
-            '6'             => 'Konghucu',
         ];
         $this->data['kebangsaan'] = [
             'name'          => 'kebangsaan',
@@ -95,7 +86,7 @@ class Sk_domisili extends CI_Controller
             'required'      => '',
         ];
         $this->data['kebangsaan_value'] = [
-            '0'             => '',
+            '0'             => '- Pilih Kebangsaan -',
             '1'             => 'Warga Negara Indonesia',
             '2'             => 'Warga Negara Asing',
         ];
@@ -115,5 +106,53 @@ class Sk_domisili extends CI_Controller
         ];
 
         $this->load->view('front/surat/create_sk_domisili', $this->data);
+    }
+
+    function create_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
+        $this->form_validation->set_rules('agama', 'Agama', 'required');
+        $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
+        $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            $this->create();
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'nik'                   => $this->input->post('nik'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'gender'                => $this->input->post('gender'),
+                'status_id'             => $this->input->post('status'),
+                'agama_id'              => $this->input->post('agama'),
+                'kebangsaan'         => $this->input->post('kebangsaan'),
+                'pekerjaan'             => $this->input->post('pekerjaan'),
+                'address'               => $this->input->post('address'),
+            );
+
+            //TODO Post to database with model
+            $this->Sk_domisili_model->insert($data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil di kirim. Mohon ditunggu hasilnya.</div>');
+            redirect('sk_domisili/create');
+        }
     }
 }

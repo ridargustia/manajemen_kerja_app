@@ -35,18 +35,27 @@
       $menu = $this->db->get('menu')->result();
       ?>
 
-      <?php foreach ($menu as $m) { ?>
+      <?php
+      //TODO Menampilkan Menu
+      foreach ($menu as $m) {
+      ?>
         <!-- jika menu tidak punya submenu -->
-        <?php if ($m->submenu_id == NULL) { ?>
+        <?php
+        //TODO Kondisi Menu tidak memiliki Submenu
+        if ($m->submenu_id == NULL) {
+        ?>
           <?php if (current_url() == base_url('admin/') . $m->menu_controller . '/' . $m->menu_function) {
             $active = 'class="active"';
           } else {
             $active = '';
           } ?>
-          <li <?php echo $active ?>> <a href="<?php echo base_url('admin/') . $m->menu_controller . '/' . $m->menu_function ?>">
-              <i class="fa <?php echo $m->menu_icon ?>"></i> <span><?php echo $m->menu_name ?></span> </a>
+          <li <?php echo $active ?>>
+            <a href="<?php echo base_url('admin/') . $m->menu_controller . '/' . $m->menu_function ?>">
+              <i class="fa <?php echo $m->menu_icon ?>"></i> <span><?php echo $m->menu_name ?></span>
+            </a>
           </li>
         <?php } else {
+          //TODO Kondisi Menu memiliki Submenu
           $this->db->join('menu', 'submenu.id_submenu = menu.id_menu', 'LEFT');
           $this->db->join('menu_access', 'submenu.id_submenu = menu_access.submenu_id');
           $this->db->where('submenu.menu_id', $m->id_menu);
@@ -63,22 +72,56 @@
           <li <?php echo $actives ?>>
             <a href="#">
               <i class="fa <?php echo $m->menu_icon ?>"></i> <span><?php echo $m->menu_name ?></span>
-              <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+              <span class="pull-right-container">
+                <?php
+                if ($m->menu_controller === 'skck') {
+                  $count = $this->Skck_model->total_rows_is_not_readed();
+                  if ($count > 0) {
+                ?>
+                    <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
+                  <?php
+                  }
+                } elseif ($m->menu_controller === 'sk_domisili') {
+                  $count = $this->Sk_domisili_model->total_rows_is_not_readed();
+                  if ($count > 0) {
+                  ?>
+                    <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
+                <?php
+                  }
+                }
+                ?>
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
             </a>
             <ul class="treeview-menu">
-              <?php foreach ($submenu as $sm) { ?>
+              <?php
+              //TODO Menampilkan Submenu per Menu
+              foreach ($submenu as $sm) {
+              ?>
                 <?php if (current_url() == base_url('admin/') . $m->menu_controller . '/' . $sm->submenu_function) {
                   $active = 'class="active"';
                 } else {
                   $active = '';
                 } ?>
-                <li <?php echo $active ?>><a href="<?php echo base_url('admin/') . $m->menu_controller . '/' . $sm->submenu_function ?>"><i class="fa fa-circle-o"></i> <?php echo $sm->submenu_name ?></a> </li>
+                <li <?php echo $active ?>>
+                  <a href="<?php echo base_url('admin/') . $m->menu_controller . '/' . $sm->submenu_function ?>">
+                    <i class="fa fa-circle-o"></i> <?php echo $sm->submenu_name ?>
+                    <?php
+                    if ($sm->submenu_function == 'index') {
+                    ?>
+                      <!-- <span class="pull-right-container"> -->
+                      <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:#696969;"><?php echo $count ?></span>
+                      <!-- </span> -->
+                    <?php } ?>
+                  </a>
+                </li>
               <?php } ?>
             </ul>
           </li>
       <?php
         }
-      } ?>
+      }
+      ?>
 
       <li class="header">SETTINGS</li>
 
