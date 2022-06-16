@@ -63,7 +63,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Agama*</label>
-                                                <?php echo form_dropdown('', $agama_value, '', $agama) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_agama, '', $agama) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -153,14 +153,14 @@
 
             $('#birthdate').datepicker({
                 autoclose: true,
-                format: 'dd-mm-yyyy',
+                format: 'yyyy-mm-dd',
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
 
             $('#tgl_berangkat').datepicker({
                 autoclose: true,
-                format: 'dd-mm-yyyy',
+                format: 'yyyy-mm-dd',
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });

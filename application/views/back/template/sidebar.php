@@ -110,7 +110,7 @@
                     if ($sm->submenu_function == 'index') {
                       if ($count > 0) {
                     ?>
-                        <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:#696969;"><?php echo $count ?></span>
+                        <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 5px; background-color:#696969; border-radius:5px;"><?php echo $count ?></span>
                     <?php
                       }
                     }
