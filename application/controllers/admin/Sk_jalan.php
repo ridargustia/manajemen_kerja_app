@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Sk_domisili extends CI_Controller
+class Sk_jalan extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
 
-        $this->data['module'] = 'Surat Keterangan Domisili';
+        $this->data['module'] = 'Surat Keterangan Jalan';
 
         $this->data['company_data']             = $this->Company_model->company_profile();
         $this->data['layout_template']          = $this->Template_model->layout();
@@ -17,7 +17,7 @@ class Sk_domisili extends CI_Controller
         $this->data['btn_submit'] = 'Simpan';
         $this->data['btn_reset']  = 'Reset';
         $this->data['btn_add']    = 'Tambah Data';
-        $this->data['add_action'] = base_url('admin/sk_domisili/create');
+        $this->data['add_action'] = base_url('admin/sk_jalan/create');
 
         is_login();
 
@@ -35,9 +35,9 @@ class Sk_domisili extends CI_Controller
         is_read();
         //TODO Inisialisasi variabel judul
         $this->data['page_title'] = 'Data ' . $this->data['module'];
-        //TODO Get data SK Domisili dari database
-        $this->data['get_all'] = $this->Sk_domisili_model->get_all();
+        //TODO Get data SK Jalan dari database
+        $this->data['get_all'] = $this->Sk_jalan_model->get_all();
 
-        $this->load->view('back/sk_domisili/sk_domisili_list', $this->data);
+        $this->load->view('back/sk_jalan/sk_jalan_list', $this->data);
     }
 }

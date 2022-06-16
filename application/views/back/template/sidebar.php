@@ -86,6 +86,13 @@
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
+                  <?php
+                  }
+                } elseif ($m->menu_controller === 'sk_jalan') {
+                  $count = $this->Sk_jalan_model->total_rows_is_not_readed();
+                  if ($count > 0) {
+                  ?>
+                    <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                 <?php
                   }
                 }
@@ -106,15 +113,6 @@
                 <li <?php echo $active ?>>
                   <a href="<?php echo base_url('admin/') . $m->menu_controller . '/' . $sm->submenu_function ?>">
                     <i class="fa fa-circle-o"></i> <?php echo $sm->submenu_name ?>
-                    <?php
-                    if ($sm->submenu_function == 'index') {
-                      if ($count > 0) {
-                    ?>
-                        <span class="badge" style="margin-top: 0px; font-size:11px; padding: 3px 5px; background-color:#696969; border-radius:5px;"><?php echo $count ?></span>
-                    <?php
-                      }
-                    }
-                    ?>
                   </a>
                 </li>
               <?php } ?>
