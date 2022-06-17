@@ -114,6 +114,13 @@
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
+                  <?php
+                  }
+                } elseif ($m->menu_controller === 'sk_usaha') {
+                  $count = $this->Sk_usaha_model->total_rows_is_not_readed();
+                  if ($count > 0) {
+                  ?>
+                    <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                 <?php
                   }
                 }
