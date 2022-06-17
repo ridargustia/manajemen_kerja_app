@@ -35,7 +35,6 @@
                                 <tr>
                                     <th style="text-align: center">No</th>
                                     <th style="text-align: center">Nama</th>
-                                    <th style="text-align: center">NIK</th>
                                     <th style="text-align: center">Dibuat pada</th>
                                     <th class="hidden" style="text-align: center">Is Readed</th>
                                     <th style="text-align: center">Aksi</th>
@@ -45,13 +44,12 @@
                                 <?php $no = 1;
                                 foreach ($get_all as $data) {
                                     //TODO Create Action Button
-                                    $detail = '<a href="' . base_url('admin/skck/update/' . $data->id_skck) . '" class="btn btn-primary" title="Detail Data"><i class="fa fa-eye"></i></a>';
-                                    $delete = '<a href="' . base_url('admin/skck/delete/' . $data->id_skck) . '" onClick="return confirm(\'Are you sure?\');" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
+                                    $detail = '<a href="' . base_url('admin/sk_meninggal_dunia/update/' . $data->id_sk_meninggal_dunia) . '" class="btn btn-primary" title="Detail Data"><i class="fa fa-eye"></i></a>';
+                                    $delete = '<a href="' . base_url('admin/sk_meninggal_dunia/delete/' . $data->id_sk_meninggal_dunia) . '" onClick="return confirm(\'Are you sure?\');" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
                                 ?>
                                     <tr>
                                         <td style="text-align: center"><?php echo $no++ ?></td>
                                         <td style="text-align: center"><?php echo $data->name ?></td>
-                                        <td style="text-align: center"><?php echo $data->nik ?></td>
                                         <td style="text-align: center"><?php echo datetime_indo3($data->created_at) ?></td>
                                         <td class="hidden" style="text-align: center"><?php echo $data->is_readed ?></td>
                                         <td style="text-align: center"><?php echo $detail ?> <?php echo $delete ?></td>
@@ -78,7 +76,7 @@
         $(document).ready(function() {
             $('#dataTable').DataTable({
                 "rowCallback": function(row, data, index) {
-                    if (data[4] == "0") {
+                    if (data[3] == "0") {
                         $('td', row).css('background-color', '#DCDCDC');
                     }
                 }

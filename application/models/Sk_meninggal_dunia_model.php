@@ -14,7 +14,7 @@ class Sk_meninggal_dunia_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_meninggal_dunia.nik, sk_meninggal_dunia.name, sk_meninggal_dunia.created_at, sk_meninggal_dunia.is_readed');
+        $this->db->select('sk_meninggal_dunia.name, sk_meninggal_dunia.created_at, sk_meninggal_dunia.is_readed');
 
         $this->db->where('sk_meninggal_dunia.is_delete', '0');
 
