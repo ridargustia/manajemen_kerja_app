@@ -53,7 +53,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Pekerjaan*</label>
-                                                <?php echo form_dropdown('', $pekerjaan_value, '', $pekerjaan) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_pekerjaan, '', $pekerjaan) ?>
                                             </div>
                                         </div>
                                     </div>
@@ -68,6 +68,11 @@
                                                 <?php echo form_input($tgl_meninggal) ?>
                                             </div>
                                         </div>
+                                        <!-- <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Time*</label>
+                                            </div>
+                                        </div> -->
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Penyebab Meninggal Dunia*</label>
@@ -104,24 +109,24 @@
         <link rel="stylesheet" href="<?php echo base_url('assets/plugins/') ?>bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
         <script src="<?php echo base_url('assets/plugins/') ?>bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
-        <script>
+        <script type="text/javascript">
             $(document).ready(function() {
                 $('#dataTable').DataTable();
             });
 
             $('#birthdate').datepicker({
                 autoclose: true,
-                format: 'dd-mm-yyyy',
+                format: 'yyyy-mm-dd',
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
 
-            $('#tgl_meninggal').datepicker({
-                autoclose: true,
-                format: 'dd-mm-yyyy',
-                zIndexOffset: 9999,
-                todayHighlight: true,
-            });
+            // $('#tgl_meninggal').datepicker({
+            //     autoclose: true,
+            //     format: 'yyyy-mm-dd',
+            //     zIndexOffset: 9999,
+            //     todayHighlight: true,
+            // });
         </script>
 
 </body>

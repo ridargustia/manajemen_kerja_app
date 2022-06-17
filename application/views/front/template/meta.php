@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <!-- Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url('assets/images/company/' . $company_data->company_photo) ?>" />
+
   <style>
     .bg {
       /* The image used */
