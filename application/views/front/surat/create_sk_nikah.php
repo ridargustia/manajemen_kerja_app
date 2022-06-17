@@ -62,7 +62,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Status Pernikahan*</label>
-                                                <?php echo form_dropdown('', $status_value, '', $suami_status) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_status, '', $suami_status) ?>
                                             </div>
                                         </div>
                                     </div>
@@ -70,7 +70,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Agama*</label>
-                                                <?php echo form_dropdown('', $agama_value, '', $suami_agama) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_agama, '', $suami_agama) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -119,7 +119,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Status Pernikahan*</label>
-                                                <?php echo form_dropdown('', $status_value, '', $istri_status) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_status, '', $istri_status) ?>
                                             </div>
                                         </div>
                                     </div>
@@ -127,7 +127,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Agama*</label>
-                                                <?php echo form_dropdown('', $agama_value, '', $istri_agama) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_agama, '', $istri_agama) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -173,14 +173,14 @@
 
             $('#suami_birthdate').datepicker({
                 autoclose: true,
-                format: 'dd-mm-yyyy',
+                format: 'yyyy-mm-dd',
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
 
             $('#istri_birthdate').datepicker({
                 autoclose: true,
-                format: 'dd-mm-yyyy',
+                format: 'yyyy-mm-dd',
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
