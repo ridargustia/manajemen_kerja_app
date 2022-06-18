@@ -68,11 +68,6 @@
                                                 <?php echo form_input($tgl_meninggal) ?>
                                             </div>
                                         </div>
-                                        <!-- <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="control-label">Time*</label>
-                                            </div>
-                                        </div> -->
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Penyebab Meninggal Dunia*</label>

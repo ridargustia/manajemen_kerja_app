@@ -12,15 +12,23 @@ class Surat_pengantar_nikah extends CI_Controller
         $this->data['company_data']      = $this->Company_model->company_profile();
         $this->data['footer']            = $this->Footer_model->footer();
 
-        $this->data['btn_submit'] = 'Submit';
+        $this->data['btn_submit'] = 'Kirim';
         $this->data['btn_reset']  = 'Reset';
         $this->data['btn_add']    = 'Tambah Data';
     }
 
     function create()
     {
+        //TODO Inisialisasi variabel
         $this->data['page_title'] = 'Surat Pengantar Bepergian Untuk Nikah';
+        $this->data['action']     = 'surat_pengantar_nikah/create_action';
 
+        //TODO Get data untuk dropdown reference
+        $this->data['get_all_combobox_agama'] = $this->Agama_model->get_all_combobox();
+        $this->data['get_all_combobox_status'] = $this->Status_model->get_all_combobox();
+        $this->data['get_all_combobox_pekerjaan'] = $this->Pekerjaan_model->get_all_combobox();
+
+        //TODO Rancangan form
         $this->data['name'] = [
             'name'          => 'name',
             'id'            => 'name',
@@ -49,7 +57,7 @@ class Surat_pengantar_nikah extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '',
+            '0'             => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -74,7 +82,7 @@ class Surat_pengantar_nikah extends CI_Controller
             'required'      => '',
         ];
         $this->data['kebangsaan_value'] = [
-            '0'             => '',
+            '0'             => '- Pilih Kebangsaan -',
             '1'             => 'Warga Negara Indonesia',
             '2'             => 'Warga Negara Asing',
         ];
@@ -84,43 +92,17 @@ class Surat_pengantar_nikah extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['agama_value'] = [
-            '0'             => '',
-            '1'             => 'Islam',
-            '2'             => 'Kristen Protestan',
-            '3'             => 'Kristen Katolik',
-            '4'             => 'Buddha',
-            '5'             => 'Hindu',
-            '6'             => 'Konghucu',
-        ];
         $this->data['status'] = [
             'name'          => 'status',
             'id'            => 'status',
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['status_value'] = [
-            '0'             => '',
-            '1'             => 'Belum Kawin',
-            '2'             => 'Kawin',
-            '3'             => 'Cerai Hidup',
-            '4'             => 'Cerai Mati',
-        ];
         $this->data['pekerjaan'] = [
             'name'          => 'pekerjaan',
             'id'            => 'pekerjaan',
             'class'         => 'form-control',
             'required'      => '',
-        ];
-        $this->data['pekerjaan_value'] = [
-            '0'             => '',
-            '1'             => 'PNS',
-            '2'             => 'Wiraswasta',
-            '3'             => 'Karyawan Swasta',
-            '4'             => 'Pensiunan',
-            '5'             => 'Belum/Tidak Bekerja',
-            '6'             => 'Pelajar/Mahasiswa',
-            '7'             => 'Lainnya',
         ];
         $this->data['address'] = [
             'name'          => 'address',
@@ -173,6 +155,72 @@ class Surat_pengantar_nikah extends CI_Controller
             'required'      => '',
         ];
 
+        //TODO Load view dengan mengirim data
         $this->load->view('front/surat/create_surat_pengantar_nikah', $this->data);
+    }
+
+    function create_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('bin_binti', 'Bin/Binti', 'trim|required');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
+        $this->form_validation->set_rules('agama', 'Agama', 'required');
+        $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
+        $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('dusun', 'Dusun', 'required');
+        $this->form_validation->set_rules('rt', 'RT', 'required');
+        $this->form_validation->set_rules('rw', 'RW', 'required');
+        $this->form_validation->set_rules('desa', 'Desa', 'required');
+        $this->form_validation->set_rules('kecamatan', 'Kecamatan', 'required');
+        $this->form_validation->set_rules('kabupaten', 'Kabupaten', 'required');
+        $this->form_validation->set_rules('provinsi', 'Provinsi', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            $this->create();
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'nik'                   => $this->input->post('nik'),
+                'bin_binti'             => $this->input->post('bin_binti'),
+
+                'gender'                => $this->input->post('gender'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'kebangsaan'            => $this->input->post('kebangsaan'),
+                'agama_id'              => $this->input->post('agama'),
+                'status_id'             => $this->input->post('status'),
+                'pekerjaan_id'          => $this->input->post('pekerjaan'),
+                'address'               => $this->input->post('address'),
+                'dusun'                 => $this->input->post('dusun'),
+                'rt'                    => $this->input->post('rt'),
+                'rw'                    => $this->input->post('rw'),
+                'desa'                  => $this->input->post('desa'),
+                'kecamatan'             => $this->input->post('kecamatan'),
+                'kabupaten'             => $this->input->post('kabupaten'),
+                'provinsi'              => $this->input->post('provinsi'),
+            );
+
+            //TODO Post to database with model
+            $this->Surat_pengantar_nikah_model->insert($data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil di kirim. Mohon ditunggu hasilnya.</div>');
+            redirect('surat_pengantar_nikah/create');
+        }
     }
 }
