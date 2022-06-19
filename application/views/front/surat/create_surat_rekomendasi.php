@@ -63,7 +63,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Status Pernikahan*</label>
-                                                <?php echo form_dropdown('', $status_value, '', $status) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_status, '', $status) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -77,13 +77,13 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Agama*</label>
-                                                <?php echo form_dropdown('', $agama_value, '', $agama) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_agama, '', $agama) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Pekerjaan*</label>
-                                                <?php echo form_dropdown('', $pekerjaan_value, '', $pekerjaan) ?>
+                                                <?php echo form_dropdown('', $get_all_combobox_pekerjaan, '', $pekerjaan) ?>
                                             </div>
                                         </div>
                                     </div>
@@ -141,7 +141,7 @@
 
             $('#birthdate').datepicker({
                 autoclose: true,
-                format: 'dd-mm-yyyy',
+                format: 'yyyy-mm-dd',
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
