@@ -140,7 +140,7 @@ class Sk_domisili extends CI_Controller
                 'gender'                => $this->input->post('gender'),
                 'status_id'             => $this->input->post('status'),
                 'agama_id'              => $this->input->post('agama'),
-                'kebangsaan'         => $this->input->post('kebangsaan'),
+                'kebangsaan'            => $this->input->post('kebangsaan'),
                 'pekerjaan'             => $this->input->post('pekerjaan'),
                 'address'               => $this->input->post('address'),
             );
