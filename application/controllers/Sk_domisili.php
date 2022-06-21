@@ -151,7 +151,7 @@ class Sk_domisili extends CI_Controller
             write_log();
 
             //TODO Tampilkan notifikasi dan redirect
-            $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil di kirim. Mohon ditunggu hasilnya.</div>');
+            $this->session->set_flashdata('message', 'Sukses');
             redirect('sk_domisili/create');
         }
     }

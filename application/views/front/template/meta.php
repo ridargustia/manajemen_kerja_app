@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/') ?>bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -22,6 +23,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <!-- Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url('assets/images/company/' . $company_data->company_photo) ?>" />
+  <!-- Animate CSS (SweetAlert) -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/') ?>sweetalert/animate.min.css">
 
   <style>
     .bg {
@@ -32,6 +35,10 @@
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
+    }
+
+    .swal2-popup {
+      font-size: 1.6rem !important;
     }
   </style>
 </head>
