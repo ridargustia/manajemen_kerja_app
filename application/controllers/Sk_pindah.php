@@ -158,6 +158,7 @@ class Sk_pindah extends CI_Controller
             'name'          => 'tgl_pindah',
             'id'            => 'tgl_pindah',
             'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
         $this->data['alasan_pindah'] = [
