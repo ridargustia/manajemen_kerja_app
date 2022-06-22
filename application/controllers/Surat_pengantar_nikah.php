@@ -219,7 +219,7 @@ class Surat_pengantar_nikah extends CI_Controller
             write_log();
 
             //TODO Tampilkan notifikasi dan redirect
-            $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil di kirim. Mohon ditunggu hasilnya.</div>');
+            $this->session->set_flashdata('message', 'Sukses');
             redirect('surat_pengantar_nikah/create');
         }
     }
