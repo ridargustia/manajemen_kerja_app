@@ -30,4 +30,9 @@ class Surat_pernyataan_miskin_model extends CI_Model
 
         return $this->db->get($this->table)->num_rows();
     }
+
+    function total_rows()
+    {
+        return $this->db->get($this->table)->num_rows();
+    }
 }

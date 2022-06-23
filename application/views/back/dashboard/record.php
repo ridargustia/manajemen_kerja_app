@@ -37,7 +37,7 @@
         <p>SK Kehilangan KTP</p>
       </div>
       <div class="icon"><i class="fa fa-file-text-o"></i></div>
-      <a href="<?php echo base_url('admin/skck/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/sk_hilang_ktp/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
 </div>
@@ -47,10 +47,10 @@
     <div class="small-box bg-blue">
       <div class="inner">
         <h3><?php echo $get_total_sk_meninggal_dunia ?></h3>
-        <p>SK Meninggal Dunia</p>
+        <p>SK Kematian</p>
       </div>
       <div class="icon"><i class="fa fa-file-text-o"></i></div>
-      <a href="<?php echo base_url('admin/sk_domisili/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/sk_meninggal_dunia/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-3 col-sm-3 col-xs-12">
@@ -60,7 +60,7 @@
         <p>Surat Keterangan Nikah</p>
       </div>
       <div class="icon"><i class="fa fa-file-text-o"></i></div>
-      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/sk_nikah/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-3 col-sm-3 col-xs-12">
@@ -70,7 +70,7 @@
         <p>Surat Keterangan Pindah</p>
       </div>
       <div class="icon"><i class="fa fa-file-text-o"></i></div>
-      <a href="<?php echo base_url('admin/skck/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/sk_pindah/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-3 col-sm-3 col-xs-12">
@@ -80,7 +80,7 @@
         <p>Surat Keterangan Usaha</p>
       </div>
       <div class="icon"><i class="fa fa-file-text-o"></i></div>
-      <a href="<?php echo base_url('admin/sk_domisili/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/sk_usaha/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
 </div>
@@ -93,7 +93,7 @@
         <p>Surat Pengantar Nikah</p>
       </div>
       <div class="icon"><i class="fa fa-file-text-o"></i></div>
-      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/surat_pengantar_nikah/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-4 col-sm-4 col-xs-12">
@@ -103,7 +103,7 @@
         <p>Surat Pernyataan Miskin</p>
       </div>
       <div class="icon"><i class="fa fa-file-text-o"></i></div>
-      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/surat_pernyataan_miskin/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-4 col-sm-4 col-xs-12">
@@ -113,7 +113,7 @@
         <p>Surat Rekomendasi</p>
       </div>
       <div class="icon"><i class="fa fa-file-text-o"></i></div>
-      <a href="<?php echo base_url('admin/sk_jalan/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/surat_rekomendasi/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
 </div>
