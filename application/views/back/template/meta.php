@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title><?php echo $page_title.' | '.$company_data->company_name ?></title>
+  <title><?php echo $page_title . ' | ' . $company_data->company_name ?></title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <!-- Tell the browser to be responsive to screen width -->
@@ -17,6 +18,15 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <!-- Favicon -->
-  <link rel="shortcut icon" href="<?php echo base_url('assets/images/company/'.$company_data->company_photo_thumb) ?>" />
+  <link rel="shortcut icon" href="<?php echo base_url('assets/images/company/' . $company_data->company_photo_thumb) ?>" />
+  <!-- Animate CSS (SweetAlert) -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/') ?>sweetalert/animate.min.css">
+
+  <style>
+    .swal2-popup {
+      font-size: 1.6rem !important;
+    }
+  </style>
 </head>
+
 <body class="<?php echo $skins_template->value ?> sidebar-mini <?php echo $layout_template->value ?>">

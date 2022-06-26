@@ -1,4 +1,4 @@
-  <footer class="main-footer">    
+  <footer class="main-footer">
     <?php echo $footer->content ?>
   </footer>
 
@@ -14,3 +14,22 @@
   <script src="<?php echo base_url('assets/plugins/') ?>fastclick/lib/fastclick.js"></script>
   <!-- AdminLTE App -->
   <script src="<?php echo base_url('assets/template/back/') ?>dist/js/adminlte.min.js"></script>
+  <!-- SweetAlert -->
+  <script src="<?php echo base_url('assets/plugins/') ?>sweetalert/js/sweetalert2.all.min.js"></script>
+
+  <script type="text/javascript">
+    const flashData = $('.flash-data').data('flashdata');
+    if (flashData) {
+      Swal.fire({
+        title: flashData,
+        text: 'Data berhasil disimpan',
+        icon: 'success',
+        showClass: {
+          popup: 'animate__animated animate__tada'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        },
+      });
+    }
+  </script>

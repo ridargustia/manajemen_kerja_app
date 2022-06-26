@@ -24,6 +24,9 @@
             } ?>
             <?php echo validation_errors() ?>
             <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">TAMBAH DATA</h3>
+                </div>
                 <?php echo form_open($action) ?>
                 <div class="box-body">
                     <div class="row">

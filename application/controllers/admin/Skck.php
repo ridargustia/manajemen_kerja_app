@@ -46,7 +46,7 @@ class Skck extends CI_Controller
     function create()
     {
         //TODO Inisialisasi variabel
-        $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
+        $this->data['page_title'] = $this->data['module'];
         $this->data['action']     = 'admin/skck/create_action';
 
         //TODO Get data untuk dropdown reference
@@ -130,5 +130,53 @@ class Skck extends CI_Controller
 
         //TODO Load view dengan mengirim data
         $this->load->view('back/skck/skck_add', $this->data);
+    }
+
+    function create_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
+        $this->form_validation->set_rules('agama', 'Agama', 'required');
+        $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
+        $this->form_validation->set_rules('pendidikan_akhir', 'Pendidikan Terakhir', 'required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            $this->create();
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'nik'                   => $this->input->post('nik'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'gender'                => $this->input->post('gender'),
+                'status_id'             => $this->input->post('status'),
+                'agama_id'              => $this->input->post('agama'),
+                'pekerjaan_id'          => $this->input->post('pekerjaan'),
+                'pendidikan_akhir_id'   => $this->input->post('pendidikan_akhir'),
+                'address'               => $this->input->post('address'),
+            );
+
+            //TODO Post to database with model
+            $this->Skck_model->insert($data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/skck');
+        }
     }
 }
