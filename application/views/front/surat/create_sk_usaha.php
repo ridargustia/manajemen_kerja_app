@@ -20,7 +20,7 @@
                         <div class="col-lg-12">
                             <div class="box box-primary box-solid">
                                 <div class="box-header">
-                                    Form Pembuatan Surat Keterangan Usaha
+                                    <h3 class="box-title">Form Pembuatan Surat Keterangan Usaha</h3>
                                 </div>
                                 <div class="box-body">
                                     <div class="row">
