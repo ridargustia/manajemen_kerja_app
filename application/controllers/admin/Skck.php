@@ -167,6 +167,7 @@ class Skck extends CI_Controller
                 'pekerjaan_id'          => $this->input->post('pekerjaan'),
                 'pendidikan_akhir_id'   => $this->input->post('pendidikan_akhir'),
                 'address'               => $this->input->post('address'),
+                'created_by'            => $this->session->username,
             );
 
             //TODO Post to database with model

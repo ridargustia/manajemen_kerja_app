@@ -167,6 +167,7 @@ class Sk_domisili extends CI_Controller
                 'kebangsaan'            => $this->input->post('kebangsaan'),
                 'pekerjaan'             => $this->input->post('pekerjaan'),
                 'address'               => $this->input->post('address'),
+                'created_by'            => $this->session->username,
             );
 
             //TODO Post to database with model
