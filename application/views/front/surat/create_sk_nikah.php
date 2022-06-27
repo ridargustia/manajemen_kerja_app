@@ -20,7 +20,7 @@
                         <div class="col-lg-12">
                             <div class="box box-primary box-solid">
                                 <div class="box-header">
-                                    Form Pembuatan Surat Keterangan Nikah
+                                    <h3 class="box-title">Form Pembuatan Surat Keterangan Nikah</h3>
                                 </div>
                             </div>
                         </div>
@@ -29,7 +29,7 @@
                         <div class="col-lg-12">
                             <div class="box box-primary">
                                 <div class="box-header">
-                                    <h4>DATA SUAMI</h4>
+                                    <h4 class="box-title">DATA SUAMI</h4>
                                 </div>
                                 <div class="box-body">
                                     <div class="form-group">
@@ -86,7 +86,7 @@
                         <div class="col-lg-12">
                             <div class="box box-primary">
                                 <div class="box-header">
-                                    <h4>DATA ISTRI</h4>
+                                    <h4 class="box-title">DATA ISTRI</h4>
                                 </div>
                                 <div class="box-body">
                                     <div class="form-group">
