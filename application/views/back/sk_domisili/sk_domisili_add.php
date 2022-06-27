@@ -56,38 +56,34 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Jenis Kelamin*</label>
                                 <?php echo form_dropdown('', $gender_value, '', $gender) ?>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Status Pernikahan*</label>
+                                <label class="control-label">Status*</label>
                                 <?php echo form_dropdown('', $get_all_combobox_status, '', $status) ?>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Agama*</label>
                                 <?php echo form_dropdown('', $get_all_combobox_agama, '', $agama) ?>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Kebangsaan*</label>
+                                <?php echo form_dropdown('', $kebangsaan_value, '', $kebangsaan) ?>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Pekerjaan*</label>
-                                <?php echo form_dropdown('', $get_all_combobox_pekerjaan, '', $pekerjaan) ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Pendidikan Terakhir*</label>
-                                <?php echo form_dropdown('', $get_all_combobox_pendidikan_akhir, '', $pendidikan_akhir) ?>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label class="control-label">Pekerjaan*</label>
+                        <?php echo form_input($pekerjaan) ?>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Alamat*</label>
