@@ -20,7 +20,7 @@
                         <div class="col-lg-12">
                             <div class="box box-primary box-solid">
                                 <div class="box-header">
-                                    Form Pembuatan Surat Keterangan Meninggal Dunia
+                                    <h3 class="box-title">Form Pembuatan Surat Keterangan Meninggal Dunia</h3>
                                 </div>
                                 <div class="box-body">
                                     <div class="form-group">
@@ -113,13 +113,6 @@
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
-
-            // $('#tgl_meninggal').datepicker({
-            //     autoclose: true,
-            //     format: 'yyyy-mm-dd',
-            //     zIndexOffset: 9999,
-            //     todayHighlight: true,
-            // });
         </script>
 
 </body>
