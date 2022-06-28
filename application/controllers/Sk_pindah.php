@@ -248,10 +248,10 @@ class Sk_pindah extends CI_Controller
 
             //TODO eksekusi query INSERT
             $this->Sk_pindah_model->insert($data);
+            $sk_pindah_id = $this->db->insert_id();
 
             write_log();
 
-            $sk_pindah_id = $this->db->insert_id();
 
             if (!empty($this->input->post('nik_pengikut')) and !empty($this->input->post('pengikut_name'))) {
                 $count = count($this->input->post('nik_pengikut'));
