@@ -180,4 +180,29 @@ class Skck extends CI_Controller
             redirect('admin/skck');
         }
     }
+
+    function delete($id_skck)
+    {
+        is_delete();
+
+        $delete = $this->Skck_model->get_by_id($id_skck);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'   => '1',
+                'deleted_by'  => $this->session->username,
+                'deleted_at'  => date('Y-m-d H:i:a'),
+            );
+
+            $this->Skck_model->soft_delete($id_skck, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/skck');
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/skck');
+        }
+    }
 }

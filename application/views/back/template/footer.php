@@ -19,7 +19,7 @@
 
   <script type="text/javascript">
     const flashData = $('.flash-data').data('flashdata');
-    if (flashData) {
+    if (flashData === 'Sukses') {
       Swal.fire({
         title: flashData,
         text: 'Data berhasil disimpan',
@@ -31,5 +31,48 @@
           popup: 'animate__animated animate__fadeOutUp'
         },
       });
+    } else if (flashData === 'dihapus') {
+      Swal.fire({
+        title: 'Sukses',
+        text: 'Data berhasil ' + flashData,
+        icon: 'success',
+        showClass: {
+          popup: 'animate__animated animate__tada'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        },
+      });
+    } else if (flashData === 'tidak ditemukan') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Terjadi Kesalahan',
+        text: 'Data ' + flashData + '!',
+        showClass: {
+          popup: 'animate__animated animate__tada'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        },
+      });
     }
+
+    $(document).on('click', '#delete-button', function(e) {
+      e.preventDefault();
+      const link = $(this).attr('href');
+
+      Swal.fire({
+        title: 'Apakah anda yakin?',
+        text: "Data akan dihapus!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#00a65a',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location = link;
+        }
+      })
+    });
   </script>

@@ -14,7 +14,7 @@ class Skck_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('skck.nik, skck.name, skck.created_at, skck.is_readed');
+        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.created_at, skck.is_readed');
 
         $this->db->where('skck.is_delete', '0');
 
@@ -31,8 +31,20 @@ class Skck_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id($id)
+    {
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function total_rows()
     {
         return $this->db->get($this->table)->num_rows();
+    }
+
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
     }
 }
