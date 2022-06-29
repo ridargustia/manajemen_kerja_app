@@ -160,4 +160,29 @@ class Sk_meninggal_dunia extends CI_Controller
             redirect('admin/sk_meninggal_dunia');
         }
     }
+
+    function delete($id_sk_meninggal_dunia)
+    {
+        is_delete();
+
+        $delete = $this->Sk_meninggal_dunia_model->get_by_id($id_sk_meninggal_dunia);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'   => '1',
+                'deleted_by'  => $this->session->username,
+                'deleted_at'  => date('Y-m-d H:i:a'),
+            );
+
+            $this->Sk_meninggal_dunia_model->soft_delete($id_sk_meninggal_dunia, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_meninggal_dunia');
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_meninggal_dunia');
+        }
+    }
 }

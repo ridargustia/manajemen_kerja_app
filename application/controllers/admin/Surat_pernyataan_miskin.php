@@ -164,4 +164,29 @@ class Surat_pernyataan_miskin extends CI_Controller
             redirect('admin/surat_pernyataan_miskin');
         }
     }
+
+    function delete($id_surat_pernyataan_miskin)
+    {
+        is_delete();
+
+        $delete = $this->Surat_pernyataan_miskin_model->get_by_id($id_surat_pernyataan_miskin);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'   => '1',
+                'deleted_by'  => $this->session->username,
+                'deleted_at'  => date('Y-m-d H:i:a'),
+            );
+
+            $this->Surat_pernyataan_miskin_model->soft_delete($id_surat_pernyataan_miskin, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/surat_pernyataan_miskin');
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_pernyataan_miskin');
+        }
+    }
 }

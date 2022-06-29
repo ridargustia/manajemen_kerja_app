@@ -14,7 +14,7 @@ class Sk_usaha_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_usaha.nik, sk_usaha.name, sk_usaha.created_at, sk_usaha.is_readed');
+        $this->db->select('sk_usaha.id_sk_usaha, sk_usaha.nik, sk_usaha.name, sk_usaha.created_at, sk_usaha.is_readed');
 
         $this->db->where('sk_usaha.is_delete', '0');
 
@@ -31,8 +31,20 @@ class Sk_usaha_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id($id)
+    {
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function total_rows()
     {
         return $this->db->get($this->table)->num_rows();
+    }
+
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
     }
 }

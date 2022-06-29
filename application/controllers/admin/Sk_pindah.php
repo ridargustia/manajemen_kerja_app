@@ -301,4 +301,29 @@ class Sk_pindah extends CI_Controller
             redirect('admin/sk_pindah');
         }
     }
+
+    function delete($id_sk_pindah)
+    {
+        is_delete();
+
+        $delete = $this->Sk_pindah_model->get_by_id($id_sk_pindah);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'   => '1',
+                'deleted_by'  => $this->session->username,
+                'deleted_at'  => date('Y-m-d H:i:a'),
+            );
+
+            $this->Sk_pindah_model->soft_delete($id_sk_pindah, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_pindah');
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_pindah');
+        }
+    }
 }

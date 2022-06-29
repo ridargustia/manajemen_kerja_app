@@ -187,4 +187,29 @@ class Sk_hilang_ktp extends CI_Controller
             redirect('admin/sk_hilang_ktp');
         }
     }
+
+    function delete($id_sk_hilang_ktp)
+    {
+        is_delete();
+
+        $delete = $this->Sk_hilang_ktp_model->get_by_id($id_sk_hilang_ktp);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'   => '1',
+                'deleted_by'  => $this->session->username,
+                'deleted_at'  => date('Y-m-d H:i:a'),
+            );
+
+            $this->Sk_hilang_ktp_model->soft_delete($id_sk_hilang_ktp, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_hilang_ktp');
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_hilang_ktp');
+        }
+    }
 }

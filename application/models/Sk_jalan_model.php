@@ -14,7 +14,7 @@ class Sk_jalan_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_jalan.nik, sk_jalan.name, sk_jalan.created_at, sk_jalan.is_readed');
+        $this->db->select('sk_jalan.id_sk_jalan, sk_jalan.nik, sk_jalan.name, sk_jalan.created_at, sk_jalan.is_readed');
 
         $this->db->where('sk_jalan.is_delete', '0');
 
@@ -31,8 +31,20 @@ class Sk_jalan_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id($id)
+    {
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function total_rows()
     {
         return $this->db->get($this->table)->num_rows();
+    }
+
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
     }
 }

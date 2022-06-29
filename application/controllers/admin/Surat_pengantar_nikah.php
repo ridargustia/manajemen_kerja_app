@@ -248,4 +248,29 @@ class Surat_pengantar_nikah extends CI_Controller
             redirect('admin/surat_pengantar_nikah');
         }
     }
+
+    function delete($id_surat_pengantar_nikah)
+    {
+        is_delete();
+
+        $delete = $this->Surat_pengantar_nikah_model->get_by_id($id_surat_pengantar_nikah);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'   => '1',
+                'deleted_by'  => $this->session->username,
+                'deleted_at'  => date('Y-m-d H:i:a'),
+            );
+
+            $this->Surat_pengantar_nikah_model->soft_delete($id_surat_pengantar_nikah, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/surat_pengantar_nikah');
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_pengantar_nikah');
+        }
+    }
 }

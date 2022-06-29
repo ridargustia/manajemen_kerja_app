@@ -215,4 +215,29 @@ class Sk_nikah extends CI_Controller
             redirect('admin/sk_nikah');
         }
     }
+
+    function delete($id_sk_nikah)
+    {
+        is_delete();
+
+        $delete = $this->Sk_nikah_model->get_by_id($id_sk_nikah);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'   => '1',
+                'deleted_by'  => $this->session->username,
+                'deleted_at'  => date('Y-m-d H:i:a'),
+            );
+
+            $this->Sk_nikah_model->soft_delete($id_sk_nikah, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_nikah');
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_nikah');
+        }
+    }
 }

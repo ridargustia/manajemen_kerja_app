@@ -14,7 +14,7 @@ class Surat_pernyataan_miskin_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('surat_pernyataan_miskin.nik, surat_pernyataan_miskin.name, surat_pernyataan_miskin.created_at, surat_pernyataan_miskin.is_readed');
+        $this->db->select('surat_pernyataan_miskin.id_surat_pernyataan_miskin, surat_pernyataan_miskin.nik, surat_pernyataan_miskin.name, surat_pernyataan_miskin.created_at, surat_pernyataan_miskin.is_readed');
 
         $this->db->where('surat_pernyataan_miskin.is_delete', '0');
 
@@ -31,8 +31,20 @@ class Surat_pernyataan_miskin_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id($id)
+    {
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function total_rows()
     {
         return $this->db->get($this->table)->num_rows();
+    }
+
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
     }
 }

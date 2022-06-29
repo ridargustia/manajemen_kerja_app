@@ -14,7 +14,7 @@ class Sk_pindah_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_pindah.nik, sk_pindah.name, sk_pindah.created_at, sk_pindah.is_readed');
+        $this->db->select('sk_pindah.id_sk_pindah, sk_pindah.nik, sk_pindah.name, sk_pindah.created_at, sk_pindah.is_readed');
 
         $this->db->where('sk_pindah.is_delete', '0');
 
@@ -31,8 +31,20 @@ class Sk_pindah_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id($id)
+    {
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function total_rows()
     {
         return $this->db->get($this->table)->num_rows();
+    }
+
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
     }
 }

@@ -180,4 +180,29 @@ class Sk_domisili extends CI_Controller
             redirect('admin/sk_domisili');
         }
     }
+
+    function delete($id_sk_domisili)
+    {
+        is_delete();
+
+        $delete = $this->Sk_domisili_model->get_by_id($id_sk_domisili);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'   => '1',
+                'deleted_by'  => $this->session->username,
+                'deleted_at'  => date('Y-m-d H:i:a'),
+            );
+
+            $this->Sk_domisili_model->soft_delete($id_sk_domisili, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_domisili');
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_domisili');
+        }
+    }
 }

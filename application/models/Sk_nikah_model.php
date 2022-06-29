@@ -14,7 +14,7 @@ class Sk_nikah_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_nikah.suami_name, sk_nikah.istri_name, sk_nikah.created_at, sk_nikah.is_readed');
+        $this->db->select('sk_nikah.id_sk_nikah, sk_nikah.suami_name, sk_nikah.istri_name, sk_nikah.created_at, sk_nikah.is_readed');
 
         $this->db->where('sk_nikah.is_delete', '0');
 
@@ -31,8 +31,20 @@ class Sk_nikah_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id($id)
+    {
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function total_rows()
     {
         return $this->db->get($this->table)->num_rows();
+    }
+
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
     }
 }

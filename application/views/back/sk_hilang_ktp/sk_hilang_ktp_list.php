@@ -44,7 +44,7 @@
                                 foreach ($get_all as $data) {
                                     //TODO Create Action Button
                                     $detail = '<a href="' . base_url('admin/sk_hilang_ktp/update/' . $data->id_sk_hilang_ktp) . '" class="btn btn-primary" title="Detail Data"><i class="fa fa-eye"></i></a>';
-                                    $delete = '<a href="' . base_url('admin/sk_hilang_ktp/delete/' . $data->id_sk_hilang_ktp) . '" onClick="return confirm(\'Are you sure?\');" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
+                                    $delete = '<a href="' . base_url('admin/sk_hilang_ktp/delete/' . $data->id_sk_hilang_ktp) . '" id="delete-button" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
                                 ?>
                                     <tr>
                                         <td style="text-align: center"><?php echo $no++ ?></td>

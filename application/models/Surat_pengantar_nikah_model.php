@@ -14,7 +14,7 @@ class Surat_pengantar_nikah_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('surat_pengantar_nikah.nik, surat_pengantar_nikah.name, surat_pengantar_nikah.created_at, surat_pengantar_nikah.is_readed');
+        $this->db->select('surat_pengantar_nikah.id_surat_pengantar_nikah, surat_pengantar_nikah.nik, surat_pengantar_nikah.name, surat_pengantar_nikah.created_at, surat_pengantar_nikah.is_readed');
 
         $this->db->where('surat_pengantar_nikah.is_delete', '0');
 
@@ -31,8 +31,20 @@ class Surat_pengantar_nikah_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id($id)
+    {
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function total_rows()
     {
         return $this->db->get($this->table)->num_rows();
+    }
+
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
     }
 }
