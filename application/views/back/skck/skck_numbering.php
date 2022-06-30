@@ -40,59 +40,68 @@
                                             <div class="form-group">
                                                 <?php echo form_input($no_surat) ?>
                                             </div>
-                                            <button type="submit" class="btn btn-success"><i class="fa fa-send"></i> Simpan</button>
+                                            <button type="submit" class="btn btn-success"><i class="fa fa-send"></i> Kirim</button>
                                             <?php echo form_close() ?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Nama</td>
                                         <td style="width:10px">:</td>
-                                        <td class="text-left">Ridar Gustia</td>
+                                        <td class="text-left"><?php echo $data_skck->name ?></td>
                                     </tr>
                                     <tr>
                                         <td>NIK</td>
                                         <td>:</td>
-                                        <td class="text-left">873468376457834</td>
+                                        <td class="text-left"><?php echo $data_skck->nik ?></td>
                                     </tr>
                                     <tr>
                                         <td style="width:120px">Tempat Lahir</td>
                                         <td>:</td>
-                                        <td class="text-left">Kediri</td>
+                                        <td class="text-left"><?php echo $data_skck->birthplace ?></td>
                                     </tr>
                                     <tr>
                                         <td>Tanggal Lahir</td>
                                         <td>:</td>
-                                        <td class="text-left">5 Juni 1996</td>
+                                        <td class="text-left"><?php echo $data_skck->birthdate ?></td>
                                     </tr>
                                     <tr>
                                         <td>Jenis Kelamin</td>
                                         <td>:</td>
-                                        <td class="text-left">Laki-laki</td>
+                                        <td class="text-left">
+                                            <?php
+                                            if ($data_skck->gender === '1') {
+                                                $gender = 'Laki-laki';
+                                            } elseif ($data_skck->gender === '2') {
+                                                $gender = 'Perempuan';
+                                            }
+                                            echo $gender;
+                                            ?>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>Status Pernikahan</td>
                                         <td>:</td>
-                                        <td class="text-left">Belum Kawin</td>
+                                        <td class="text-left"><?php echo $status->status_name ?></td>
                                     </tr>
                                     <tr>
                                         <td>Agama</td>
                                         <td>:</td>
-                                        <td class="text-left">Islam</td>
+                                        <td class="text-left"><?php echo $agama->agama_name ?></td>
                                     </tr>
                                     <tr>
                                         <td>Pekerjaan</td>
                                         <td>:</td>
-                                        <td class="text-left">Karyawan Swasta</td>
+                                        <td class="text-left"><?php echo $pekerjaan->pekerjaan_name ?></td>
                                     </tr>
                                     <tr>
                                         <td>Pendidikan Akhir</td>
                                         <td>:</td>
-                                        <td class="text-left">Perguruan Tinggi</td>
+                                        <td class="text-left"><?php echo $pendidikan_akhir->pendidikan_akhir_name ?></td>
                                     </tr>
                                     <tr>
                                         <td>Alamat</td>
                                         <td>:</td>
-                                        <td class="text-left">Yogyakarta</td>
+                                        <td class="text-left"><?php echo $data_skck->address ?></td>
                                     </tr>
                                 </tbody>
                             </table>

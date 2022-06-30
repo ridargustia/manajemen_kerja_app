@@ -220,6 +220,13 @@ class Skck extends CI_Controller
             'required'      => '',
         ];
 
+        //TODO Get detail skck by id
+        $this->data['data_skck'] = $this->Skck_model->get_by_id($id_skck);
+        $this->data['status'] = $this->Status_model->get_by_id($this->data['data_skck']->status_id);
+        $this->data['agama'] = $this->Agama_model->get_by_id($this->data['data_skck']->agama_id);
+        $this->data['pekerjaan'] = $this->Pekerjaan_model->get_by_id($this->data['data_skck']->pekerjaan_id);
+        $this->data['pendidikan_akhir'] = $this->Pendidikan_akhir_model->get_by_id($this->data['data_skck']->pendidikan_akhir_id);
+
         //TODO Load view dengan mengirim data
         $this->load->view('back/skck/skck_numbering', $this->data);
     }
