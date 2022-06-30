@@ -25,7 +25,7 @@
         text: 'Data berhasil disimpan',
         icon: 'success',
         showClass: {
-          popup: 'animate__animated animate__tada'
+          popup: 'animate__animated animate__bounce'
         },
         hideClass: {
           popup: 'animate__animated animate__fadeOutUp'
