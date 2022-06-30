@@ -34,14 +34,21 @@
                                         <td style="width:10px">:</td>
                                         <td class="text-left">
                                             <?php
-                                            $attributes = array('class' => 'form-inline');
-                                            echo form_open($action, $attributes);
+                                            if ($data_skck->no_surat === NULL) {
+                                                $attributes = array('class' => 'form-inline');
+                                                echo form_open($action, $attributes);
                                             ?>
-                                            <div class="form-group">
-                                                <?php echo form_input($no_surat) ?>
-                                            </div>
-                                            <button type="submit" class="btn btn-success"><i class="fa fa-send"></i> Kirim</button>
-                                            <?php echo form_close() ?>
+                                                <div class="form-group">
+                                                    <?php echo form_input($no_surat) ?>
+                                                </div>
+                                                <?php echo form_input($id_skck, $data_skck->id_skck) ?>
+                                                <button type="submit" class="btn btn-success"><i class="fa fa-send"></i> Kirim</button>
+                                            <?php
+                                                echo form_close();
+                                            } else {
+                                                echo $data_skck->no_surat;
+                                            }
+                                            ?>
                                         </td>
                                     </tr>
                                     <tr>
