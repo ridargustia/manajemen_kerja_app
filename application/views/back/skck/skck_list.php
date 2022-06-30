@@ -43,7 +43,7 @@
                                 <?php $no = 1;
                                 foreach ($get_all as $data) {
                                     //TODO Create Action Button
-                                    $detail = '<a href="' . base_url('admin/skck/update/' . $data->id_skck) . '" class="btn btn-primary" title="Detail Data"><i class="fa fa-eye"></i></a>';
+                                    $detail = '<a href="' . base_url('admin/skck/numbering/' . $data->id_skck) . '" class="btn btn-success" title="Tindak Lanjut"><i class="fa fa-send"></i></a>';
                                     $delete = '<a href="' . base_url('admin/skck/delete/' . $data->id_skck) . '" id="delete-button" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
                                 ?>
                                     <tr>

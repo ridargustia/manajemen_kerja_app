@@ -205,4 +205,22 @@ class Skck extends CI_Controller
             redirect('admin/skck');
         }
     }
+
+    function numbering($id_skck)
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Penomoran ' . $this->data['module'];
+        $this->data['action']     = 'admin/skck/numbering_action';
+
+        //TODO Rancangan form
+        $this->data['no_surat'] = [
+            'name'          => 'no_surat',
+            'id'            => 'no_surat',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+
+        //TODO Load view dengan mengirim data
+        $this->load->view('back/skck/skck_numbering', $this->data);
+    }
 }
