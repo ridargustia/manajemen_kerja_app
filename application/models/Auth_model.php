@@ -11,20 +11,33 @@ class Auth_model extends CI_Model
   function get_all()
   {
     $this->db->select('
-      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.cabang_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete,
-      usertype.usertype_name,
-      instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name
+      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete, usertype.usertype_name, instansi.instansi_name, divisi.divisi_name
     ');
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');
     $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'users.cabang_id = cabang.id_cabang', 'left');
     $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi', 'left');
 
     $this->db->where('is_delete', '0');
 
     $this->db->order_by($this->id, $this->order);
+
+    return $this->db->get($this->table)->result();
+  }
+
+  function get_all_by_instansi()
+  {
+    $this->db->select('
+      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete, usertype.usertype_name, instansi.instansi_name, divisi.divisi_name
+    ');
+    $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');
+    $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'left');
+    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi', 'left');
+
+    $this->db->where('users.instansi_id', $this->session->instansi_id);
+    $this->db->where('users.usertype_id <', '5');
+    $this->db->where('is_delete', '0');
+
+    $this->db->order_by('name', $this->order);
 
     return $this->db->get($this->table)->result();
   }
@@ -37,30 +50,6 @@ class Auth_model extends CI_Model
     $this->db->where('divisi_id', $divisi_id);
 
     return $this->db->get($this->table)->row();
-  }
-
-  function get_all_by_instansi()
-  {
-    $this->db->select('
-      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.cabang_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete,
-      usertype.usertype_name,
-      instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name
-    ');
-    $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');
-    $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'users.cabang_id = cabang.id_cabang', 'left');
-    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi', 'left');
-
-    $this->db->where('users.instansi_id', $this->session->instansi_id);
-    $this->db->where('users.usertype_id >', '1');
-    $this->db->where('users.usertype_id <', '5');
-    $this->db->where('is_delete', '0');
-
-    $this->db->order_by('name', $this->order);
-
-    return $this->db->get($this->table)->result();
   }
 
   function get_all_by_cabang()
@@ -144,7 +133,7 @@ class Auth_model extends CI_Model
   {
     $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'LEFT');
 
-    $this->db->where('instansi_id', $instansi_id);    
+    $this->db->where('instansi_id', $instansi_id);
 
     $this->db->order_by('name');
 
@@ -163,7 +152,7 @@ class Auth_model extends CI_Model
   {
     $this->db->join('cabang', 'users.cabang_id = cabang.id_cabang');
 
-    $this->db->where('cabang_id', $cabang_id);    
+    $this->db->where('cabang_id', $cabang_id);
 
     $this->db->order_by('name');
 
@@ -180,9 +169,9 @@ class Auth_model extends CI_Model
 
   function get_all_combobox_grandAdmin_by_divisi($divisi_id)
   {
-    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi');    
+    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi');
 
-    $this->db->where('divisi_id', $divisi_id);    
+    $this->db->where('divisi_id', $divisi_id);
 
     $this->db->order_by('name');
 
@@ -221,7 +210,7 @@ class Auth_model extends CI_Model
   {
     $this->db->join('cabang', 'users.cabang_id = cabang.id_cabang');
 
-    $this->db->where('cabang_id', $cabang_id);    
+    $this->db->where('cabang_id', $cabang_id);
     $this->db->where('usertype_id <', '4');
     $this->db->where('usertype_id >', '1');
 
@@ -240,7 +229,7 @@ class Auth_model extends CI_Model
 
   function get_all_combobox_by_divisi($divisi_id)
   {
-    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi');    
+    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi');
 
     $this->db->where('divisi_id', $divisi_id);
     // $this->db->where('divisi.instansi_id', $this->session->instansi_id);

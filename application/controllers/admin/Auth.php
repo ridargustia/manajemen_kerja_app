@@ -25,15 +25,16 @@ class Auth extends CI_Controller
     $this->data['btn_reset']  = 'Reset';
     $this->data['btn_add']    = 'Tambah Data';
     $this->data['add_action'] = base_url('admin/auth/create');
+
+    is_login();
   }
 
   function index()
   {
-    is_login();
     is_read();
 
-    if (is_admin() or is_pegawai()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+    if (is_superadmin()) {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki hak akses</div>');
       redirect('admin/dashboard');
     }
 
@@ -43,8 +44,6 @@ class Auth extends CI_Controller
       $this->data['get_all'] = $this->Auth_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Auth_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Auth_model->get_all_by_cabang();
     }
 
     $this->load->view('back/auth/user_list', $this->data);
@@ -52,29 +51,22 @@ class Auth extends CI_Controller
 
   function create()
   {
-    is_login();
     is_create();
 
-    if (is_admin() and is_pegawai()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+    if (is_superadmin()) {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki hak akses</div>');
       redirect('admin/dashboard');
     }
 
     if (is_grandadmin()) {
       $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
-      $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox();
       $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox();
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox();
     } elseif (is_masteradmin()) {
-      $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
       $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_instansi($this->session->instansi_id);
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_instansi($this->session->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->session->cabang_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_cabang($this->session->cabang_id);
     }
 
-    $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
     $this->data['get_all_combobox_data_access']   = $this->Dataaccess_model->get_all_combobox();
     $this->data['get_all_data_access']            = $this->Dataaccess_model->get_all();
 
@@ -364,7 +356,7 @@ class Auth extends CI_Controller
     $this->data['user']     = $this->Auth_model->get_by_id($id);
     $user                   = $this->data['user'];
 
-    if (is_admin() and is_pegawai()) {
+    if (is_superadmin()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
     }
@@ -377,7 +369,7 @@ class Auth extends CI_Controller
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak melihat data orang lain</div>');
       redirect('admin/auth');
     }
-    if (is_admin() && $user->divisi_id != $this->session->divisi_id) {
+    if (is_superadmin() && $user->divisi_id != $this->session->divisi_id) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak melihat data orang lain</div>');
       redirect('admin/auth');
     }
@@ -669,7 +661,7 @@ class Auth extends CI_Controller
     is_login();
     is_delete();
 
-    if (is_admin() and is_pegawai()) {
+    if (is_superadmin()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
     }
@@ -700,7 +692,7 @@ class Auth extends CI_Controller
     is_login();
     is_delete();
 
-    if (is_admin() and is_pegawai()) {
+    if (is_superadmin()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
     }
@@ -731,7 +723,7 @@ class Auth extends CI_Controller
     is_login();
     is_restore();
 
-    if (is_admin() and is_pegawai()) {
+    if (is_superadmin()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
     }
@@ -755,7 +747,7 @@ class Auth extends CI_Controller
     is_login();
     is_restore();
 
-    if (is_admin() and is_pegawai()) {
+    if (is_superadmin()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
     }
@@ -783,7 +775,7 @@ class Auth extends CI_Controller
   {
     is_login();
 
-    if (is_admin() and is_pegawai()) {
+    if (is_superadmin()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
     }
@@ -798,7 +790,7 @@ class Auth extends CI_Controller
   {
     is_login();
 
-    if (is_admin() and is_pegawai()) {
+    if (is_superadmin()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
     }
@@ -1050,7 +1042,7 @@ class Auth extends CI_Controller
     } else {
       $password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
 
-      if (is_admin()) {
+      if (is_superadmin()) {
         $id_user = $this->session->user_id;
       } else {
         $id_user = $this->input->post('user_id');
@@ -1212,8 +1204,7 @@ class Auth extends CI_Controller
           echo "<div class='text-green'>Email tersedia</div>";
         }
       }
-    }
-    else {
+    } else {
       echo "<div class='text-red'>Wajib diisi</div>";
     }
   }

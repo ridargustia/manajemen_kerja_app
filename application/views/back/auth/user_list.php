@@ -19,12 +19,12 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if ($this->session->flashdata('message')) {
-        echo $this->session->flashdata('message');
-      } ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
 
       <div class="box box-primary">
-        <div class="box-header"><a href="<?php echo $add_action ?>" class="btn btn-primary"><i class="fa fa-plus"></i> <?php echo $btn_add ?></a> </div>
+        <div class="box-header">
+          <a href="<?php echo $add_action ?>" class="btn btn-primary"><i class="fa fa-plus"></i> <?php echo $btn_add ?></a>
+        </div>
         <!-- /.box-header -->
         <div class="box-body">
           <div class="table-responsive">
@@ -36,7 +36,6 @@
                   <th style="text-align: center">Username</th>
                   <th style="text-align: center">Email</th>
                   <th style="text-align: center">Divisi</th>
-                  <th style="text-align: center">Cabang</th>
                   <th style="text-align: center">Instansi</th>
                   <th style="text-align: center">Usertype</th>
                   <th style="text-align: center">Status</th>
@@ -46,15 +45,16 @@
               <tbody>
                 <?php $no = 1;
                 foreach ($get_all as $user) {
-                  // status active
+                  //TODO status active
                   if ($user->is_active == '1') {
                     $is_active = '<a href="' . base_url('admin/auth/deactivate/' . $user->id_users) . '" class="btn btn-xs btn-success">ACTIVE</a>';
                   } else {
                     $is_active = '<a href="' . base_url('admin/auth/activate/' . $user->id_users) . '" class="btn btn-xs btn-danger">INACTIVE</a>';
                   }
-                  // action
+
+                  //TODO action
                   $edit = '<a href="' . base_url('admin/auth/update/' . $user->id_users) . '" class="btn btn-warning" title="Ubah User"><i class="fa fa-pencil"></i></a>';
-                  $delete = '<a href="' . base_url('admin/auth/delete/' . $user->id_users) . '" onClick="return confirm(\'Are you sure?\');" class="btn btn-danger" title="Hapus User"><i class="fa fa-trash"></i></a>';
+                  $delete = '<a href="' . base_url('admin/auth/delete/' . $user->id_users) . '" id="delete-button" class="btn btn-danger" title="Hapus User"><i class="fa fa-trash"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
@@ -62,7 +62,6 @@
                     <td style="text-align: center"><?php echo $user->username ?></td>
                     <td style="text-align: center"><?php echo $user->email ?></td>
                     <td style="text-align: center"><?php echo $user->divisi_name ?></td>
-                    <td style="text-align: center"><?php echo $user->cabang_name ?></td>
                     <td style="text-align: center"><?php echo $user->instansi_name ?></td>
                     <td style="text-align: center"><?php echo $user->usertype_name ?></td>
                     <td style="text-align: center"><?php echo $is_active ?></td>
@@ -70,20 +69,6 @@
                   </tr>
                 <?php } ?>
               </tbody>
-              <tfoot>
-                <tr>
-                  <th style="text-align: center">No</th>
-                  <th style="text-align: center">Name</th>
-                  <th style="text-align: center">Username</th>
-                  <th style="text-align: center">Email</th>
-                  <th style="text-align: center">Divisi</th>
-                  <th style="text-align: center">Cabang</th>
-                  <th style="text-align: center">Instansi</th>
-                  <th style="text-align: center">Usertype</th>
-                  <th style="text-align: center">Status</th>
-                  <th style="text-align: center">Action</th>
-                </tr>
-              </tfoot>
             </table>
           </div>
         </div>
