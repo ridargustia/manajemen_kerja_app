@@ -266,4 +266,14 @@ class Skck extends CI_Controller
             redirect('admin/skck/numbering/' . $this->input->post('id_skck'));
         }
     }
+
+    function deleted_list()
+    {
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        //TODO Get data SKCK dari database
+        $this->data['get_all'] = $this->Skck_model->get_all_deleted();
+
+        $this->load->view('back/skck/skck_deleted_list', $this->data);
+    }
 }

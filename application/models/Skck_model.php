@@ -23,6 +23,15 @@ class Skck_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_deleted()
+    {
+        $this->db->where('skck.is_delete', '1');
+
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
     function total_rows_is_not_readed()
     {
         $this->db->where('skck.is_readed', '0');
