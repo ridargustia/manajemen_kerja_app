@@ -19,51 +19,45 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if ($this->session->flashdata('message')) {
-        echo $this->session->flashdata('message');
-      } ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
 
       <?php echo form_open_multipart($action, array('id' => 'add_form')) ?>
       <?php echo validation_errors() ?>
       <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title">PERSONAL</h3>
-          <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-          </div>
         </div>
         <div class="box-body">
           <div class="row">
             <div class="col-sm-6">
-              <div class="form-group"><label>Full Name (*)</label>
+              <div class="form-group"><label>Nama Lengkap (*)</label>
                 <?php echo form_input($name) ?>
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group"><label>Gender</label>
+              <div class="form-group"><label>Jenis Kelamin</label>
                 <?php echo form_dropdown('', $gender_value, '', $gender) ?>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-4">
-              <div class="form-group"><label>Birthplace</label>
+              <div class="form-group"><label>Tempat Lahir</label>
                 <?php echo form_input($birthplace) ?>
               </div>
             </div>
             <div class="col-lg-4">
-              <div class="form-group"><label>Birthdate</label>
+              <div class="form-group"><label>Tanggal Lahir</label>
                 <?php echo form_input($birthdate) ?>
               </div>
             </div>
             <div class="col-lg-4">
-              <div class="form-group"><label>Phone No.</label>
+              <div class="form-group"><label>No. HP/Telepon</label>
                 <?php echo form_input($phone) ?>
               </div>
             </div>
           </div>
-          <div class="form-group"><label>Address</label>
+          <div class="form-group"><label>Alamat Lengkap</label>
             <?php echo form_textarea($address) ?>
           </div>
           <div class="form-group"><label>Photo</label>
@@ -78,10 +72,6 @@
       <div class="box box-success">
         <div class="box-header with-border">
           <h3 class="box-title">AUTH</h3>
-          <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-          </div>
         </div>
         <div class="box-body">
           <div class="row">
@@ -115,21 +105,18 @@
 
           <?php if (is_grandadmin()) { ?>
             <div class="row">
-              <div class="col-lg-4">
+              <div class="col-lg-6">
                 <div class="form-group"><label>Instansi (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
                 </div>
               </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Cabang (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Instansi Dulu -'), '', $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
+              <div class="col-lg-6">
                 <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Cabang Dulu -'), '', $divisi_id) ?>
+                  <?php echo form_dropdown('', array('' => '- Pilih Instansi Dulu -'), '', $divisi_id) ?>
                 </div>
               </div>
+            </div>
+            <div class="row">
               <div class="col-lg-6">
                 <div class="form-group"><label>Usertype (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_usertype, '', $usertype_id) ?>
@@ -139,59 +126,26 @@
                 <div class="form-group"><label>Akses Data (*)</label>
                   <p>
                     <?php foreach ($get_all_data_access as $dataAccess) { ?>
-                      <div class="pretty p-icon p-smooth">
-                        <input type="checkbox" name="data_access_id[]" value="<?php echo $dataAccess->id_data_access ?>">
-                        <div class="state p-success">
-                          <i class="icon fa fa-check"></i>
-                          <label><?php echo $dataAccess->data_access_name ?></label>
-                        </div>
-                      </div>
-                    <?php } ?>
-                  </p>
+                  <div class="pretty p-icon p-smooth">
+                    <input type="checkbox" name="data_access_id[]" value="<?php echo $dataAccess->id_data_access ?>">
+                    <div class="state p-success">
+                      <i class="icon fa fa-check"></i>
+                      <label><?php echo $dataAccess->data_access_name ?></label>
+                    </div>
+                  </div>
+                <?php } ?>
+                </p>
                 </div>
               </div>
             </div>
           <?php } elseif (is_masteradmin()) { ?>
             <div class="row">
-              <div class="col-lg-3">
-                <div class="form-group"><label>Cabang (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_cabang, '', $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-3">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Instansi Dulu -'), '', $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-3">
-                <div class="form-group"><label>Usertype (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_usertype, '', $usertype_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-3">
-                <div class="form-group"><label>Akses Data (*)</label>
-                  <p>
-                    <?php foreach ($get_all_data_access as $dataAccess) { ?>
-                      <div class="pretty p-icon p-smooth">
-                        <input type="checkbox" name="data_access_id[]" value="<?php echo $dataAccess->id_data_access ?>">
-                        <div class="state p-success">
-                          <i class="icon fa fa-check"></i>
-                          <label><?php echo $dataAccess->data_access_name ?></label>
-                        </div>
-                      </div>
-                    <?php } ?>
-                  </p>
-                </div>
-              </div>
-            </div>
-          <?php } elseif (is_superadmin()) { ?>
-            <div class="row">
-              <div class="col-lg-6">
+              <div class="col-lg-4">
                 <div class="form-group"><label>Divisi (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_divisi, '', $divisi_id) ?>
                 </div>
               </div>
-              <div class="col-lg-6">
+              <div class="col-lg-4">
                 <div class="form-group"><label>Usertype (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_usertype, '', $usertype_id) ?>
                 </div>
@@ -200,15 +154,15 @@
                 <div class="form-group"><label>Akses Data (*)</label>
                   <p>
                     <?php foreach ($get_all_data_access as $dataAccess) { ?>
-                      <div class="pretty p-icon p-smooth">
-                        <input type="checkbox" name="data_access_id[]" value="<?php echo $dataAccess->id_data_access ?>">
-                        <div class="state p-success">
-                          <i class="icon fa fa-check"></i>
-                          <label><?php echo $dataAccess->data_access_name ?></label>
-                        </div>
-                      </div>
-                    <?php } ?>
-                  </p>
+                  <div class="pretty p-icon p-smooth">
+                    <input type="checkbox" name="data_access_id[]" value="<?php echo $dataAccess->id_data_access ?>">
+                    <div class="state p-success">
+                      <i class="icon fa fa-check"></i>
+                      <label><?php echo $dataAccess->data_access_name ?></label>
+                    </div>
+                  </div>
+                <?php } ?>
+                </p>
                 </div>
               </div>
             </div>
@@ -220,7 +174,6 @@
         </div>
       </div>
       <?php echo form_close() ?>
-
     </section>
     <!-- /.content -->
   </div>
@@ -238,8 +191,10 @@
   <script type="text/javascript">
     $('#birthdate').datepicker({
       autoclose: true,
-      zIndexOffset: 9999
-    })
+      format: 'yyyy-mm-dd',
+      zIndexOffset: 9999,
+      todayHighlight: true,
+    });
 
     function checkUsername() {
       $("#loaderIcon").show();
@@ -251,7 +206,6 @@
           $("#user-availability-status").html(data);
           $("#loaderIcon").hide();
         },
-        error: function() {}
       });
     }
 
@@ -265,7 +219,6 @@
           $("#email-availability-status").html(data);
           $("#loaderIcon").hide();
         },
-        error: function() {}
       });
     }
 
@@ -293,22 +246,10 @@
       }
     }
 
-    function tampilCabang() {
+    function tampilDivisi() {
       instansi_id = document.getElementById("instansi_id").value;
       $.ajax({
-        url: "<?php echo base_url(); ?>admin/cabang/pilih_cabang/" + instansi_id + "",
-        success: function(response) {
-          $("#cabang_id").html(response);
-        },
-        dataType: "html"
-      });
-      return false;
-    }
-
-    function tampilDivisi() {
-      cabang_id = document.getElementById("cabang_id").value;
-      $.ajax({
-        url: "<?php echo base_url(); ?>admin/divisi/pilih_divisi/" + cabang_id + "",
+        url: "<?php echo base_url(); ?>admin/divisi/pilih_divisi/" + instansi_id + "",
         success: function(response) {
           $("#divisi_id").html(response);
         },
@@ -341,9 +282,6 @@
           instansi_id: {
             required: true,
           },
-          cabang_id: {
-            required: true,
-          },
           divisi_id: {
             required: true,
           },
@@ -364,11 +302,10 @@
           password_confirm: {
             required: "<span style='color:red'>Wajib diisi</span>",
             minlength: "<span style='color:red'>Password minimal 8 huruf</span>",
-            equalTo: "<span style='color:red'>Konfirmasi password harus sama dengan password</span>"
+            equalTo: "<span style='color:red'>Konfirmasi password harus sama dengan password sebelumnya</span>"
           },
           email: "<span style='color:red'>Wajib diisi</span>",
           instansi_id: "<span style='color:red'>Wajib diisi</span>",
-          cabang_id: "<span style='color:red'>Wajib diisi</span>",
           divisi_id: "<span style='color:red'>Wajib diisi</span>",
           usertype_id: "<span style='color:red'>Wajib diisi</span>",
         }

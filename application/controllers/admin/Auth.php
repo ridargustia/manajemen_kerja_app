@@ -33,19 +33,23 @@ class Auth extends CI_Controller
   {
     is_read();
 
+    //TODO Authentikasi hak akses usertype
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki hak akses</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Data ' . $this->data['module'];
 
+    //TODO Get data user berdasarkan usertype
     if (is_grandadmin()) {
       $this->data['get_all'] = $this->Auth_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Auth_model->get_all_by_instansi();
     }
 
+    //TODO Load view dengan kirim data
     $this->load->view('back/auth/user_list', $this->data);
   }
 
@@ -53,26 +57,29 @@ class Auth extends CI_Controller
   {
     is_create();
 
+    //TODO Authentikasi hak akses usertype
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki hak akses</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Get value combobox berdasarkan usertype
     if (is_grandadmin()) {
       $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox();
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox();
     } elseif (is_masteradmin()) {
       $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_instansi($this->session->instansi_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_instansi($this->session->instansi_id);
+      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_instansi();
     }
 
-    $this->data['get_all_combobox_data_access']   = $this->Dataaccess_model->get_all_combobox();
+    //TODO Get data access dari database
     $this->data['get_all_data_access']            = $this->Dataaccess_model->get_all();
 
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
     $this->data['action']     = 'admin/auth/create_action';
 
+    //TODO Rancangan form
     $this->data['name'] = [
       'name'          => 'name',
       'id'            => 'name',
@@ -81,12 +88,15 @@ class Auth extends CI_Controller
       'required'      => '',
       'value'         => $this->form_validation->set_value('name'),
     ];
-    $this->data['birthdate'] = [
-      'name'          => 'birthdate',
-      'id'            => 'birthdate',
+    $this->data['gender'] = [
+      'name'          => 'gender',
+      'id'            => 'gender',
       'class'         => 'form-control',
-      'autocomplete'  => 'off',
-      'value'         => $this->form_validation->set_value('birthdate'),
+    ];
+    $this->data['gender_value'] = [
+      ''              => '- Pilih Jenis Kelamin -',
+      '1'             => 'Laki-laki',
+      '2'             => 'Perempuan',
     ];
     $this->data['birthplace'] = [
       'name'          => 'birthplace',
@@ -95,22 +105,12 @@ class Auth extends CI_Controller
       'autocomplete'  => 'off',
       'value'         => $this->form_validation->set_value('birthplace'),
     ];
-    $this->data['gender'] = [
-      'name'          => 'gender',
-      'id'            => 'gender',
-      'class'         => 'form-control',
-    ];
-    $this->data['gender_value'] = [
-      '1'             => 'Male',
-      '2'             => 'Female',
-    ];
-    $this->data['address'] = [
-      'name'          => 'address',
-      'id'            => 'address',
+    $this->data['birthdate'] = [
+      'name'          => 'birthdate',
+      'id'            => 'birthdate',
       'class'         => 'form-control',
       'autocomplete'  => 'off',
-      'rows'           => '3',
-      'value'         => $this->form_validation->set_value('address'),
+      'value'         => $this->form_validation->set_value('birthdate'),
     ];
     $this->data['phone'] = [
       'name'          => 'phone',
@@ -119,14 +119,13 @@ class Auth extends CI_Controller
       'autocomplete'  => 'off',
       'value'         => $this->form_validation->set_value('phone'),
     ];
-    $this->data['email'] = [
-      'name'          => 'email',
-      'id'            => 'email',
+    $this->data['address'] = [
+      'name'          => 'address',
+      'id'            => 'address',
       'class'         => 'form-control',
       'autocomplete'  => 'off',
-      'onChange'      => 'checkEmail()',
-      'required'      => '',
-      'value'         => $this->form_validation->set_value('email'),
+      'rows'          => '2',
+      'value'         => $this->form_validation->set_value('address'),
     ];
     $this->data['username'] = [
       'name'          => 'username',
@@ -136,6 +135,15 @@ class Auth extends CI_Controller
       'onChange'      => 'checkUsername()',
       'required'      => '',
       'value'         => $this->form_validation->set_value('username'),
+    ];
+    $this->data['email'] = [
+      'name'          => 'email',
+      'id'            => 'email',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'onChange'      => 'checkEmail()',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('email'),
     ];
     $this->data['password'] = [
       'name'          => 'password',
@@ -157,13 +165,6 @@ class Auth extends CI_Controller
       'name'          => 'instansi_id',
       'id'            => 'instansi_id',
       'class'         => 'form-control',
-      'onChange'      => 'tampilCabang()',
-      'required'      => '',
-    ];
-    $this->data['cabang_id'] = [
-      'name'          => 'cabang_id',
-      'id'            => 'cabang_id',
-      'class'         => 'form-control',
       'onChange'      => 'tampilDivisi()',
       'required'      => '',
     ];
@@ -179,28 +180,23 @@ class Auth extends CI_Controller
       'class'         => 'form-control',
       'required'      => '',
     ];
-    $this->data['data_access_id'] = [
-      'name'          => 'data_access_id[]',
-      'id'            => 'data_access_id',
-      'class'         => 'form-control select2',
-      'required'      => '',
-      'multiple'      => '',
-    ];
 
+    //TODO Load View dengan kirim data
     $this->load->view('back/auth/user_add', $this->data);
   }
 
   function create_action()
   {
+    //TODO Proses Validasi
     $this->form_validation->set_rules('name', 'Nama Lengkap', 'trim|required');
     $this->form_validation->set_rules('phone', 'No. HP', 'trim|is_numeric');
     $this->form_validation->set_rules('username', 'Username', 'trim|is_unique[users.username]|required');
     $this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[users.email]|required');
+    $this->form_validation->set_rules('password', 'Password', 'trim|min_length[8]|required');
+    $this->form_validation->set_rules('password_confirm', 'Konfirmasi Password', 'trim|matches[password]|required');
     $this->form_validation->set_rules('divisi_id', 'Divisi', 'required');
     $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
     $this->form_validation->set_rules('data_access_id[]', 'Data Access', 'required');
-    $this->form_validation->set_rules('password', 'Password', 'trim|min_length[8]|required');
-    $this->form_validation->set_rules('password_confirm', 'Konfirmasi Password', 'trim|matches[password]|required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('is_numeric', '{field} harus angka');
@@ -211,43 +207,47 @@ class Auth extends CI_Controller
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+    //TODO Input data instansi dan divisi berdasarkan usertype
     if (is_grandadmin()) {
       $instansi_id  = $this->input->post('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->userdata('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->userdata('instansi_id');
-      $cabang_id    = $this->session->userdata('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
     }
 
+    //TODO Pengkondisian hasil validasi
     if ($this->form_validation->run() === FALSE) {
       $this->create();
     } else {
+      //TODO Enkripsi password
       $password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
 
+      //TODO Kondisi terdapat inputan foto
       if ($_FILES['photo']['error'] <> 4) {
+        //TODO Penamaan file foto
         $nmfile = strtolower(url_title($this->input->post('username'))) . date('YmdHis');
 
+        //TODO Konfigurasi library upload foto
         $config['upload_path']      = './assets/images/user/';
         $config['allowed_types']    = 'jpg|jpeg|png';
         $config['max_size']         = 2048; // 2Mb
         $config['file_name']        = $nmfile;
 
+        //TODO Import library upload
         $this->load->library('upload', $config);
 
+        //TODO kondisi Gagal upload (ERROR)
         if (!$this->upload->do_upload('photo')) {
           $error = array('error' => $this->upload->display_errors());
           $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
-
+          //TODO Redirect ke form create
           $this->create();
         } else {
+          //TODO Kondisi berhasil upload foto
           $photo = $this->upload->data();
 
+          //TODO Konfigurasi library image_lib untuk resize foto
           $config['image_library']    = 'gd2';
           $config['source_image']     = './assets/images/user/' . $photo['file_name'] . '';
           $config['create_thumb']     = TRUE;
@@ -255,35 +255,40 @@ class Auth extends CI_Controller
           $config['width']            = 250;
           $config['height']           = 250;
 
+          //TODO import library
           $this->load->library('image_lib', $config);
+          //TODO Eksekusi library
           $this->image_lib->resize();
 
+          //TODO Data inputan dikelompokkan pada variabel array
           $data = array(
             'name'              => $this->input->post('name'),
-            'birthdate'         => $this->input->post('birthdate'),
-            'birthplace'        => $this->input->post('birthplace'),
             'gender'            => $this->input->post('gender'),
-            'address'           => $this->input->post('address'),
+            'birthplace'        => $this->input->post('birthplace'),
+            'birthdate'         => $this->input->post('birthdate'),
             'phone'             => $this->input->post('phone'),
-            'email'             => $this->input->post('email'),
+            'address'           => $this->input->post('address'),
             'username'          => strtolower($this->input->post('username')),
+            'email'             => $this->input->post('email'),
             'password'          => $password,
             'instansi_id'       => $instansi_id,
-            'cabang_id'         => $cabang_id,
             'divisi_id'         => $divisi_id,
-            'usertype_id'          => $this->input->post('usertype_id'),
+            'jabatan_id'        => $this->input->post('usertype_id'),
+            'usertype_id'       => $this->input->post('usertype_id'),
             'created_by'        => $this->session->username,
             'ip_add_reg'        => $this->input->ip_address(),
             'photo'             => $this->upload->data('file_name'),
             'photo_thumb'       => $nmfile . '_thumb' . $this->upload->data('file_ext'),
           );
 
+          //TODO Simpan ke database
           $this->Auth_model->insert($data);
-
+          //TODO Ambil id dari data yang baru saja disimpan ke database
           $user_id = $this->db->insert_id();
 
           write_log();
 
+          //TODO Simpan data_access_id dalam bentuk array ke database
           if (!empty($this->input->post('data_access_id'))) {
             $data_access_id = count($this->input->post('data_access_id'));
 
@@ -299,34 +304,38 @@ class Auth extends CI_Controller
             }
           }
 
-          $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+          //TODO kirim notifikasi
+          $this->session->set_flashdata('message', 'Sukses');
           redirect('admin/auth');
         }
       } else {
+        //TODO Data inputan dikelompokkan pada variabel array
         $data = array(
           'name'              => $this->input->post('name'),
-          'birthdate'         => $this->input->post('birthdate'),
-          'birthplace'        => $this->input->post('birthplace'),
           'gender'            => $this->input->post('gender'),
-          'address'           => $this->input->post('address'),
+          'birthplace'        => $this->input->post('birthplace'),
+          'birthdate'         => $this->input->post('birthdate'),
           'phone'             => $this->input->post('phone'),
-          'email'             => $this->input->post('email'),
+          'address'           => $this->input->post('address'),
           'username'          => strtolower($this->input->post('username')),
+          'email'             => $this->input->post('email'),
           'password'          => $password,
           'instansi_id'       => $instansi_id,
-          'cabang_id'         => $cabang_id,
           'divisi_id'         => $divisi_id,
-          'usertype_id'          => $this->input->post('usertype_id'),
+          'jabatan_id'        => $this->input->post('usertype_id'),
+          'usertype_id'       => $this->input->post('usertype_id'),
           'created_by'        => $this->session->username,
           'ip_add_reg'        => $this->input->ip_address(),
         );
 
+        //TODO Simpan ke database
         $this->Auth_model->insert($data);
-
+        //TODO Ambil id dari data yang baru saja disimpan ke database
         $user_id = $this->db->insert_id();
 
         write_log();
 
+        //TODO Simpan data_access_id dalam bentuk array ke database
         if (!empty($this->input->post('data_access_id'))) {
           $data_access_id = count($this->input->post('data_access_id'));
 
@@ -342,7 +351,8 @@ class Auth extends CI_Controller
           }
         }
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+        //TODO kirim notifikasi
+        $this->session->set_flashdata('message', 'Sukses');
         redirect('admin/auth');
       }
     }
@@ -1199,7 +1209,7 @@ class Auth extends CI_Controller
         echo "<div class='text-red'>Email telah ada, silahkan ganti yang lain</div>";
       } else {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-          echo "<div class='text-danger'>Format email belum benar</div>";
+          echo "<div class='text-red'>Format email belum benar</div>";
         } else {
           echo "<div class='text-green'>Email tersedia</div>";
         }

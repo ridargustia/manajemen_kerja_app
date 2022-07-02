@@ -38,7 +38,7 @@
                 <img src="<?php echo base_url('assets/images/user/' . $this->session->photo_thumb) ?>" class="img-circle" alt="User Image" style="height:60px; width:60px;">
               <?php } ?>
               <p>
-                <?php echo $this->session->username ?> - <?php echo $this->session->usertype_name ?>
+                <?php echo $this->session->username ?> - <?php echo $this->session->jabatan_name ?>
                 <br>
                 <small><b>Bergabung:</b> <?php echo date_only($this->session->created_at) ?></small>
                 <small><b><?php echo $this->session->instansi_name ?> | <?php echo $this->session->divisi_name ?></b></small>

@@ -133,5 +133,5 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = array(
-  'Auth_model', 'Company_model', 'Dataaccess_model', 'Divisi_model', 'Footer_model', 'Instansi_model', 'Log_model', 'Menu_model', 'Menuaccess_model', 'Submenu_model', 'Usertype_model', 'Template_model', 'Status_model', 'Agama_model', 'Pekerjaan_model', 'Pendidikan_akhir_model', 'Skck_model', 'Sk_domisili_model', 'Sk_jalan_model', 'Sk_hilang_ktp_model', 'Sk_meninggal_dunia_model', 'Sk_nikah_model', 'Sk_usaha_model', 'Surat_pengantar_nikah_model', 'Surat_pernyataan_miskin_model', 'Surat_rekomendasi_model', 'Sk_pindah_model',
+  'Auth_model', 'Company_model', 'Dataaccess_model', 'Divisi_model', 'Footer_model', 'Instansi_model', 'Log_model', 'Menu_model', 'Menuaccess_model', 'Submenu_model', 'Usertype_model', 'Jabatan_model', 'Template_model', 'Status_model', 'Agama_model', 'Pekerjaan_model', 'Pendidikan_akhir_model', 'Skck_model', 'Sk_domisili_model', 'Sk_jalan_model', 'Sk_hilang_ktp_model', 'Sk_meninggal_dunia_model', 'Sk_nikah_model', 'Sk_usaha_model', 'Surat_pengantar_nikah_model', 'Surat_pernyataan_miskin_model', 'Surat_rekomendasi_model', 'Sk_pindah_model',
 );

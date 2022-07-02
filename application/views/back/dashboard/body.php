@@ -18,9 +18,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if ($this->session->flashdata('message')) {
-        echo $this->session->flashdata('message');
-      } ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
 
       <div class="callout callout-warning">
         <h4><i class="fa fa-bullhorn"></i> Halo, <?php echo $this->session->name ?>!</h4>

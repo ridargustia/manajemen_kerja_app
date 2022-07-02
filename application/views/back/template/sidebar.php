@@ -292,10 +292,14 @@
           </ul>
         </li>
 
-      <?php } elseif (is_masteradmin() or is_superadmin()) { ?>
+      <?php } elseif (is_masteradmin()) { ?>
         <li class="<?php if ($this->uri->segment(2) == 'company') {
                       echo "active";
-                    } ?>"><a href="<?php echo base_url('admin/instansi/update/' . $this->session->instansi_id) ?>"><i class="fa fa-building"></i> <span>Profil Instansi</span></a></li>
+                    } ?>">
+          <a href="<?php echo base_url('admin/instansi/update/' . $this->session->instansi_id) ?>">
+            <i class="fa fa-building"></i> <span>Profil Instansi</span>
+          </a>
+        </li>
         <li class="<?php if ($this->uri->segment(2) == 'auth' && $this->uri->segment(3) != 'log_list') {
                       echo "active";
                     } ?> treeview">
@@ -306,25 +310,49 @@
           <ul class="treeview-menu">
             <li <?php if ($this->uri->segment(2) == 'auth' && $this->uri->segment(3) == 'create') {
                   echo 'class="active"';
-                } ?>><a href="<?php echo base_url('admin/auth/create') ?>"><i class="fa fa-circle-o"></i> Add User</a></li>
+                } ?>>
+              <a href="<?php echo base_url('admin/auth/create') ?>">
+                <i class="fa fa-circle-o"></i> Add User
+              </a>
+            </li>
             <li <?php if ($this->uri->segment(2) == 'auth' && $this->uri->segment(3) == '') {
                   echo 'class="active"';
-                } ?>><a href="<?php echo base_url('admin/auth') ?>"><i class="fa fa-circle-o"></i> User List</a></li>
+                } ?>>
+              <a href="<?php echo base_url('admin/auth') ?>">
+                <i class="fa fa-circle-o"></i> User List
+              </a>
+            </li>
             <li <?php if ($this->uri->segment(2) == 'auth' && $this->uri->segment(3) == 'deleted_list') {
                   echo 'class="active"';
-                } ?>><a href="<?php echo base_url('admin/auth/deleted_list') ?>"><i class="fa fa-circle-o"></i> Recycle Bin</a></li>
+                } ?>>
+              <a href="<?php echo base_url('admin/auth/deleted_list') ?>">
+                <i class="fa fa-circle-o"></i> Recycle Bin
+              </a>
+            </li>
           </ul>
         </li>
       <?php } ?>
 
       <li class="<?php if ($this->uri->segment(3) == 'update_profile') {
                     echo "active";
-                  } ?>"><a href="<?php echo base_url('admin/auth/update_profile/' . $this->session->id_users) ?>"><i class="fa fa-pencil"></i> <span>Edit Profile</span></a></li>
+                  } ?>">
+        <a href="<?php echo base_url('admin/auth/update_profile/' . $this->session->id_users) ?>">
+          <i class="fa fa-pencil"></i> <span>Edit Profile</span>
+        </a>
+      </li>
       <li class="<?php if ($this->uri->segment(3) == 'change_password') {
                     echo "active";
-                  } ?>"><a href="<?php echo base_url('admin/auth/change_password') ?>"><i class="fa fa-asterisk"></i> <span>Ubah Password</span></a></li>
+                  } ?>">
+        <a href="<?php echo base_url('admin/auth/change_password') ?>">
+          <i class="fa fa-asterisk"></i> <span>Ubah Password</span>
+        </a>
+      </li>
 
-      <li><a href="<?php echo base_url('admin/auth/logout') ?>"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
+      <li>
+        <a href="<?php echo base_url('admin/auth/logout') ?>">
+          <i class="fa fa-sign-out"></i> <span>Logout</span>
+        </a>
+      </li>
     </ul>
   </section>
   <!-- /.sidebar -->

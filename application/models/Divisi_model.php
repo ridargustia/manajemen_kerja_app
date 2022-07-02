@@ -118,13 +118,13 @@ class Divisi_model extends CI_Model
   {
     $this->db->select('
       id_divisi, divisi.divisi_name, divisi.instansi_id,
-      instansi.instansi_name, 
+      instansi.instansi_name,
       cabang.cabang_name
     ');
 
     $this->db->join('instansi', 'divisi.instansi_id = instansi.id_instansi');
     $this->db->join('cabang', 'divisi.cabang_id = cabang.id_cabang');
-    
+
     $this->db->where('cabang_id', $cabang_id);
 
     $this->db->order_by('divisi_name');
@@ -182,7 +182,7 @@ class Divisi_model extends CI_Model
     $this->db->where('is_delete_divisi', '1');
 
     $this->db->order_by('divisi_name', $this->order);
-    
+
     return $this->db->get($this->table)->result();
   }
 
@@ -197,7 +197,7 @@ class Divisi_model extends CI_Model
 
     return $this->db->get($this->table)->result();
   }
-  
+
   function get_all_deleted_by_cabang()
   {
     $this->db->join('instansi', 'divisi.instansi_id = instansi.id_instansi');
@@ -231,24 +231,6 @@ class Divisi_model extends CI_Model
   {
     $this->db->where('instansi_id', $instansi_id);
     $this->db->order_by('divisi_name');
-    $sql = $this->db->get('divisi');
-    if ($sql->num_rows() > 0) {
-      foreach ($sql->result_array() as $row) {
-        $result[''] = '- Silahkan Pilih Divisi -';
-        $result[$row['id_divisi']] = ucwords(strtolower($row['divisi_name']));
-      }
-    } else {
-      $result['-'] = '- Belum Ada Divisi -';
-    }
-    return $result;
-  }
-
-  function get_divisi_by_cabang_combobox($cabang_id)
-  {
-    $this->db->where('cabang_id', $cabang_id);
-
-    $this->db->order_by('divisi_name');
-
     $sql = $this->db->get('divisi');
 
     if ($sql->num_rows() > 0) {

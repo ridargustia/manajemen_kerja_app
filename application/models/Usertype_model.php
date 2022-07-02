@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Usertype_model extends CI_Model{
+class Usertype_model extends CI_Model
+{
 
   public $table = 'usertype';
   public $id    = 'id_usertype';
@@ -17,11 +18,9 @@ class Usertype_model extends CI_Model{
     $this->db->order_by('id_usertype');
     $data = $this->db->get($this->table);
 
-    if($data->num_rows() > 0)
-    {
-      foreach($data->result_array() as $row)
-      {
-        $result[''] = '- Please Choose Usertype';
+    if ($data->num_rows() > 0) {
+      foreach ($data->result_array() as $row) {
+        $result[''] = '- Pilih Usertype';
         $result[$row['id_usertype']] = $row['usertype_name'];
       }
       return $result;
@@ -37,10 +36,8 @@ class Usertype_model extends CI_Model{
 
     $data = $this->db->get($this->table);
 
-    if($data->num_rows() > 0)
-    {
-      foreach($data->result_array() as $row)
-      {
+    if ($data->num_rows() > 0) {
+      foreach ($data->result_array() as $row) {
         $result[''] = '- Silahkan Pilih Usertype';
         $result[$row['id_usertype']] = $row['usertype_name'];
       }
@@ -57,10 +54,8 @@ class Usertype_model extends CI_Model{
 
     $data = $this->db->get($this->table);
 
-    if($data->num_rows() > 0)
-    {
-      foreach($data->result_array() as $row)
-      {
+    if ($data->num_rows() > 0) {
+      foreach ($data->result_array() as $row) {
         $result[''] = '- Silahkan Pilih Usertype';
         $result[$row['id_usertype']] = $row['usertype_name'];
       }
@@ -84,7 +79,7 @@ class Usertype_model extends CI_Model{
     $this->db->insert($this->table, $data);
   }
 
-  function update($id,$data)
+  function update($id, $data)
   {
     $this->db->where($this->id, $id);
     $this->db->update($this->table, $data);
@@ -95,5 +90,4 @@ class Usertype_model extends CI_Model{
     $this->db->where($this->id, $id);
     $this->db->delete($this->table);
   }
-
 }

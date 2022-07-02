@@ -55,6 +55,18 @@
           popup: 'animate__animated animate__fadeOutUp'
         },
       });
+    } else if (flashData === 'tidak memiliki akses') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Terjadi Kesalahan',
+        text: 'Anda ' + flashData + ' ke halaman tersebut!',
+        showClass: {
+          popup: 'animate__animated animate__tada'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        },
+      });
     }
 
     $(document).on('click', '#delete-button', function(e) {

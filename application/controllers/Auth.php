@@ -40,6 +40,7 @@ class Auth extends CI_Controller
 
       //TODO Ambil data-data yang diperlukan
       $usertype_id = $this->Usertype_model->get_by_id($row->usertype_id);
+      $jabatan_id = $this->Jabatan_model->get_by_id($row->jabatan_id);
       $instansi_id = $this->Instansi_model->get_by_id($row->instansi_id);
       $divisi_id   = $this->Divisi_model->get_by_id($row->divisi_id);
 
@@ -92,6 +93,7 @@ class Auth extends CI_Controller
           'email'               => $row->email,
           'usertype_id'         => $row->usertype_id,
           'usertype_name'       => $usertype_id->usertype_name,
+          'jabatan_name'        => $jabatan_id->jabatan_name,
           'instansi_id'         => $row->instansi_id,
           'instansi_name'       => $instansi_id->instansi_name,
           'instansi_img'        => $instansi_id->instansi_img,

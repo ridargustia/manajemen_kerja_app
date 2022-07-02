@@ -24,7 +24,7 @@ class Divisi extends CI_Controller
 
     is_login();
 
-    if (is_admin() and is_pegawai()) {
+    if (is_superadmin()) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
       redirect('admin/dashboard');
     }
@@ -152,7 +152,7 @@ class Divisi extends CI_Controller
       if (is_grandadmin()) {
         $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
         $this->data['get_all_combobox_cabang']        = $this->Cabang_model->get_all_combobox_update($this->data['divisi']->instansi_id);
-      } elseif (is_masteradmin()) {        
+      } elseif (is_masteradmin()) {
         $this->data['get_all_combobox_cabang']        = $this->Cabang_model->get_all_combobox_update_by_instansi($this->data['divisi']->instansi_id);
       }
 
@@ -314,7 +314,7 @@ class Divisi extends CI_Controller
 
   function pilih_divisi()
   {
-    $this->data['divisi'] = $this->Divisi_model->get_divisi_by_cabang_combobox($this->uri->segment(4));
+    $this->data['divisi'] = $this->Divisi_model->get_divisi_by_instansi_combobox($this->uri->segment(4));
     $this->load->view('back/divisi/v_divisi', $this->data);
   }
 }
