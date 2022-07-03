@@ -78,9 +78,9 @@ class Divisi_model extends CI_Model
     }
   }
 
-  function get_all_combobox_update($cabang_id)
+  function get_all_combobox_update($instansi_id)
   {
-    $this->db->where('cabang_id', $cabang_id);
+    $this->db->where('instansi_id', $instansi_id);
     $this->db->order_by('divisi_name');
     $data = $this->db->get($this->table);
 

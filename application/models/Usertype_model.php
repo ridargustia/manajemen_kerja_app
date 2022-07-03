@@ -29,8 +29,7 @@ class Usertype_model extends CI_Model
 
   function get_all_combobox_by_instansi()
   {
-    $this->db->where('id_usertype >', '1');
-    $this->db->where('id_usertype <', '5');
+    $this->db->where('id_usertype', '2');
 
     $this->db->order_by('id_usertype');
 

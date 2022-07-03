@@ -11,11 +11,12 @@ class Auth_model extends CI_Model
   function get_all()
   {
     $this->db->select('
-      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete, usertype.usertype_name, instansi.instansi_name, divisi.divisi_name
+      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete, usertype.usertype_name, instansi.instansi_name, divisi.divisi_name, jabatan.jabatan_name
     ');
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');
     $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'left');
     $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi', 'left');
+    $this->db->join('jabatan', 'users.jabatan_id = jabatan.id_jabatan', 'left');
 
     $this->db->where('is_delete', '0');
 
@@ -27,11 +28,12 @@ class Auth_model extends CI_Model
   function get_all_by_instansi()
   {
     $this->db->select('
-      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete, usertype.usertype_name, instansi.instansi_name, divisi.divisi_name
+      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete, usertype.usertype_name, instansi.instansi_name, divisi.divisi_name, jabatan.jabatan_name
     ');
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');
     $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'left');
     $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi', 'left');
+    $this->db->join('jabatan', 'users.jabatan_id = jabatan.id_jabatan', 'left');
 
     $this->db->where('users.instansi_id', $this->session->instansi_id);
     $this->db->where('users.usertype_id <', '5');

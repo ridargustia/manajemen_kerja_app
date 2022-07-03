@@ -36,8 +36,10 @@
                   <th style="text-align: center">Username</th>
                   <th style="text-align: center">Email</th>
                   <th style="text-align: center">Divisi</th>
-                  <th style="text-align: center">Instansi</th>
-                  <th style="text-align: center">Usertype</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Instansi</th>
+                  <?php } ?>
+                  <th style="text-align: center">Jabatan</th>
                   <th style="text-align: center">Status</th>
                   <th style="text-align: center">Action</th>
                 </tr>
@@ -62,8 +64,10 @@
                     <td style="text-align: center"><?php echo $user->username ?></td>
                     <td style="text-align: center"><?php echo $user->email ?></td>
                     <td style="text-align: center"><?php echo $user->divisi_name ?></td>
-                    <td style="text-align: center"><?php echo $user->instansi_name ?></td>
-                    <td style="text-align: center"><?php echo $user->usertype_name ?></td>
+                    <?php if (is_grandadmin()) { ?>
+                      <td style="text-align: center"><?php echo $user->instansi_name ?></td>
+                    <?php } ?>
+                    <td style="text-align: center"><?php echo $user->jabatan_name ?></td>
                     <td style="text-align: center"><?php echo $is_active ?></td>
                     <td style="text-align: center"><?php echo $edit ?> <?php echo $delete ?></td>
                   </tr>

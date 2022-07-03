@@ -223,6 +223,13 @@ class Auth extends CI_Controller
       //TODO Enkripsi password
       $password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
 
+      //TODO Kondisi tgl lahir tidak memiliki value
+      if ($this->input->post('birthdate') === '') {
+        $birthdate = NULL;
+      } else {
+        $birthdate = $this->input->post('birthdate');
+      }
+
       //TODO Kondisi terdapat inputan foto
       if ($_FILES['photo']['error'] <> 4) {
         //TODO Penamaan file foto
@@ -265,7 +272,7 @@ class Auth extends CI_Controller
             'name'              => $this->input->post('name'),
             'gender'            => $this->input->post('gender'),
             'birthplace'        => $this->input->post('birthplace'),
-            'birthdate'         => $this->input->post('birthdate'),
+            'birthdate'         => $birthdate,
             'phone'             => $this->input->post('phone'),
             'address'           => $this->input->post('address'),
             'username'          => strtolower($this->input->post('username')),
@@ -314,7 +321,7 @@ class Auth extends CI_Controller
           'name'              => $this->input->post('name'),
           'gender'            => $this->input->post('gender'),
           'birthplace'        => $this->input->post('birthplace'),
-          'birthdate'         => $this->input->post('birthdate'),
+          'birthdate'         => $birthdate,
           'phone'             => $this->input->post('phone'),
           'address'           => $this->input->post('address'),
           'username'          => strtolower($this->input->post('username')),
@@ -360,54 +367,43 @@ class Auth extends CI_Controller
 
   function update($id)
   {
-    is_login();
     is_update();
 
+    //TODO Get data user by id
     $this->data['user']     = $this->Auth_model->get_by_id($id);
     $user                   = $this->data['user'];
 
+    //TODO superadmin tidak memiliki akses
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Kondisi masteradmin dan data instansi dari user (yg akan di edit) berbeda dengan data instansi dari akun yang sedang login, maka tidak memiliki hak akses
     if (is_masteradmin() && $user->instansi_id != $this->session->instansi_id) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak melihat data orang lain</div>');
-      redirect('admin/auth');
-    }
-    if (is_superadmin() && $user->cabang_id != $this->session->cabang_id) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak melihat data orang lain</div>');
-      redirect('admin/auth');
-    }
-    if (is_superadmin() && $user->divisi_id != $this->session->divisi_id) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak melihat data orang lain</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/auth');
     }
 
+    //TODO Get value combobox for form
     if (is_grandadmin()) {
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox();
       $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
-      $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_update($this->data['user']->instansi_id);
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['user']->cabang_id);
+      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['user']->instansi_id);
     } elseif (is_masteradmin()) {
-      $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->data['user']->instansi_id);
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->data['user']->cabang_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_instansi($this->data['user']->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->session->cabang_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_cabang($this->session->cabang_id);
+      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_instansi($this->data['user']->instansi_id);
+      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_instansi();
     }
 
-    $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
-
-    $this->data['get_all_combobox_data_access']   = $this->Dataaccess_model->get_all_combobox();
     $this->data['get_all_data_access']            = $this->Dataaccess_model->get_all();
-    $this->data['get_all_data_access_old']        = $this->Dataaccess_model->get_all_data_access_old($id);
 
+    //TODO Inisialisasi Variabel
     $this->data['page_title'] = 'Update Data ' . $this->data['module'];
     $this->data['action']     = 'admin/auth/update_action';
 
+    //TODO Kondisi user tersedia
     if ($this->data['user']) {
+      //TODO Rancangan Form
       $this->data['id_users'] = [
         'name'          => 'id_users',
         'type'          => 'hidden',
@@ -419,11 +415,15 @@ class Auth extends CI_Controller
         'autocomplete'  => 'off',
         'required'      => '',
       ];
-      $this->data['birthdate'] = [
-        'name'          => 'birthdate',
-        'id'            => 'birthdate',
+      $this->data['gender'] = [
+        'name'          => 'gender',
+        'id'            => 'gender',
         'class'         => 'form-control',
-        'autocomplete'  => 'off',
+      ];
+      $this->data['gender_value'] = [
+        ''              => '- Pilih Jenis Kelamin -',
+        '1'             => 'Laki-laki',
+        '2'             => 'Perempuan',
       ];
       $this->data['birthplace'] = [
         'name'          => 'birthplace',
@@ -431,21 +431,11 @@ class Auth extends CI_Controller
         'class'         => 'form-control',
         'autocomplete'  => 'off',
       ];
-      $this->data['gender'] = [
-        'name'          => 'gender',
-        'id'            => 'gender',
-        'class'         => 'form-control',
-      ];
-      $this->data['gender_value'] = [
-        '1'             => 'Male',
-        '2'             => 'Female',
-      ];
-      $this->data['address'] = [
-        'name'          => 'address',
-        'id'            => 'address',
+      $this->data['birthdate'] = [
+        'name'          => 'birthdate',
+        'id'            => 'birthdate',
         'class'         => 'form-control',
         'autocomplete'  => 'off',
-        'rows'           => '3',
       ];
       $this->data['phone'] = [
         'name'          => 'phone',
@@ -453,12 +443,12 @@ class Auth extends CI_Controller
         'class'         => 'form-control',
         'autocomplete'  => 'off',
       ];
-      $this->data['email'] = [
-        'name'          => 'email',
-        'id'            => 'email',
+      $this->data['address'] = [
+        'name'          => 'address',
+        'id'            => 'address',
         'class'         => 'form-control',
         'autocomplete'  => 'off',
-        'required'      => '',
+        'rows'           => '2',
       ];
       $this->data['username'] = [
         'name'          => 'username',
@@ -467,16 +457,16 @@ class Auth extends CI_Controller
         'autocomplete'  => 'off',
         'required'      => '',
       ];
+      $this->data['email'] = [
+        'name'          => 'email',
+        'id'            => 'email',
+        'class'         => 'form-control',
+        'autocomplete'  => 'off',
+        'required'      => '',
+      ];
       $this->data['instansi_id'] = [
         'name'          => 'instansi_id',
         'id'            => 'instansi_id',
-        'class'         => 'form-control',
-        'onChange'      => 'tampilCabang()',
-        'required'      => '',
-      ];
-      $this->data['cabang_id'] = [
-        'name'          => 'cabang_id',
-        'id'            => 'cabang_id',
         'class'         => 'form-control',
         'onChange'      => 'tampilDivisi()',
         'required'      => '',
@@ -493,17 +483,12 @@ class Auth extends CI_Controller
         'class'         => 'form-control',
         'required'      => '',
       ];
-      $this->data['data_access_id'] = [
-        'name'          => 'data_access_id[]',
-        'id'            => 'data_access_id',
-        'class'         => 'form-control select2',
-        'multiple'      => '',
-      ];
 
-
+      //TODO Load view dengan kirim data
       $this->load->view('back/auth/user_edit', $this->data);
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO Kondisi data tidak ditemukan
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/auth');
     }
   }
