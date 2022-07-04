@@ -495,64 +495,78 @@ class Auth extends CI_Controller
 
   function update_action()
   {
+    //TODO validasi data inputan user
     $this->form_validation->set_rules('name', 'Nama Lengkap', 'trim|required');
-    $this->form_validation->set_rules('phone', 'No. HP', 'trim|is_numeric');
+    $this->form_validation->set_rules('phone', 'No. HP/Telepon', 'trim|is_numeric');
     $this->form_validation->set_rules('username', 'Username', 'trim|required');
     $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
-    // $this->form_validation->set_rules('cabang_id', 'Cabang', 'required');
     $this->form_validation->set_rules('divisi_id', 'Divisi', 'required');
     $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
+
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('is_numeric', '{field} harus angka');
     $this->form_validation->set_message('valid_email', '{field} format email tidak benar');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+    //TODO Pengecekan form validasi
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_users'));
     } else {
+      //TODO Inisialisasi variabel berdasarkan usertype
       if (is_grandadmin()) {
         $instansi_id  = $this->input->post('instansi_id');
-        $cabang_id    = $this->input->post('cabang_id');
         $divisi_id    = $this->input->post('divisi_id');
       } elseif (is_masteradmin()) {
         $instansi_id  = $this->session->userdata('instansi_id');
-        $cabang_id    = $this->input->post('cabang_id');
-        $divisi_id    = $this->input->post('divisi_id');
-      } elseif (is_superadmin()) {
-        $instansi_id  = $this->session->userdata('instansi_id');
-        $cabang_id    = $this->session->userdata('cabang_id');
         $divisi_id    = $this->input->post('divisi_id');
       }
 
+      //TODO Kondisi tgl lahir tidak memiliki value
+      if ($this->input->post('birthdate') === '') {
+        $birthdate = NULL;
+      } else {
+        $birthdate = $this->input->post('birthdate');
+      }
+
+      //TODO Kondisi form photo berisi value
       if ($_FILES['photo']['error'] <> 4) {
+        //TODO Penamaan file foto
         $nmfile = strtolower(url_title($this->input->post('username'))) . date('YmdHis');
 
+        //TODO Konfigurasi library upload foto
         $config['upload_path']      = './assets/images/user/';
         $config['allowed_types']    = 'jpg|jpeg|png';
         $config['max_size']         = 2048; // 2Mb
         $config['file_name']        = $nmfile;
 
+        //TODO Import library upload
         $this->load->library('upload', $config);
 
+        //TODO Get data user by id untuk mengambil nama photo dari database by id users
         $delete = $this->Auth_model->get_by_id($this->input->post('id_users'));
 
+        //TODO Definisi direktori letak foto disimpan pada folder project
         $dir        = "./assets/images/user/" . $delete->photo;
         $dir_thumb  = "./assets/images/user/" . $delete->photo_thumb;
 
+        //TODO Proses hapus file foto (current) pada direktori project sebelum upload photo baru
         if (is_file($dir)) {
           unlink($dir);
           unlink($dir_thumb);
         }
 
+        //TODO kondisi Gagal upload (ERROR)
         if (!$this->upload->do_upload('photo')) {
           $error = array('error' => $this->upload->display_errors());
           $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
-
+          //TODO Redirect ke form update
           $this->update($this->input->post('id_users'));
         } else {
+          //TODO Kondisi berhasil upload foto
           $photo = $this->upload->data();
 
+          //TODO Konfigurasi library image_lib untuk resize foto
           $config['image_library']    = 'gd2';
           $config['source_image']     = './assets/images/user/' . $photo['file_name'] . '';
           $config['create_thumb']     = TRUE;
@@ -560,36 +574,41 @@ class Auth extends CI_Controller
           $config['width']            = 250;
           $config['height']           = 250;
 
+          //TODO import library
           $this->load->library('image_lib', $config);
+          //TODO Eksekusi library
           $this->image_lib->resize();
 
+          //TODO Data inputan dikelompokkan pada variabel array
           $data = array(
             'name'              => $this->input->post('name'),
-            'birthdate'         => $this->input->post('birthdate'),
-            'birthplace'        => $this->input->post('birthplace'),
             'gender'            => $this->input->post('gender'),
-            'address'           => $this->input->post('address'),
+            'birthplace'        => $this->input->post('birthplace'),
+            'birthdate'         => $birthdate,
             'phone'             => $this->input->post('phone'),
-            'email'             => $this->input->post('email'),
+            'address'           => $this->input->post('address'),
             'username'          => strtolower($this->input->post('username')),
+            'email'             => $this->input->post('email'),
             'instansi_id'       => $instansi_id,
-            'cabang_id'         => $cabang_id,
             'divisi_id'         => $divisi_id,
+            'jabatan_id'        => $this->input->post('usertype_id'),
             'usertype_id'       => $this->input->post('usertype_id'),
             'modified_by'       => $this->session->username,
             'photo'             => $this->upload->data('file_name'),
             'photo_thumb'       => $nmfile . '_thumb' . $this->upload->data('file_ext'),
           );
 
+          //TODO Simpan data baru ke database by id users
           $this->Auth_model->update($this->input->post('id_users'), $data);
 
           write_log();
 
+          //TODO Simpan data access baru dan hapus data access lama
           if (!empty($this->input->post('data_access_id'))) {
             $this->db->where('user_id', $this->input->post('id_users'));
             $this->db->delete('users_data_access');
 
-            $data_access_id         = count($this->input->post('data_access_id'));
+            $data_access_id = count($this->input->post('data_access_id'));
 
             for ($i_data_access_id = 0; $i_data_access_id < $data_access_id; $i_data_access_id++) {
               $datas_data_access_id[$i_data_access_id] = array(
@@ -603,30 +622,34 @@ class Auth extends CI_Controller
             }
           }
 
-          $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+          //TODO kirim notifikasi
+          $this->session->set_flashdata('message', 'Sukses');
           redirect('admin/auth');
         }
       } else {
+        //TODO Data inputan dikelompokkan pada variabel array
         $data = array(
           'name'              => $this->input->post('name'),
-          'birthdate'         => $this->input->post('birthdate'),
-          'birthplace'        => $this->input->post('birthplace'),
           'gender'            => $this->input->post('gender'),
-          'address'           => $this->input->post('address'),
+          'birthplace'        => $this->input->post('birthplace'),
+          'birthdate'         => $birthdate,
           'phone'             => $this->input->post('phone'),
-          'email'             => $this->input->post('email'),
+          'address'           => $this->input->post('address'),
           'username'          => strtolower($this->input->post('username')),
+          'email'             => $this->input->post('email'),
           'instansi_id'       => $instansi_id,
-          'cabang_id'         => $cabang_id,
           'divisi_id'         => $divisi_id,
+          'jabatan_id'        => $this->input->post('usertype_id'),
           'usertype_id'       => $this->input->post('usertype_id'),
           'modified_by'       => $this->session->username,
         );
 
+        //TODO Simpan data baru ke database by id users
         $this->Auth_model->update($this->input->post('id_users'), $data);
 
         write_log();
 
+        //TODO Simpan data access baru dan hapus data access lama
         if (!empty($this->input->post('data_access_id'))) {
           $this->db->where('user_id', $this->input->post('id_users'));
           $this->db->delete('users_data_access');
@@ -645,7 +668,8 @@ class Auth extends CI_Controller
           }
         }
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+        //TODO kirim notifikasi
+        $this->session->set_flashdata('message', 'Sukses');
         redirect('admin/auth');
       }
     }
