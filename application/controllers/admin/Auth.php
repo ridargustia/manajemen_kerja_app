@@ -776,29 +776,35 @@ class Auth extends CI_Controller
 
   function restore($id)
   {
-    is_login();
     is_restore();
 
+    //TODO Authentikasi usertype
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Get data user by id
     $row = $this->Auth_model->get_by_id($id);
 
+    //TODO Kondisi data user ditemukan
     if ($row) {
+      //TODO Tampung data yang akan diedit dalam array
       $data = array(
         'is_delete'   => '0',
         'deleted_by'  => NULL,
         'deleted_at'  => NULL,
       );
 
+      //TODO eksekusi proses update data berdasarkan id
       $this->Auth_model->update($id, $data);
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dikembalikan</div>');
+      //TODO Kirim notifikasi berhasil dikembalikan
+      $this->session->set_flashdata('message', 'dikembalikan');
       redirect('admin/auth/deleted_list');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO kirim notifikasi data tidak ditemukan
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/auth');
     }
   }

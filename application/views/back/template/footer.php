@@ -67,6 +67,18 @@
           popup: 'animate__animated animate__fadeOutUp'
         },
       });
+    } else if (flashData === 'dikembalikan') {
+      Swal.fire({
+        title: 'Sukses',
+        text: 'Data berhasil ' + flashData,
+        icon: 'success',
+        showClass: {
+          popup: 'animate__animated animate__bounce'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        },
+      });
     }
 
     $(document).on('click', '#delete-button', function(e) {
