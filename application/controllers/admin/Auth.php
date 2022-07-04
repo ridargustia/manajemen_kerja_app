@@ -714,31 +714,38 @@ class Auth extends CI_Controller
 
   function delete_permanent($id)
   {
-    is_login();
     is_delete();
 
+    //TODO Authentikasi usertype
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Get data users by id
     $delete = $this->Auth_model->get_by_id($id);
 
+    //TODO Kondisi user ditemukan
     if ($delete) {
+      //TODO Definisikan direktori tempat file foto disimpan
       $dir        = "./assets/images/user/" . $delete->photo;
       $dir_thumb  = "./assets/images/user/" . $delete->photo_thumb;
 
+      //TODO Proses hapus file foto di direktori project
       if (is_file($dir)) {
         unlink($dir);
         unlink($dir_thumb);
       }
 
+      //TODO Eksekusi proses hapus data user secara permanen
       $this->Auth_model->delete($id);
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus permanen</div>');
+      //TODO Kirim notifikasi berhasil dihapus
+      $this->session->set_flashdata('message', 'dihapus');
       redirect('admin/auth/deleted_list');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO Kirim notifikasi data tidak ditemukan
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/auth');
     }
   }
