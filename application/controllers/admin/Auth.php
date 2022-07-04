@@ -677,31 +677,37 @@ class Auth extends CI_Controller
 
   function delete($id)
   {
-    is_login();
     is_delete();
 
+    //TODO Authentikasi usertype
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Get data users by id
     $delete = $this->Auth_model->get_by_id($id);
 
+    //TODO Kondisi data users ditemukan
     if ($delete) {
+      //TODO Data yang akan diubah kelompokkan dalam array
       $data = array(
         'is_delete'   => '1',
         'deleted_by'  => $this->session->username,
         'deleted_at'  => date('Y-m-d H:i:a'),
       );
 
+      //TODO eksekusi soft delete data user
       $this->Auth_model->soft_delete($id, $data);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
+      //TODO Kirim notifikasi berhasil dihapus
+      $this->session->set_flashdata('message', 'dihapus');
       redirect('admin/auth');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO Kirim notifikasi data tidak ditemukan pada database
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/auth');
     }
   }
