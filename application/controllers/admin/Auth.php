@@ -752,25 +752,25 @@ class Auth extends CI_Controller
 
   function deleted_list()
   {
-    is_login();
     is_restore();
 
+    //TODO Authentikasi usertype
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
-    $this->data['page_title'] = 'Deleted ' . $this->data['module'] . ' List';
+    //TODO Inisialisasi variabel
+    $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
 
+    //TODO Get data user yang telah dihapus berdasarkan usertype
     if (is_grandadmin()) {
       $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted();
     } elseif (is_masteradmin()) {
       $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted_by_cabang();
     }
 
-
+    //TODO Load view dengan kirim data
     $this->load->view('back/auth/user_deleted_list', $this->data);
   }
 

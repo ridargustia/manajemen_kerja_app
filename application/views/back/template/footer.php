@@ -87,4 +87,23 @@
         }
       })
     });
+
+    $(document).on('click', '#delete-button-permanent', function(e) {
+      e.preventDefault();
+      const link = $(this).attr('href');
+
+      Swal.fire({
+        title: 'Apakah anda yakin?',
+        text: "Data akan dihapus secara permanen!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#00a65a',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location = link;
+        }
+      })
+    });
   </script>

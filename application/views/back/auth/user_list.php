@@ -32,7 +32,7 @@
               <thead>
                 <tr>
                   <th style="text-align: center">No</th>
-                  <th style="text-align: center">Name</th>
+                  <th style="text-align: center">Nama</th>
                   <th style="text-align: center">Username</th>
                   <th style="text-align: center">Email</th>
                   <th style="text-align: center">Divisi</th>
