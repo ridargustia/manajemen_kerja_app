@@ -693,6 +693,7 @@ class Auth extends CI_Controller
       //TODO Data yang akan diubah kelompokkan dalam array
       $data = array(
         'is_delete'   => '1',
+        'is_active'   => '0',
         'deleted_by'  => $this->session->username,
         'deleted_at'  => date('Y-m-d H:i:a'),
       );
@@ -792,6 +793,7 @@ class Auth extends CI_Controller
       //TODO Tampung data yang akan diedit dalam array
       $data = array(
         'is_delete'   => '0',
+        'is_active'   => '1',
         'deleted_by'  => NULL,
         'deleted_at'  => NULL,
       );
@@ -811,31 +813,33 @@ class Auth extends CI_Controller
 
   function activate($id)
   {
-    is_login();
-
+    //TODO Authentikasi usertype
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Proses update data is active
     $this->Auth_model->update($this->uri->segment('4'), array('is_active' => '1'));
 
-    $this->session->set_flashdata('message', '<div class="alert alert-success">Akun berhasil diaktifkan</div>');
+    //TODO kirim notifikasi berhasil diaktifkan
+    $this->session->set_flashdata('message', 'diaktifkan');
     redirect('admin/auth');
   }
 
   function deactivate($id)
   {
-    is_login();
-
+    //TODO Authentikasi usertype
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Proses update data is active
     $this->Auth_model->update($this->uri->segment('4'), array('is_active' => '0'));
 
-    $this->session->set_flashdata('message', '<div class="alert alert-success">Akun berhasil dinonaktifkan</div>');
+    //TODO Kirim notifikasi data dinonaktifkan
+    $this->session->set_flashdata('message', 'dinonaktifkan');
     redirect('admin/auth');
   }
 

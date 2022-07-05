@@ -49,9 +49,9 @@
                 foreach ($get_all as $user) {
                   //TODO status active
                   if ($user->is_active == '1') {
-                    $is_active = '<a href="' . base_url('admin/auth/deactivate/' . $user->id_users) . '" class="btn btn-xs btn-success">ACTIVE</a>';
+                    $is_active = '<a href="' . base_url('admin/auth/deactivate/' . $user->id_users) . '" id="deactive-button" class="btn btn-xs btn-success" title="Nonaktifkan User">ACTIVE</a>';
                   } else {
-                    $is_active = '<a href="' . base_url('admin/auth/activate/' . $user->id_users) . '" class="btn btn-xs btn-danger">INACTIVE</a>';
+                    $is_active = '<a href="' . base_url('admin/auth/activate/' . $user->id_users) . '" class="btn btn-xs btn-danger" title="Aktifkan User">INACTIVE</a>';
                   }
 
                   //TODO action

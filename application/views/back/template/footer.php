@@ -79,6 +79,30 @@
           popup: 'animate__animated animate__fadeOutUp'
         },
       });
+    } else if (flashData === 'diaktifkan') {
+      Swal.fire({
+        title: 'Sukses',
+        text: 'Akun berhasil ' + flashData,
+        icon: 'success',
+        showClass: {
+          popup: 'animate__animated animate__bounce'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        },
+      });
+    } else if (flashData === 'dinonaktifkan') {
+      Swal.fire({
+        title: 'Sukses',
+        text: 'Akun berhasil ' + flashData,
+        icon: 'success',
+        showClass: {
+          popup: 'animate__animated animate__bounce'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        },
+      });
     }
 
     $(document).on('click', '#delete-button', function(e) {
@@ -112,6 +136,25 @@
         confirmButtonColor: '#00a65a',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Ya, hapus!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location = link;
+        }
+      })
+    });
+
+    $(document).on('click', '#deactive-button', function(e) {
+      e.preventDefault();
+      const link = $(this).attr('href');
+
+      Swal.fire({
+        title: 'Apakah anda yakin?',
+        text: "Akun akan dinonaktifkan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#00a65a',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, nonaktifkan!'
       }).then((result) => {
         if (result.isConfirmed) {
           window.location = link;
