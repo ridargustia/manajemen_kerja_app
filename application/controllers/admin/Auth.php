@@ -845,21 +845,25 @@ class Auth extends CI_Controller
 
   function update_profile($id)
   {
-    is_login();
-
+    //TODO Get data user by id
     $this->data['user']     = $this->Auth_model->get_by_id($id);
 
+    //TODO Authentikasi id user
     if ($id != $this->session->id_users) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak mengubah data user lain</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Kondisi user ditemukan
     if ($this->data['user']) {
+      //TODO Inisialisasi variabel
       $this->data['page_title'] = 'Update Profile';
       $this->data['action']     = 'admin/auth/update_profile_action';
 
+      //TODO Get data access yang dimiliki user tsb
       $this->data['get_all_data_access_old']        = $this->Dataaccess_model->get_all_data_access_old($id);
 
+      //TODO Rancangan form
       $this->data['id_users'] = [
         'name'          => 'id_users',
         'type'          => 'hidden',
@@ -871,11 +875,15 @@ class Auth extends CI_Controller
         'autocomplete'  => 'off',
         'required'      => '',
       ];
-      $this->data['birthdate'] = [
-        'name'          => 'birthdate',
-        'id'            => 'birthdate',
+      $this->data['gender'] = [
+        'name'          => 'gender',
+        'id'            => 'gender',
         'class'         => 'form-control',
-        'autocomplete'  => 'off',
+      ];
+      $this->data['gender_value'] = [
+        ''              => '- Pilih Jenis Kelamin -',
+        '1'             => 'Laki-laki',
+        '2'             => 'Perempuan',
       ];
       $this->data['birthplace'] = [
         'name'          => 'birthplace',
@@ -883,21 +891,11 @@ class Auth extends CI_Controller
         'class'         => 'form-control',
         'autocomplete'  => 'off',
       ];
-      $this->data['gender'] = [
-        'name'          => 'gender',
-        'id'            => 'gender',
-        'class'         => 'form-control',
-      ];
-      $this->data['gender_value'] = [
-        '1'             => 'Male',
-        '2'             => 'Female',
-      ];
-      $this->data['address'] = [
-        'name'          => 'address',
-        'id'            => 'address',
+      $this->data['birthdate'] = [
+        'name'          => 'birthdate',
+        'id'            => 'birthdate',
         'class'         => 'form-control',
         'autocomplete'  => 'off',
-        'rows'           => '3',
       ];
       $this->data['phone'] = [
         'name'          => 'phone',
@@ -905,12 +903,12 @@ class Auth extends CI_Controller
         'class'         => 'form-control',
         'autocomplete'  => 'off',
       ];
-      $this->data['email'] = [
-        'name'          => 'email',
-        'id'            => 'email',
+      $this->data['address'] = [
+        'name'          => 'address',
+        'id'            => 'address',
         'class'         => 'form-control',
         'autocomplete'  => 'off',
-        'required'      => '',
+        'rows'           => '2',
       ];
       $this->data['username'] = [
         'name'          => 'username',
@@ -919,63 +917,80 @@ class Auth extends CI_Controller
         'autocomplete'  => 'off',
         'required'      => '',
       ];
-      $this->data['usertype'] = [
-        'name'          => 'usertype',
-        'id'            => 'usertype',
+      $this->data['email'] = [
+        'name'          => 'email',
+        'id'            => 'email',
         'class'         => 'form-control',
+        'autocomplete'  => 'off',
         'required'      => '',
       ];
 
+      //TODO Load view dengan kirim data
       $this->load->view('back/auth/update_profile', $this->data);
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO Kondisi data user tidak ditemukan
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/dashboard');
     }
   }
 
   function update_profile_action()
   {
-    $this->form_validation->set_rules('name', 'Full Name', 'trim|required');
-    $this->form_validation->set_rules('phone', 'Phone No', 'trim|is_numeric');
+    //TODO Setup validasi form
+    $this->form_validation->set_rules('name', 'Nama Lengkap', 'trim|required');
+    $this->form_validation->set_rules('phone', 'No. HP/Telepon', 'trim|is_numeric');
     $this->form_validation->set_rules('username', 'Username', 'trim|required');
     $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('valid_email', '{field} format email tidak benar');
+    $this->form_validation->set_message('is_numeric', '{field} format harus angka');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+    //TODO Kondisi data tidak lolos validasi
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_users'));
     } else {
+      //TODO Kondisi data lolos validasi
+      //TODO Jika user mengganti/upload foto baru
       if ($_FILES['photo']['error'] <> 4) {
+        //TODO Definisikan nama file foto yang akan disimpan ke direktori
         $nmfile = strtolower(url_title($this->input->post('username'))) . date('YmdHis');
 
+        //TODO Konfigurasi library upload
         $config['upload_path']      = './assets/images/user/';
         $config['allowed_types']    = 'jpg|jpeg|png';
         $config['max_size']         = 2048; // 2Mb
         $config['file_name']        = $nmfile;
 
+        //TODO import library upload
         $this->load->library('upload', $config);
 
+        //TODO Get data user by id
         $delete = $this->Auth_model->get_by_id($this->input->post('id_users'));
 
+        //TODO Definisikan letak direktori penyimpanan filenya
         $dir        = "./assets/images/user/" . $delete->photo;
         $dir_thumb  = "./assets/images/user/" . $delete->photo_thumb;
 
+        //TODO Jika file ditemukan pada direktori maka hapus file
         if (is_file($dir)) {
           unlink($dir);
           unlink($dir_thumb);
         }
 
+        //TODO Kondisi file foto gagal diupload
         if (!$this->upload->do_upload('photo')) {
           $error = array('error' => $this->upload->display_errors());
           $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
 
           $this->update($this->input->post('id_users'));
         } else {
+          //TODO Menjalankan library upload
           $photo = $this->upload->data();
 
+          //TODO Konfigurasi library image_lib
           $config['image_library']    = 'gd2';
           $config['source_image']     = './assets/images/user/' . $photo['file_name'] . '';
           $config['create_thumb']     = TRUE;
@@ -983,48 +998,57 @@ class Auth extends CI_Controller
           $config['width']            = 250;
           $config['height']           = 250;
 
+          //TODO import library image_lib
           $this->load->library('image_lib', $config);
+          //TODO Jalankan library image_lib
           $this->image_lib->resize();
 
+          //TODO Tampung data ke variabel array
           $data = array(
             'name'              => $this->input->post('name'),
-            'birthdate'         => $this->input->post('birthdate'),
-            'birthplace'        => $this->input->post('birthplace'),
             'gender'            => $this->input->post('gender'),
-            'address'           => $this->input->post('address'),
+            'birthplace'        => $this->input->post('birthplace'),
+            'birthdate'         => $this->input->post('birthdate'),
             'phone'             => $this->input->post('phone'),
-            'email'             => $this->input->post('email'),
+            'address'           => $this->input->post('address'),
             'username'          => $this->input->post('username'),
+            'email'             => $this->input->post('email'),
             'modified_by'       => $this->session->username,
             'photo'             => $this->upload->data('file_name'),
             'photo_thumb'       => $nmfile . '_thumb' . $this->upload->data('file_ext'),
           );
 
+          //TODO Proses update data by id user
           $this->Auth_model->update($this->input->post('id_users'), $data);
 
           write_log();
 
-          $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+          //TODO Kirim notifikasi sukses disimpan
+          $this->session->set_flashdata('message', 'Sukses');
           redirect('admin/auth/update_profile/' . $this->session->id_users);
         }
       } else {
+        //TODO Kondisi user tidak upload file foto baru
+        //TODO Tampung data ke variabel array
         $data = array(
           'name'              => $this->input->post('name'),
-          'birthdate'         => $this->input->post('birthdate'),
-          'birthplace'        => $this->input->post('birthplace'),
           'gender'            => $this->input->post('gender'),
-          'address'           => $this->input->post('address'),
+          'birthplace'        => $this->input->post('birthplace'),
+          'birthdate'         => $this->input->post('birthdate'),
           'phone'             => $this->input->post('phone'),
-          'email'             => $this->input->post('email'),
+          'address'           => $this->input->post('address'),
           'username'          => $this->input->post('username'),
+          'email'             => $this->input->post('email'),
           'modified_by'       => $this->session->username,
         );
 
+        //TODO Proses update data by id user
         $this->Auth_model->update($this->input->post('id_users'), $data);
 
         write_log();
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+        //TODO Kirim notifikasi sukses disimpan
+        $this->session->set_flashdata('message', 'Sukses');
         redirect('admin/auth/update_profile/' . $this->session->id_users);
       }
     }
