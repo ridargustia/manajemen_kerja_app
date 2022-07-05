@@ -192,8 +192,9 @@ class Auth_model extends CI_Model
   {
     $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'LEFT');
 
-    $this->db->where('instansi_id', $instansi_id);
-    $this->db->where('usertype_id <', '4');
+    $this->db->where('users.instansi_id', $instansi_id);
+    $this->db->where('users.usertype_id <', '5');
+    $this->db->where('users.is_delete', '0');
 
     $this->db->order_by('name');
 

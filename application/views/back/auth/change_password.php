@@ -19,29 +19,29 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if($this->session->flashdata('message')){echo $this->session->flashdata('message');} ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
 
       <?php echo form_open($action) ?>
       <?php echo validation_errors() ?>
-        <div class="box box-primary">
-          <div class="box-body">
-            <?php if(!is_admin()){ ?>
-              <div class="form-group"><label>User (*)</label>
-                <?php echo form_dropdown('', $get_all_users, '', $user_id) ?>
-              </div>
-            <?php } ?>
-            <div class="form-group"><label>Password Baru (*)</label>
-              <?php echo form_password($new_password) ?>
+      <div class="box box-primary">
+        <div class="box-body">
+          <?php if (!is_superadmin()) { ?>
+            <div class="form-group"><label>User (*)</label>
+              <?php echo form_dropdown('', $get_all_users, '', $user_id) ?>
             </div>
-            <div class="form-group"><label>Isikan Kembali Password Baru</label>
-              <?php echo form_password($confirm_new_password) ?>
-            </div>
+          <?php } ?>
+          <div class="form-group"><label>Password Baru (*)</label>
+            <?php echo form_password($new_password) ?>
           </div>
-          <div class="box-footer">
-            <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
-            <button type="reset" name="button" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php echo $btn_reset ?></button>
+          <div class="form-group"><label>Isikan Kembali Password Baru</label>
+            <?php echo form_password($confirm_new_password) ?>
           </div>
         </div>
+        <div class="box-footer">
+          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
+          <button type="reset" name="button" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php echo $btn_reset ?></button>
+        </div>
+      </div>
       <?php echo form_close() ?>
 
     </section>
@@ -67,4 +67,5 @@
 <!-- ./wrapper -->
 
 </body>
+
 </html>

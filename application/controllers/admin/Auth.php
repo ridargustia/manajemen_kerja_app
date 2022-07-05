@@ -1056,23 +1056,21 @@ class Auth extends CI_Controller
 
   function change_password()
   {
-    is_login();
-
+    //TODO Definisi variabel
     $this->data['page_title'] = 'Ubah Password';
     $this->data['action']     = 'admin/auth/change_password_action';
 
+    //TODO Get value Combobox by usertype
     if (is_grandadmin()) {
       $this->data['get_all_users']      = $this->Auth_model->get_all_combobox();
     } elseif (is_masteradmin()) {
       $this->data['get_all_users']      = $this->Auth_model->get_all_combobox_by_instansi($this->session->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_users']      = $this->Auth_model->get_all_combobox_by_cabang($this->session->cabang_id);
     }
 
+    //TODO Rancangan form
     $this->data['user_id'] = [
       'name'          => 'user_id',
       'id'            => 'user_id',
-      'type'          => 'hidden',
       'class'         => 'form-control',
     ];
     $this->data['new_password'] = [
@@ -1090,39 +1088,49 @@ class Auth extends CI_Controller
       'required'      => '',
     ];
 
+    //TODO Load view dengan kirim data
     $this->load->view('back/auth/change_password', $this->data);
   }
 
   function change_password_action()
   {
+    //TODO Validasi form
     $this->form_validation->set_rules('new_password', 'Password', 'min_length[8]|required');
     $this->form_validation->set_rules('confirm_new_password', 'Password Confirmation', 'matches[new_password]|required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('matches', '{field} harus sama');
+    $this->form_validation->set_message('min_length', '{field} minimal 8 karakter');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+    //TODO Kondisi tidak lolos validasi form
     if ($this->form_validation->run() == FALSE) {
       $this->change_password();
     } else {
+      //TODO Kondisi lolos validasi form
+      //TODO Enkripsi password
       $password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
 
+      //TODO Definisi variabel id_user
       if (is_superadmin()) {
-        $id_user = $this->session->user_id;
+        $id_user = $this->session->id_users;
       } else {
         $id_user = $this->input->post('user_id');
       }
 
+      //TODO Data yang akan diubah
       $data = array(
         'password' => $password
       );
 
+      //TODO Proses update data user by id
       $this->Auth_model->update($id_user, $data);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Password berhasil diganti</div>');
+      //TODO Kirim notifikasi sukses ganti password
+      $this->session->set_flashdata('message', 'Sukses');
       redirect('admin/auth/change_password');
     }
   }
