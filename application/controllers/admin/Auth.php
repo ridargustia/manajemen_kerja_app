@@ -1135,107 +1135,12 @@ class Auth extends CI_Controller
     }
   }
 
-  function login()
-  {
-    $this->data['page_title'] = 'Login';
-    $this->data['action']     = 'admin/auth/login';
-
-    $this->form_validation->set_rules('username', 'Username', 'trim|required');
-    $this->form_validation->set_rules('password', 'Password', 'required');
-    $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
-
-    $this->form_validation->set_message('required', '{field} wajib diisi');
-
-    if ($this->form_validation->run() === TRUE) {
-      $row = $this->Auth_model->get_by_username($this->input->post('username'));
-
-      $instansi_is_active_check = $this->Auth_model->get_user_by_instansi($this->input->post('username'));
-
-      $usertype_id = $this->Usertype_model->get_by_id($row->usertype_id);
-      $instansi_id = $this->Instansi_model->get_by_id($row->instansi_id);
-      $cabang_id   = $this->Cabang_model->get_by_id($row->cabang_id);
-      $divisi_id   = $this->Divisi_model->get_by_id($row->divisi_id);
-
-      if (!$row->username) {
-        $this->session->set_flashdata('message', '<div class="alert alert-danger">Username tidak ditemukan</div>');
-        redirect('admin/auth/login');
-      } elseif ($instansi_is_active_check->is_active == 0) {
-        $this->session->set_flashdata('message', '<div class="alert alert-danger">Instansi Anda sedang tidak aktif, silahkan perpanjang dan hubungi MASTERADMIN dulu</div>');
-        redirect('admin/auth/login');
-      } elseif ($row->is_active == 0) {
-        $this->session->set_flashdata('message', '<div class="alert alert-danger">Akun Anda sedang tidak aktif</div>');
-        redirect('admin/auth/login');
-      } elseif (!password_verify($this->input->post('password'), $row->password)) {
-        $log = $this->Auth_model->get_total_login_attempts_per_user($this->input->post('username'));
-
-        // kunci akun kalau gagal input password 3x
-        if ($log > 2) {
-          $this->Auth_model->lock_account($this->input->post('username'), array('is_active' => '0'));
-
-          $this->Auth_model->clear_login_attempt($this->input->post('username'));
-
-          $this->session->set_flashdata('message', '<div class="alert alert-danger">Terlalu banyak percobaan login, akun Anda kami nonaktifkan sementara. Silahkan kontak SUPERADMIN untuk membukanya kembali.</div>');
-          redirect('admin/auth/login');
-        } else {
-          $this->Auth_model->insert_login_attempt(array('ip_address' => $this->input->ip_address(), 'username' => $this->input->post('username')));
-
-          $this->session->set_flashdata('message', '<div class="alert alert-danger">Password Salah</div>');
-          redirect('admin/auth/login');
-        }
-      } else {
-        $this->Auth_model->clear_login_attempt($this->input->post('username'));
-
-        $session = array(
-          'id_users'            => $row->id_users,
-          'name'                => $row->name,
-          'username'            => $row->username,
-          'email'               => $row->email,
-          'usertype_id'         => $row->usertype_id,
-          'usertype_name'       => $usertype_id->usertype_name,
-          'instansi_id'         => $row->instansi_id,
-          'instansi_name'       => $instansi_id->instansi_name,
-          'instansi_img'        => $instansi_id->instansi_img,
-          'instansi_img_thumb'  => $instansi_id->instansi_img_thumb,
-          'cabang_id'           => $row->cabang_id,
-          'cabang_name'         => $cabang_id->cabang_name,
-          'divisi_id'           => $row->divisi_id,
-          'divisi_name'         => $divisi_id->divisi_name,
-          'photo'               => $row->photo,
-          'photo_thumb'         => $row->photo_thumb,
-          'created_at'          => $row->created_at,
-        );
-
-        $this->session->set_userdata($session);
-
-        $this->Auth_model->update($this->session->id_users, array('last_login' => date('Y-m-d H:i:s')));
-
-        redirect('admin/dashboard');
-      }
-    } else {
-      $this->data['username'] = [
-        'name'              => 'username',
-        'id'                => 'username',
-        'class'             => 'form-control',
-        'placeholder'       => 'Silahkan masukkan username',
-        'value'             => $this->form_validation->set_value('username'),
-      ];
-
-      $this->data['password'] = [
-        'name'              => 'password',
-        'id'                => 'password',
-        'class'             => 'form-control',
-        'placeholder'       => 'Silahkan masukkan password',
-        'value'             => $this->form_validation->set_value('password'),
-      ];
-
-      $this->load->view('back/auth/login', $this->data);
-    }
-  }
-
   function logout()
   {
+    //TODO Hapus session
     $this->session->sess_destroy();
 
+    //TODO Redirect to form login
     redirect('auth/login');
   }
 
@@ -1247,11 +1152,15 @@ class Auth extends CI_Controller
 
   function check_username()
   {
+    //TODO Ambil inputan username dari form
     $username = $this->input->post('username');
 
+    //TODO Get data user by username
     $check_username     = $this->Auth_model->get_by_username($username);
 
+    //TODO Kondisi username tidak kosong
     if (!empty($username)) {
+      //TODO Kondisi username telah ada di database
       if ($check_username) {
         echo "<div class='text-red'>Username telah ada, silahkan ganti yang lain</div>";
       } else {
@@ -1264,14 +1173,19 @@ class Auth extends CI_Controller
 
   function check_email()
   {
+    //TODO Ambil inputan email dari form
     $email = $this->input->post('email');
 
+    //TODO Get data user by email
     $check_email     = $this->Auth_model->get_by_email($email);
 
+    //TODO Kondisi email tidak kosong
     if (!empty($email)) {
+      //TODO Kondisi email telah ada di database
       if ($check_email) {
         echo "<div class='text-red'>Email telah ada, silahkan ganti yang lain</div>";
       } else {
+        //TODO Cek format email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
           echo "<div class='text-red'>Format email belum benar</div>";
         } else {
