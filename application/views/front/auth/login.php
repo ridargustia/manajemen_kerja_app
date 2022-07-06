@@ -82,7 +82,8 @@
       </div>
       </form>
 
-      <br><a href="<?php echo base_url('auth/forgot_password') ?>">Lupa password? Klik disini</a><br>
+      <!-- <br><a href="<?php //echo base_url('auth/forgot_password') 
+                        ?>">Lupa password? Klik disini</a><br> -->
 
     </div>
     <!-- /.login-box-body -->

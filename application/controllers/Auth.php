@@ -1,6 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+//Load composer's autoloader
+require 'vendor/autoload.php';
+
 class Auth extends CI_Controller
 {
 
@@ -133,265 +139,18 @@ class Auth extends CI_Controller
         'value'             => $this->form_validation->set_value('password'),
       ];
 
+      //TODO Load view halaman login
       $this->load->view('front/auth/login', $this->data);
-    }
-  }
-
-  function logout()
-  {
-    $this->session->sess_destroy();
-
-    redirect('auth/login');
-  }
-
-  function update_profile($id)
-  {
-    is_login();
-
-    $this->data['user']     = $this->Auth_model->get_by_id($id);
-
-    if ($id != $this->session->id_users) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak dapat mengganti akun user lain!</div>');
-      redirect('home');
-    }
-
-    if ($this->data['user']) {
-      $this->data['page_title'] = 'Update Profil';
-      $this->data['action']     = 'auth/update_profile_action';
-
-      $this->data['id_users'] = [
-        'name'          => 'id_users',
-        'type'          => 'hidden',
-      ];
-      $this->data['name'] = [
-        'name'          => 'name',
-        'id'            => 'name',
-        'class'         => 'form-control',
-        'autocomplete'  => 'off',
-        'required'      => '',
-      ];
-      $this->data['birthdate'] = [
-        'name'          => 'birthdate',
-        'id'            => 'birthdate',
-        'class'         => 'form-control',
-        'autocomplete'  => 'off',
-      ];
-      $this->data['birthplace'] = [
-        'name'          => 'birthplace',
-        'id'            => 'birthplace',
-        'class'         => 'form-control',
-        'autocomplete'  => 'off',
-      ];
-      $this->data['gender'] = [
-        'name'          => 'gender',
-        'id'            => 'gender',
-        'class'         => 'form-control',
-      ];
-      $this->data['gender_value'] = [
-        '1'             => 'Male',
-        '2'             => 'Female',
-      ];
-      $this->data['address'] = [
-        'name'          => 'address',
-        'id'            => 'address',
-        'class'         => 'form-control',
-        'autocomplete'  => 'off',
-        'rows'           => '3',
-      ];
-      $this->data['phone'] = [
-        'name'          => 'phone',
-        'id'            => 'phone',
-        'class'         => 'form-control',
-        'autocomplete'  => 'off',
-      ];
-      $this->data['email'] = [
-        'name'          => 'email',
-        'id'            => 'email',
-        'class'         => 'form-control',
-        'autocomplete'  => 'off',
-        'required'      => '',
-      ];
-      $this->data['username'] = [
-        'name'          => 'username',
-        'id'            => 'username',
-        'class'         => 'form-control',
-        'autocomplete'  => 'off',
-        'required'      => '',
-      ];
-
-      $this->load->view('front/auth/update_profile', $this->data);
-    } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">User idak ditemukan</div>');
-      redirect('home');
-    }
-  }
-
-  function update_profile_action()
-  {
-    $this->form_validation->set_rules('name', 'Nama Lengkap', 'trim|required');
-    $this->form_validation->set_rules('phone', 'No. HP', 'trim|is_numeric');
-    $this->form_validation->set_rules('username', 'Username', 'trim|required');
-    $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
-
-    $this->form_validation->set_message('required', '{field} wajib diisi');
-    $this->form_validation->set_message('is_numeric', '{field} isi angka saja');
-    $this->form_validation->set_message('valid_email', '{field} format email tidak benar');
-
-    $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
-
-    if ($this->form_validation->run() === FALSE) {
-      $this->update($this->input->post('id_users'));
-    } else {
-      if ($_FILES['photo']['error'] <> 4) {
-        $nmfile = strtolower(url_title($this->input->post('username'))) . date('YmdHis');
-
-        $config['upload_path']      = './assets/images/user/';
-        $config['allowed_types']    = 'jpg|jpeg|png';
-        $config['max_size']         = 2048; // 2Mb
-        $config['file_name']        = $nmfile;
-
-        $this->load->library('upload', $config);
-
-        $delete = $this->Auth_model->get_by_id($this->input->post('id_users'));
-
-        $dir        = "./assets/images/user/" . $delete->photo;
-        $dir_thumb  = "./assets/images/user/" . $delete->photo_thumb;
-
-        if (is_file($dir)) {
-          unlink($dir);
-          unlink($dir_thumb);
-        }
-
-        if (!$this->upload->do_upload('photo')) {
-          $error = array('error' => $this->upload->display_errors());
-          $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
-
-          $this->update($this->input->post('id_users'));
-        } else {
-          $photo = $this->upload->data();
-
-          $config['image_library']    = 'gd2';
-          $config['source_image']     = './assets/images/user/' . $photo['file_name'] . '';
-          $config['create_thumb']     = TRUE;
-          $config['maintain_ratio']   = TRUE;
-          $config['width']            = 250;
-          $config['height']           = 250;
-
-          $this->load->library('image_lib', $config);
-          $this->image_lib->resize();
-
-          $data = array(
-            'name'              => $this->input->post('name'),
-            'birthdate'         => $this->input->post('birthdate'),
-            'birthplace'        => $this->input->post('birthplace'),
-            'gender'            => $this->input->post('gender'),
-            'address'           => $this->input->post('address'),
-            'phone'             => $this->input->post('phone'),
-            'email'             => $this->input->post('email'),
-            'username'          => $this->input->post('username'),
-            'modified_by'       => $this->session->username,
-            'photo'             => $this->upload->data('file_name'),
-            'photo_thumb'       => $nmfile . '_thumb' . $this->upload->data('file_ext'),
-          );
-
-          $this->Auth_model->update($this->input->post('id_users'), $data);
-
-          write_log();
-
-          $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
-          redirect('auth/update_profile/' . $this->session->id_users);
-        }
-      } else {
-        $data = array(
-          'name'              => $this->input->post('name'),
-          'birthdate'         => $this->input->post('birthdate'),
-          'birthplace'        => $this->input->post('birthplace'),
-          'gender'            => $this->input->post('gender'),
-          'address'           => $this->input->post('address'),
-          'phone'             => $this->input->post('phone'),
-          'email'             => $this->input->post('email'),
-          'username'          => $this->input->post('username'),
-          'modified_by'       => $this->session->username,
-        );
-
-        $this->Auth_model->update($this->input->post('id_users'), $data);
-
-        write_log();
-
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
-        redirect('auth/update_profile/' . $this->session->id_users);
-      }
-    }
-  }
-
-  function change_password()
-  {
-    is_login();
-
-    $this->data['page_title'] = 'Ubah Password';
-    $this->data['action']     = 'auth/change_password_action';
-
-    $this->data['get_all_users']     = $this->Auth_model->get_all_combobox();
-
-    $this->data['user_id'] = [
-      'name'          => 'user_id',
-      'type'          => 'hidden',
-      'class'          => 'form-control',
-    ];
-    $this->data['new_password'] = [
-      'name'          => 'new_password',
-      'id'            => 'new_password',
-      'class'         => 'form-control',
-      'autocomplete'  => 'off',
-      'required'      => '',
-    ];
-    $this->data['confirm_new_password'] = [
-      'name'          => 'confirm_new_password',
-      'id'            => 'confirm_new_password',
-      'class'         => 'form-control',
-      'autocomplete'  => 'off',
-      'required'      => '',
-    ];
-
-    $this->load->view('front/auth/change_password', $this->data);
-  }
-
-  function change_password_action()
-  {
-    $this->form_validation->set_rules('new_password', 'Password', 'min_length[8]|required');
-    $this->form_validation->set_rules('confirm_new_password', 'Konfirmasi Password', 'matches[new_password]|required');
-
-    $this->form_validation->set_message('required', '{field} wajib diisi');
-    $this->form_validation->set_message('matches', '{field} password tidak sama');
-    $this->form_validation->set_message('min_length', '{field} minimal 8 huruf');
-
-    $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
-
-    if ($this->form_validation->run() == FALSE) {
-      $this->change_password();
-    } else {
-      $password = password_hash($this->input->post('new_password'), PASSWORD_BCRYPT);
-
-      $id_user = $this->session->id_users;
-
-      $data = array(
-        'password' => $password
-      );
-
-      $this->Auth_model->update($id_user, $data);
-
-      write_log();
-
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Password baru berhasil disimpan</div>');
-      redirect('auth/change_password');
     }
   }
 
   function forgot_password()
   {
-    $this->data['page_title'] = "Lupa Password";
+    //TODO Inisialisasi variabel
+    $this->data['page_title'] = "Lupa Password | Desa Saobi";
     $this->data['action']     = 'auth/forgot_password_process';
 
+    //TODO Rancangan form
     $this->data['email'] = [
       'name'          => 'email',
       'id'            => 'email',
@@ -400,48 +159,60 @@ class Auth extends CI_Controller
       'required'      => '',
     ];
 
+    //TODO Load view dengan kirim data
     $this->load->view('back/auth/forgot_password', $this->data);
   }
 
   function forgot_password_process()
   {
+    //TODO import helper random_str untuk generate string random
     $this->load->helper('random_str');
 
+    //TODO Kondisi form telah submit
     if (isset($_POST['submit'])) {
+      //TODO Validasi form
       $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
 
       $this->form_validation->set_message('required', '{field} wajib diisi');
+      $this->form_validation->set_message('valid_email', 'Format {field} salah');
 
       $this->form_validation->set_error_delimiters('<div class="col-lg-12"><div class="alert alert-danger alert">', '</div></div>');
 
+      //TODO Kondisi data tidak lolos validasi
       if ($this->form_validation->run() == FALSE) {
         $this->login();
       } else {
+        //TODO Ambil data user by email
         $email_check = $this->Auth_model->get_by_email($this->input->post('email'));
 
+        //TODO Kondisi email tidak ditemukan di database
         if (!$email_check) {
+          //TODO Kirim notifikasi data tidak ditemukan
           $this->session->set_flashdata('message', '<div class="alert alert-block alert-danger">Maaf, email tidak ditemukan.</div>');
           redirect('auth/forgot_password', 'refresh');
         } else {
+          //TODO Kondisi data ditemukan
           $hash   = random_str(50);
           $email   = $this->input->post('email');
 
+          //TODO Konfigurasi fitur mailing
           $config = [
             'mailtype'   => 'html',
             'priority'   => 5,
           ];
 
+          //TODO import library email
           $this->load->library('email', $config);
 
-          // sender / from
+          //TODO sender / from
           $this->email->from($this->data['company_data']->company_email, $this->data['company_data']->company_name);
-          // target / mail receiver
+          //TODO target / mail receiver
           $this->email->to($email);
-          // reply to
+          //TODO reply to
           $this->email->reply_to($this->data['company_data']->company_email);
-          // subject
+          //TODO subject
           $this->email->subject('Password Reset Request');
-          // message.
+          //TODO message.
           $this->email->message('
 								<h3>Hi, ' . $email . '</h3>
                 Hi, beberapa saat yang lalu, sistem menerima permintaan untuk mereset password Anda. <br>
@@ -455,21 +226,25 @@ class Auth extends CI_Controller
 								<br>Alamat: ' . $this->data['company_data']->company_address . '
 								<br>No. HP: ' . $this->data['company_data']->company_phone . '
 								<br>Fax: ' . $this->data['company_data']->company_fax . '
-								<br>Email: ' . $this->data['company_data']->company_email . ' / ' . $this->data['company_data']->company_gmail . '
-							');
+								<br>Email: ' . $this->data['company_data']->company_email . '');
 
+          //TODO Kondisi email terkirim
           if ($this->email->send()) {
+            //TODO update data code_forgotten user by email
             $this->Auth_model->update_by_email($email, array('code_forgotten' => $hash));
 
+            //TODO Kirim notifikasi email berhasil dikirim
             $this->session->set_flashdata('message', '<div class="alert alert-block alert-success">Password Anda berhasil kami reset. Silahkan cek email Anda.</div>');
             redirect('auth/login', 'refresh');
           } else {
+            //TODO Kirim notifikasi percobaan reset password gagal
             $this->session->set_flashdata('message', '<div class="alert alert-block alert-danger">Maaf, percobaan reset password gagal. Silahkan coba kembali.</div>');
             redirect('auth/login', 'refresh');
           }
         }
       }
     } else {
+      //TODO Kondisi tombol submit belum ditekan
       $this->session->set_flashdata('message', '<div class="alert alert-block alert-danger">Tekan tombolnya dulu!</div>');
       redirect('auth/login', 'refresh');
     }
