@@ -19,7 +19,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if($this->session->flashdata('message')){echo $this->session->flashdata('message');} ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
 
       <div class="box box-primary">
         <div class="box-header"><a href="<?php echo $add_action ?>" class="btn btn-primary"><i class="fa fa-plus"></i> <?php echo $btn_add ?></a> </div>
@@ -40,42 +40,32 @@
                 </tr>
               </thead>
               <tbody>
-                <?php $no = 1; foreach($get_all as $data){
-                  if($data->is_active == '1')
-                  {
+                <?php $no = 1;
+                foreach ($get_all as $data) {
+                  //TODO status aktif instansi
+                  if ($data->is_active == '1') {
                     $status_active = "<a class='btn btn-success btn-xs'>ACTIVE</a>";
                   }
-                  if($data->is_active == '0'){
+                  if ($data->is_active == '0') {
                     $status_active = "<a class='btn btn-danger btn-xs'>INACTIVE</a>";
                   }
-                  // action
-                  $edit = '<a href="'.base_url('admin/instansi/update/'.$data->id_instansi).'" class="btn btn-warning" title="Ubah Instansi"><i class="fa fa-pencil"></i></a>';
-                  $delete = '<a href="'.base_url('admin/instansi/delete/'.$data->id_instansi).'" onClick="return confirm(\'Are you sure?\');" class="btn btn-danger" title="Hapus Instansi"><i class="fa fa-trash"></i></a>';
+
+                  //TODO Action Button
+                  $edit = '<a href="' . base_url('admin/instansi/update/' . $data->id_instansi) . '" class="btn btn-warning" title="Ubah Instansi"><i class="fa fa-pencil"></i></a>';
+                  $delete = '<a href="' . base_url('admin/instansi/delete/' . $data->id_instansi) . '" id="delete-button" class="btn btn-danger" title="Hapus Instansi"><i class="fa fa-trash"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: left"><?php echo $data->instansi_name ?></td>
                     <td style="text-align: left"><?php echo $data->instansi_address ?></td>
                     <td style="text-align: center"><?php echo $data->instansi_phone ?></td>
-                    <td style="text-align: center"><img src="<?php echo base_url('assets/images/instansi/'.$data->instansi_img_thumb) ?>" width="100px" height="100px" class="img-circle"> </td>
+                    <td style="text-align: center"><img src="<?php echo base_url('assets/images/instansi/' . $data->instansi_img_thumb) ?>" width="100px" height="100px"></td>
                     <td style="text-align: center"><?php echo date_only($data->active_date) ?></td>
                     <td style="text-align: center"><?php echo $status_active ?></td>
                     <td style="text-align: center"><?php echo $edit ?> <?php echo $delete ?></td>
                   </tr>
                 <?php } ?>
               </tbody>
-              <tfoot>
-                <tr>
-                  <th style="text-align: center">No</th>
-                  <th style="text-align: center">Nama Instansi</th>
-                  <th style="text-align: center">Alamat</th>
-                  <th style="text-align: center">No. Telpon / HP</th>
-                  <th style="text-align: center">Logo</th>
-                  <th style="text-align: center">Aktif Sampai</th>
-                  <th style="text-align: center">Status</th>
-                  <th style="text-align: center">Action</th>
-                </tr>
-              </tfoot>
             </table>
           </div>
         </div>
@@ -93,13 +83,14 @@
   <script src="<?php echo base_url('assets/plugins/') ?>datatables/js/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url('assets/plugins/') ?>datatables-bs/js/dataTables.bootstrap.min.js"></script>
   <script>
-  $(document).ready( function () {
-    $('#dataTable').DataTable();
-  } );
+    $(document).ready(function() {
+      $('#dataTable').DataTable();
+    });
   </script>
 
 </div>
 <!-- ./wrapper -->
 
 </body>
+
 </html>

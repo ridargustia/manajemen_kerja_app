@@ -27,15 +27,19 @@ class Instansi extends CI_Controller
   {
     is_read();
 
+    //TODO Authentikasi usertype
     if (!is_grandadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Data ' . $this->data['module'];
 
+    //TODO Get all data instansi
     $this->data['get_all'] = $this->Instansi_model->get_all();
 
+    //TODO Load view dengan kirim data
     $this->load->view('back/instansi/instansi_list', $this->data);
   }
 
@@ -346,14 +350,14 @@ class Instansi extends CI_Controller
               'instansi_address'    => $this->input->post('instansi_address'),
               'instansi_phone'      => $this->input->post('instansi_phone'),
               'active_date'         => $this->input->post('active_date'),
-              'is_active'           => $is_active,              
+              'is_active'           => $is_active,
               'modified_by'         => $this->session->username,
             );
           } else {
             $data = array(
               'instansi_name'       => $this->input->post('instansi_name'),
               'instansi_address'    => $this->input->post('instansi_address'),
-              'instansi_phone'      => $this->input->post('instansi_phone'),              
+              'instansi_phone'      => $this->input->post('instansi_phone'),
               'modified_by'         => $this->session->username,
             );
           }
@@ -363,13 +367,13 @@ class Instansi extends CI_Controller
               'instansi_address'    => $this->input->post('instansi_address'),
               'instansi_phone'      => $this->input->post('instansi_phone'),
               'active_date'         => $this->input->post('active_date'),
-              'is_active'           => $is_active,              
+              'is_active'           => $is_active,
               'modified_by'         => $this->session->username,
             );
           } else {
             $data = array(
               'instansi_address'    => $this->input->post('instansi_address'),
-              'instansi_phone'      => $this->input->post('instansi_phone'),              
+              'instansi_phone'      => $this->input->post('instansi_phone'),
               'modified_by'         => $this->session->username,
             );
           }
