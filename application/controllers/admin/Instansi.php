@@ -47,14 +47,17 @@ class Instansi extends CI_Controller
   {
     is_create();
 
+    //TODO Authentikasi usertype
     if (!is_grandadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
     $this->data['action']     = 'admin/instansi/create_action';
 
+    //TODO Rancangan form
     $this->data['instansi_name'] = [
       'name'          => 'instansi_name',
       'id'            => 'instansi_name',
@@ -63,14 +66,6 @@ class Instansi extends CI_Controller
       'required'      => '',
       'value'         => $this->form_validation->set_value('instansi_name'),
     ];
-    $this->data['instansi_phone'] = [
-      'name'          => 'instansi_phone',
-      'id'            => 'instansi_phone',
-      'class'         => 'form-control',
-      'autocomplete'  => 'off',
-      'required'      => '',
-      'value'         => $this->form_validation->set_value('instansi_phone'),
-    ];
     $this->data['instansi_address'] = [
       'name'          => 'instansi_address',
       'id'            => 'instansi_address',
@@ -78,6 +73,14 @@ class Instansi extends CI_Controller
       'autocomplete'  => 'off',
       'required'      => '',
       'value'         => $this->form_validation->set_value('instansi_address'),
+    ];
+    $this->data['instansi_phone'] = [
+      'name'          => 'instansi_phone',
+      'id'            => 'instansi_phone',
+      'class'         => 'form-control',
+      'autocomplete'  => 'off',
+      'required'      => '',
+      'value'         => $this->form_validation->set_value('instansi_phone'),
     ];
     $this->data['active_date'] = [
       'name'          => 'active_date',
@@ -88,11 +91,13 @@ class Instansi extends CI_Controller
       'value'         => $this->form_validation->set_value('active_date'),
     ];
 
+    //TODO Load view dengan kirim data
     $this->load->view('back/instansi/instansi_add', $this->data);
   }
 
   function create_action()
   {
+    //TODO validasi form
     $this->form_validation->set_rules('instansi_name', 'Nama Instansi', 'trim|required');
     $this->form_validation->set_rules('instansi_phone', 'No. HP / Telpon', 'trim|required');
     $this->form_validation->set_rules('instansi_address', 'Alamat', 'trim|required');
@@ -102,27 +107,37 @@ class Instansi extends CI_Controller
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+    //TODO Kondisi data tidak lolos validasi
     if ($this->form_validation->run() === FALSE) {
       $this->create();
     } else {
+      //TODO Kondisi data lolos validasi
+      //TODO Kondisi user upload file foto/logo
       if ($_FILES['photo']['error'] <> 4) {
+        //TODO Definisi nama file
         $nmfile = strtolower(url_title($this->input->post('instansi_name'))) . date('YmdHis');
 
+        //TODO Konfigurasi library upload
         $config['upload_path']      = './assets/images/instansi/';
         $config['allowed_types']    = 'jpg|jpeg|png';
         $config['max_size']         = 2048; // 2Mb
         $config['file_name']        = $nmfile;
 
+        //TODO Import library upload
         $this->load->library('upload', $config);
 
+        //TODO Kondisi file gagal diupload
         if (!$this->upload->do_upload('photo')) {
+          //TODO Kirim notifikasi
           $error = array('error' => $this->upload->display_errors());
           $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
 
           $this->create();
         } else {
+          //TODO Kondisi file berhasil diupload
           $photo = $this->upload->data();
 
+          //TODO Konfigurasi library image_lib
           $config['image_library']    = 'gd2';
           $config['source_image']     = './assets/images/instansi/' . $photo['file_name'] . '';
           $config['create_thumb']     = TRUE;
@@ -130,9 +145,12 @@ class Instansi extends CI_Controller
           $config['width']            = 250;
           $config['height']           = 250;
 
+          //TODO import library image_lib
           $this->load->library('image_lib', $config);
+          //TODO Jalankan library image_lib
           $this->image_lib->resize();
 
+          //TODO Tampung inputan form ke dalam variabel array
           $data = array(
             'instansi_name'       => $this->input->post('instansi_name'),
             'instansi_address'    => $this->input->post('instansi_address'),
@@ -144,14 +162,17 @@ class Instansi extends CI_Controller
             'created_by'          => $this->session->username,
           );
 
+          //TODO Simpan data ke database
           $this->Instansi_model->insert($data);
 
           write_log();
 
-          $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+          //TODO Kirim notifikasi data berhasil disimpan
+          $this->session->set_flashdata('message', 'Sukses');
           redirect('admin/instansi');
         }
       } else {
+        //TODO Tampung inputan form ke dalam variabel array
         $data = array(
           'instansi_name'       => $this->input->post('instansi_name'),
           'instansi_address'    => $this->input->post('instansi_address'),
@@ -161,11 +182,13 @@ class Instansi extends CI_Controller
           'created_by'          => $this->session->username,
         );
 
+        //TODO Simpan data ke database
         $this->Instansi_model->insert($data);
 
         write_log();
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+        //TODO Kirim notifikasi data berhasil disimpan
+        $this->session->set_flashdata('message', 'Sukses');
         redirect('admin/instansi');
       }
     }
