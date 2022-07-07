@@ -10,10 +10,9 @@ class Divisi_model extends CI_Model
 
   function get_all()
   {
-    $this->db->select('id_instansi, instansi_name, cabang.id_cabang, cabang.cabang_name, divisi.id_divisi, divisi.divisi_name, divisi.instansi_id');
+    $this->db->select('divisi.id_divisi, divisi.divisi_name, divisi.instansi_id, instansi.instansi_name');
 
     $this->db->join('instansi', 'divisi.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'divisi.cabang_id = cabang.id_cabang', 'left');
 
     $this->db->where('is_delete_divisi', '0');
 
@@ -24,10 +23,9 @@ class Divisi_model extends CI_Model
 
   function get_all_by_instansi()
   {
-    $this->db->select('id_instansi, instansi_name, cabang.id_cabang, cabang.cabang_name, divisi.id_divisi, divisi.divisi_name, divisi.instansi_id');
+    $this->db->select('divisi.id_divisi, divisi.divisi_name, divisi.instansi_id, instansi.instansi_name');
 
     $this->db->join('instansi', 'divisi.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'divisi.cabang_id = cabang.id_cabang', 'left');
 
     $this->db->where('divisi.instansi_id', $this->session->instansi_id);
     $this->db->where('is_delete_divisi', '0');

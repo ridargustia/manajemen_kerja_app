@@ -10,8 +10,6 @@ class Divisi extends CI_Controller
 
     $this->data['module'] = 'Divisi';
 
-    $this->load->model(array('Divisi_model'));
-
     $this->data['company_data']             = $this->Company_model->company_profile();
     $this->data['layout_template']          = $this->Template_model->layout();
     $this->data['skins_template']           = $this->Template_model->skins();
@@ -25,7 +23,7 @@ class Divisi extends CI_Controller
     is_login();
 
     if (is_superadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
@@ -40,16 +38,17 @@ class Divisi extends CI_Controller
   {
     is_read();
 
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Data ' . $this->data['module'];
 
+    //TODO Get data divisi berdasarkan hak akses usertype
     if (is_grandadmin()) {
       $this->data['get_all'] = $this->Divisi_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Divisi_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Divisi_model->get_all_by_cabang();
     }
 
+    //TODO Load view list divisi dengan kirim data
     $this->load->view('back/divisi/divisi_list', $this->data);
   }
 
