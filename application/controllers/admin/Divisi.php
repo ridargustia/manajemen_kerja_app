@@ -56,19 +56,22 @@ class Divisi extends CI_Controller
   {
     is_create();
 
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
     $this->data['action']     = 'admin/divisi/create_action';
 
+    //TODO Get combobox value by usertype
     if (is_grandadmin()) {
       $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
-      $this->data['get_all_combobox_cabang']        = $this->Cabang_model->get_all_combobox();
-      $this->data['get_all_combobox_divisi']        = $this->Divisi_model->get_all_combobox();
-    } elseif (is_masteradmin()) {
-      $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox_by_instansi($this->session->instansi_id);
-      $this->data['get_all_combobox_cabang']        = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
-      $this->data['get_all_combobox_divisi']        = $this->Divisi_model->get_all_combobox_by_instansi($this->session->instansi_id);
     }
 
+    //TODO Rancangan form
+    $this->data['instansi_id'] = [
+      'name'          => 'instansi_id',
+      'id'            => 'instansi_id',
+      'class'         => 'form-control',
+      'required'      => '',
+    ];
     $this->data['divisi_name'] = [
       'name'          => 'divisi_name',
       'id'            => 'divisi_name',
@@ -77,58 +80,45 @@ class Divisi extends CI_Controller
       'required'      => '',
       'value'         => $this->form_validation->set_value('divisi_name'),
     ];
-    $this->data['instansi_id'] = [
-      'name'          => 'instansi_id',
-      'id'            => 'instansi_id',
-      'class'         => 'form-control',
-      'onChange'      => 'tampilCabang()',
-      'required'      => '',
-    ];
-    $this->data['cabang_id'] = [
-      'name'          => 'cabang_id',
-      'id'            => 'cabang_id',
-      'class'         => 'form-control',
-      'required'      => '',
-    ];
 
+    //TODO Load view form add dengan kirim data
     $this->load->view('back/divisi/divisi_add', $this->data);
   }
 
   function create_action()
   {
+    //TODO Form Validation
     $this->form_validation->set_rules('divisi_name', 'Nama Divisi', 'trim|required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+    //TODO Definisi variabel berdasarkan usertype
     if (is_grandadmin()) {
       $instansi_id  = $this->input->post('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->input->post('cabang_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
     }
 
+    //TODO Jika inputan data tidak lolos validasi
     if ($this->form_validation->run() === FALSE) {
       $this->create();
     } else {
       $data = array(
         'instansi_id'     => $instansi_id,
-        'cabang_id'       => $cabang_id,
-        'divisi_name'     => $this->input->post('divisi_name'),
+        'divisi_name'     => strtoupper($this->input->post('divisi_name')),
         'divisi_slug'     => strtolower(url_title($this->input->post('divisi_name'))),
         'created_by'      => $this->session->username,
       );
 
+      //TODO Proses post data ke database
       $this->Divisi_model->insert($data);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+      //TODO Kirim notifikasi berhasil disimpan
+      $this->session->set_flashdata('message', 'Sukses');
       redirect('admin/divisi');
     }
   }

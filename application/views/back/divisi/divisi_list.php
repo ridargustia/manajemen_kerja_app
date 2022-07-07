@@ -31,7 +31,9 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Divisi</th>
-                  <th style="text-align: center">Nama Instansi</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Nama Instansi</th>
+                  <?php } ?>
                   <th style="text-align: center">Action</th>
                 </tr>
               </thead>
@@ -45,7 +47,9 @@
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->divisi_name ?></td>
-                    <td style="text-align: center"><?php echo $data->instansi_name ?></td>
+                    <?php if (is_grandadmin()) { ?>
+                      <td style="text-align: center"><?php echo $data->instansi_name ?></td>
+                    <?php } ?>
                     <td style="text-align: center"><?php echo $edit ?> <?php echo $delete ?></td>
                   </tr>
                 <?php } ?>

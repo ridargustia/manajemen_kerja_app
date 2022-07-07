@@ -19,9 +19,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if ($this->session->flashdata('message')) {
-        echo $this->session->flashdata('message');
-      } ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
       <?php echo validation_errors() ?>
       <div class="box box-primary">
         <?php echo form_open($action) ?>
@@ -29,14 +27,6 @@
           <?php if (is_grandadmin()) : ?>
             <div class="form-group"><label>Nama Instansi</label>
               <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
-            </div>
-            <div class="form-group"><label>Nama Cabang</label>
-              <?php echo form_dropdown('', array(''=>'- Pilih Instansi Dulu -'), '', $cabang_id) ?>
-            </div>
-          <?php endif ?>
-          <?php if (is_masteradmin()) : ?>            
-            <div class="form-group"><label>Nama Cabang</label>
-              <?php echo form_dropdown('', $get_all_combobox_cabang, '', $cabang_id) ?>
             </div>
           <?php endif ?>
           <div class="form-group"><label>Nama Divisi (*)</label>
@@ -57,20 +47,6 @@
   <!-- /.content-wrapper -->
 
   <?php $this->load->view('back/template/footer'); ?>
-
-  <script>
-    function tampilCabang() {
-      instansi_id = document.getElementById("instansi_id").value;
-      $.ajax({
-        url: "<?php echo base_url(); ?>admin/cabang/pilih_cabang/" + instansi_id + "",
-        success: function(response) {
-          $("#cabang_id").html(response);
-        },
-        dataType: "html"
-      });
-      return false;
-    }
-  </script>
 
 </div>
 <!-- ./wrapper -->
