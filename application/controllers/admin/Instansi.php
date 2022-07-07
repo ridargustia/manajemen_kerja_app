@@ -473,22 +473,28 @@ class Instansi extends CI_Controller
   {
     is_delete();
 
+    //TODO Authentikasi hak akses usertype
     if (!is_grandadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Get instansi by id
     $delete = $this->Instansi_model->get_by_id($id);
 
+    //TODO Jika data instansi ditemukan
     if ($delete) {
+      //TODO Jalankan proses hapus secara permanen
       $this->Instansi_model->delete($id);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus permanen</div>');
+      //TODO Kirim notifikasi data berhasil dihapus permanen
+      $this->session->set_flashdata('message', 'dihapus');
       redirect('admin/instansi/deleted_list');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO Kirim notifikasi data tidak ditemukan
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/instansi');
     }
   }
