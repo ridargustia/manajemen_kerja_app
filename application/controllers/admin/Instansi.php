@@ -450,6 +450,7 @@ class Instansi extends CI_Controller
     if ($delete) {
       $data = array(
         'is_delete_instansi'    => '1',
+        'is_active'             => '0',
         'deleted_by'            => $this->session->username,
         'deleted_at'            => date('Y-m-d H:i:a'),
       );
@@ -503,15 +504,19 @@ class Instansi extends CI_Controller
   {
     is_restore();
 
+    //TODO Authentikasi hak akses usertype
     if (!is_grandadmin()) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak masuk ke halaman sebelumnya</div>');
+      $this->session->set_flashdata('message', 'tidak memiliki akses');
       redirect('admin/dashboard');
     }
 
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
 
+    //TODO Get all data instansi yang telah dihapus
     $this->data['get_all_deleted'] = $this->Instansi_model->get_all_deleted();
 
+    //TODO Load view list data yang telah dihapus
     $this->load->view('back/instansi/instansi_deleted_list', $this->data);
   }
 
