@@ -265,6 +265,7 @@ class Instansi extends CI_Controller
     //TODO Form validation
     if (is_grandadmin()) {
       $this->form_validation->set_rules('instansi_name', 'Nama Instansi', 'trim|required');
+      $this->form_validation->set_rules('active_date', 'Masa Aktif', 'required');
     }
     $this->form_validation->set_rules('instansi_phone', 'No. HP / Telpon', 'trim|required');
     $this->form_validation->set_rules('instansi_address', 'Alamat', 'trim|required');
@@ -351,16 +352,6 @@ class Instansi extends CI_Controller
                 'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
                 'modified_by'         => $this->session->username,
               );
-            } else {
-              //TODO Jika form active date kosong
-              $data = array(
-                'instansi_name'       => $this->input->post('instansi_name'),
-                'instansi_address'    => $this->input->post('instansi_address'),
-                'instansi_phone'      => $this->input->post('instansi_phone'),
-                'instansi_img'        => $this->upload->data('file_name'),
-                'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
-                'modified_by'         => $this->session->username,
-              );
             }
           } else {
             //TODO Jika selain Grandadmin
@@ -371,15 +362,6 @@ class Instansi extends CI_Controller
                 'instansi_phone'      => $this->input->post('instansi_phone'),
                 'active_date'         => $this->input->post('active_date'),
                 'is_active'           => $is_active,
-                'instansi_img'        => $this->upload->data('file_name'),
-                'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
-                'modified_by'         => $this->session->username,
-              );
-            } else {
-              //TODO Jika active date kosong
-              $data = array(
-                'instansi_address'    => $this->input->post('instansi_address'),
-                'instansi_phone'      => $this->input->post('instansi_phone'),
                 'instansi_img'        => $this->upload->data('file_name'),
                 'instansi_img_thumb'  => $nmfile . '_thumb' . $this->upload->data('file_ext'),
                 'modified_by'         => $this->session->username,
@@ -417,14 +399,6 @@ class Instansi extends CI_Controller
               'is_active'           => $is_active,
               'modified_by'         => $this->session->username,
             );
-          } else {
-            //TODO Jika active date kosong
-            $data = array(
-              'instansi_name'       => $this->input->post('instansi_name'),
-              'instansi_address'    => $this->input->post('instansi_address'),
-              'instansi_phone'      => $this->input->post('instansi_phone'),
-              'modified_by'         => $this->session->username,
-            );
           }
         } else {
           //TODO Jika selain grandadmin
@@ -435,13 +409,6 @@ class Instansi extends CI_Controller
               'instansi_phone'      => $this->input->post('instansi_phone'),
               'active_date'         => $this->input->post('active_date'),
               'is_active'           => $is_active,
-              'modified_by'         => $this->session->username,
-            );
-          } else {
-            //TODO Jika active date kosong
-            $data = array(
-              'instansi_address'    => $this->input->post('instansi_address'),
-              'instansi_phone'      => $this->input->post('instansi_phone'),
               'modified_by'         => $this->session->username,
             );
           }
