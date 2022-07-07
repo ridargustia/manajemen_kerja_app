@@ -19,9 +19,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if ($this->session->flashdata('message')) {
-        echo $this->session->flashdata('message');
-      } ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
 
       <?php echo validation_errors() ?>
       <?php echo form_open_multipart($action) ?>
@@ -55,7 +53,6 @@
             <b>Preview</b><br>
             <img id="preview" width="250px" />
           </div>
-
         </div>
         <?php echo form_input($id_instansi, $instansi->id_instansi) ?>
         <div class="box-footer">
