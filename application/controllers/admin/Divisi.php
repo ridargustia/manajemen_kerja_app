@@ -127,24 +127,28 @@ class Divisi extends CI_Controller
   {
     is_update();
 
+    //TODO Get data divisi by id
     $this->data['divisi']     = $this->Divisi_model->get_by_id($id);
 
+    //TODO Jika data divisi ditemukan
     if ($this->data['divisi']) {
+      //TODO Authentikasi hak akses usertype
       if (!is_grandadmin() and !is_masteradmin() and $this->data['divisi']->instansi_id != $this->session->instansi_id) {
-        $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak mengganti data orang lain</div>');
+        //TODO Kirim notifikasi tidak memiliki akses
+        $this->session->set_flashdata('message', 'tidak memiliki akses');
         redirect('admin/divisi');
       }
 
+      //TODO Inisialisasi variabel
       $this->data['page_title'] = 'Update Data ' . $this->data['module'];
       $this->data['action']     = 'admin/divisi/update_action';
 
+      //TODO Get value combobox by usertype
       if (is_grandadmin()) {
         $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
-        $this->data['get_all_combobox_cabang']        = $this->Cabang_model->get_all_combobox_update($this->data['divisi']->instansi_id);
-      } elseif (is_masteradmin()) {
-        $this->data['get_all_combobox_cabang']        = $this->Cabang_model->get_all_combobox_update_by_instansi($this->data['divisi']->instansi_id);
       }
 
+      //TODO Rancangan form
       $this->data['id_divisi'] = [
         'name'          => 'id_divisi',
         'type'          => 'hidden',
@@ -162,55 +166,50 @@ class Divisi extends CI_Controller
         'class'         => 'form-control',
         'required'      => '',
       ];
-      $this->data['cabang_id'] = [
-        'name'          => 'cabang_id',
-        'id'            => 'cabang_id',
-        'class'         => 'form-control',
-        'required'      => '',
-      ];
 
+      //TODO Load view form edit divisi
       $this->load->view('back/divisi/divisi_edit', $this->data);
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO Kirim notifikasi data tidak ditemukan
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/divisi');
     }
   }
 
   function update_action()
   {
+    //TODO Validasi form
     $this->form_validation->set_rules('divisi_name', 'Nama Divisi', 'trim|required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+    //TODO Inisialisasi variabel berdasarkan hak akses usertype
     if (is_grandadmin()) {
       $instansi_id  = $this->input->post('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->input->post('cabang_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
     }
 
+    //TODO Kondisi data inputan tidak lolos validasi
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_divisi'));
     } else {
       $data = array(
         'instansi_id'     => $instansi_id,
-        'cabang_id'       => $cabang_id,
-        'divisi_name'     => $this->input->post('divisi_name'),
+        'divisi_name'     => strtoupper($this->input->post('divisi_name')),
         'divisi_slug'     => strtolower(url_title($this->input->post('divisi_name'))),
         'modified_by'     => $this->session->username,
       );
 
+      //TODO Jalankan proses update by id
       $this->Divisi_model->update($this->input->post('id_divisi'), $data);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+      //TODO Kirim notifikasi berhasil disimpan
+      $this->session->set_flashdata('message', 'Sukses');
       redirect('admin/divisi');
     }
   }

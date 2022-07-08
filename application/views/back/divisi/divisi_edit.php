@@ -19,35 +19,19 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if ($this->session->flashdata('message')) {
-        echo $this->session->flashdata('message');
-      } ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
       <?php echo validation_errors() ?>
       <div class="box box-primary">
         <?php echo form_open($action) ?>
         <div class="box-body">
-          <?php if (is_grandadmin()){ ?>
+          <?php if (is_grandadmin()) { ?>
             <div class="form-group"><label>Nama Instansi</label>
               <?php echo form_dropdown('', $get_all_combobox_instansi, $divisi->instansi_id, $instansi_id) ?>
             </div>
-            <div class="form-group"><label>Nama Cabang</label>
-              <?php echo form_dropdown('', $get_all_combobox_cabang, $divisi->cabang_id, $cabang_id) ?>
-            </div>
-            <div class="form-group"><label>Nama Divisi (*)</label>
-              <?php echo form_input($divisi_name, $divisi->divisi_name) ?>
-            </div>
-          <?php } elseif(is_masteradmin()){ ?>
-            <div class="form-group"><label>Nama Cabang</label>
-              <?php echo form_dropdown('', $get_all_combobox_cabang, $divisi->cabang_id, $cabang_id) ?>
-            </div>
-            <div class="form-group"><label>Nama Divisi (*)</label>
-              <?php echo form_input($divisi_name, $divisi->divisi_name) ?>
-            </div>
-          <?php }elseif(is_superadmin()){ ?>
-            <div class="form-group"><label>Nama Divisi (*)</label>
-              <?php echo form_input($divisi_name, $divisi->divisi_name) ?>
-            </div>
           <?php } ?>
+          <div class="form-group"><label>Nama Divisi (*)</label>
+            <?php echo form_input($divisi_name, $divisi->divisi_name) ?>
+          </div>
         </div>
         <?php echo form_input($id_divisi, $divisi->id_divisi) ?>
         <div class="box-footer">
