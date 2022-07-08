@@ -248,17 +248,22 @@ class Divisi extends CI_Controller
   {
     is_delete();
 
+    //TODO Get divisi by id
     $delete = $this->Divisi_model->get_by_id($id);
 
+    //TODO Jika data divisi ditemukan
     if ($delete) {
+      //TODO Jalankan proses delete permanen
       $this->Divisi_model->delete($id);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus permanen</div>');
+      //TODO Kirim notifikasi berhasil dihapus permanen
+      $this->session->set_flashdata('message', 'dihapus');
       redirect('admin/divisi/deleted_list');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO Kirim notifikasi data tidak ditemukan
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/divisi');
     }
   }
