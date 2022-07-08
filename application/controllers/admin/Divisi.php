@@ -217,23 +217,29 @@ class Divisi extends CI_Controller
   function delete($id)
   {
     is_delete();
+
+    //TODO Get data divisi by id
     $delete = $this->Divisi_model->get_by_id($id);
 
+    //TODO Jika data divisi ditemukan
     if ($delete) {
       $data = array(
-        'is_delete_divisi'   => '1',
+        'is_delete_divisi'  => '1',
         'deleted_by'        => $this->session->username,
         'deleted_at'        => date('Y-m-d H:i:a'),
       );
 
+      //TODO Jalankan proses softdelete
       $this->Divisi_model->soft_delete($id, $data);
 
       write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
+      //TODO Kirim notifikasi berhasil dihapus
+      $this->session->set_flashdata('message', 'dihapus');
       redirect('admin/divisi');
     } else {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      //TODO Kirim notifikasi data tidak ditemukan
+      $this->session->set_flashdata('message', 'tidak ditemukan');
       redirect('admin/divisi');
     }
   }
