@@ -177,21 +177,26 @@ class Divisi_model extends CI_Model
 
   function get_all_deleted()
   {
-    $this->db->where('is_delete_divisi', '1');
+    $this->db->select('
+      divisi.id_divisi, divisi.divisi_name, divisi.instansi_id,
+      instansi.instansi_name
+    ');
 
-    $this->db->order_by('divisi_name', $this->order);
+    $this->db->join('instansi', 'divisi.instansi_id = instansi.id_instansi');
+
+    $this->db->where('divisi.is_delete_divisi', '1');
+
+    $this->db->order_by('divisi.divisi_name', $this->order);
 
     return $this->db->get($this->table)->result();
   }
 
   function get_all_deleted_by_instansi()
   {
-    $this->db->join('instansi', 'divisi.instansi_id = instansi.id_instansi');
+    $this->db->where('divisi.instansi_id', $this->session->instansi_id);
+    $this->db->where('divisi.is_delete_divisi', '1');
 
-    $this->db->where('instansi_id', $this->session->instansi_id);
-    $this->db->where('is_delete_divisi', '1');
-
-    $this->db->order_by('divisi_name', $this->order);
+    $this->db->order_by('divisi.divisi_name', $this->order);
 
     return $this->db->get($this->table)->result();
   }

@@ -272,17 +272,17 @@ class Divisi extends CI_Controller
   {
     is_restore();
 
+    //TODO Inisialisasi variabel
     $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
 
+    //TODO Get data divisi berdasarkan hak akses usertype
     if (is_grandadmin()) {
       $this->data['get_all_deleted'] = $this->Divisi_model->get_all_deleted();
     } elseif (is_masteradmin()) {
       $this->data['get_all_deleted'] = $this->Divisi_model->get_all_deleted_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all_deleted'] = $this->Divisi_model->get_all_deleted_by_cabang();
     }
 
-
+    //TODO Load view list divisi yang telah dihapus
     $this->load->view('back/divisi/divisi_deleted_list', $this->data);
   }
 

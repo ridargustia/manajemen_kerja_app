@@ -19,7 +19,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if($this->session->flashdata('message')){echo $this->session->flashdata('message');} ?>
+      <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
 
       <div class="box box-primary">
         <!-- /.box-header -->
@@ -29,30 +29,30 @@
               <thead>
                 <tr>
                   <th style="text-align: center">No</th>
-                  <th style="text-align: center">Divisi Name</th>
-                  <th style="text-align: center">Action</th>
+                  <th style="text-align: center">Nama Divisi</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Nama Instansi</th>
+                  <?php } ?>
+                  <th style="text-align: center">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                <?php $no = 1; foreach($get_all_deleted as $data){
-                  // action
-                  $restore = '<a href="'.base_url('admin/divisi/restore/'.$data->id_divisi).'" class="btn btn-sm btn-primary" title="Restore Divisi"><i class="fa fa-refresh"></i></a>';
-                  $delete = '<a href="'.base_url('admin/divisi/delete_permanent/'.$data->id_divisi).'" onClick="return confirm(\'Are you sure?\');" class="btn btn-sm btn-danger" title="Hapus Permanen"><i class="fa fa-remove"></i></a>';
+                <?php $no = 1;
+                foreach ($get_all_deleted as $data) {
+                  //TODO Action Button
+                  $restore = '<a href="' . base_url('admin/divisi/restore/' . $data->id_divisi) . '" class="btn btn-sm btn-primary" title="Restore Divisi"><i class="fa fa-refresh"></i></a>';
+                  $delete = '<a href="' . base_url('admin/divisi/delete_permanent/' . $data->id_divisi) . '" id="delete-button-permanent" class="btn btn-sm btn-danger" title="Hapus Permanen"><i class="fa fa-remove"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->divisi_name ?></td>
+                    <?php if (is_grandadmin()) { ?>
+                      <td style="text-align: center"><?php echo $data->instansi_name ?></td>
+                    <?php } ?>
                     <td style="text-align: center"><?php echo $restore ?> <?php echo $delete ?></td>
                   </tr>
                 <?php } ?>
               </tbody>
-              <tfoot>
-                <tr>
-                  <th style="text-align: center">No</th>
-                  <th style="text-align: center">Divisi Name</th>
-                  <th style="text-align: center">Action</th>
-                </tr>
-              </tfoot>
             </table>
           </div>
         </div>
@@ -70,13 +70,14 @@
   <script src="<?php echo base_url('assets/plugins/') ?>datatables/js/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url('assets/plugins/') ?>datatables-bs/js/dataTables.bootstrap.min.js"></script>
   <script>
-  $(document).ready( function () {
-    $('#dataTable').DataTable();
-  } );
+    $(document).ready(function() {
+      $('#dataTable').DataTable();
+    });
   </script>
 
 </div>
 <!-- ./wrapper -->
 
 </body>
+
 </html>
