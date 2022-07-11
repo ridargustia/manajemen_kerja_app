@@ -185,6 +185,155 @@ class Skck extends CI_Controller
         }
     }
 
+    function update($id_skck)
+    {
+        is_update();
+
+        //TODO Get by id data skck
+        $this->data['skck']     = $this->Skck_model->get_by_id($id_skck);
+
+        //TODO Jika skck ditemukan
+        if ($this->data['skck']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'Update Data ' . $this->data['module'];
+            $this->data['action']     = 'admin/skck/update_action';
+
+            //TODO Get data untuk dropdown reference
+            $this->data['get_all_combobox_status'] = $this->Status_model->get_all_combobox();
+            $this->data['get_all_combobox_agama'] = $this->Agama_model->get_all_combobox();
+            $this->data['get_all_combobox_pekerjaan'] = $this->Pekerjaan_model->get_all_combobox();
+            $this->data['get_all_combobox_pendidikan_akhir'] = $this->Pendidikan_akhir_model->get_all_combobox();
+
+            //TODO Rancangan form
+            $this->data['id_skck'] = [
+                'name'          => 'id_skck',
+                'type'          => 'hidden',
+            ];
+            $this->data['name'] = [
+                'name'          => 'name',
+                'id'            => 'name',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['nik'] = [
+                'name'          => 'nik',
+                'id'            => 'nik',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthplace'] = [
+                'name'          => 'birthplace',
+                'id'            => 'birthplace',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthdate'] = [
+                'name'          => 'birthdate',
+                'id'            => 'birthdate',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['gender'] = [
+                'name'          => 'gender',
+                'id'            => 'gender',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['gender_value'] = [
+                '0'             => '- Pilih Jenis Kelamin -',
+                '1'             => 'Laki-laki',
+                '2'             => 'Perempuan',
+            ];
+            $this->data['status'] = [
+                'name'          => 'status',
+                'id'            => 'status',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['agama'] = [
+                'name'          => 'agama',
+                'id'            => 'agama',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['pekerjaan'] = [
+                'name'          => 'pekerjaan',
+                'id'            => 'pekerjaan',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['pendidikan_akhir'] = [
+                'name'          => 'pendidikan_akhir',
+                'id'            => 'pendidikan_akhir',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['address'] = [
+                'name'          => 'address',
+                'id'            => 'address',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'rows'          => '2',
+                'required'      => '',
+            ];
+
+            $this->load->view('back/skck/skck_edit', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/skck');
+        }
+    }
+
+    function update_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
+        $this->form_validation->set_rules('agama', 'Agama', 'required');
+        $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
+        $this->form_validation->set_rules('pendidikan_akhir', 'Pendidikan Terakhir', 'required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //TODO Jika data tidak lolos validasi
+        if ($this->form_validation->run() === FALSE) {
+            $this->update($this->input->post('id_skck'));
+        } else {
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'nik'                   => $this->input->post('nik'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'gender'                => $this->input->post('gender'),
+                'status_id'             => $this->input->post('status'),
+                'agama_id'              => $this->input->post('agama'),
+                'pekerjaan_id'          => $this->input->post('pekerjaan'),
+                'pendidikan_akhir_id'   => $this->input->post('pendidikan_akhir'),
+                'address'               => $this->input->post('address'),
+                'modified_by'           => $this->session->username,
+            );
+
+            //TODO Jalankan proses update
+            $this->Skck_model->update($this->input->post('id_skck'), $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/skck');
+        }
+    }
+
     function delete($id_skck)
     {
         is_delete();

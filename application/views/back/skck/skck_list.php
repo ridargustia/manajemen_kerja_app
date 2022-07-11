@@ -45,6 +45,7 @@
                                 foreach ($get_all as $data) {
                                     //TODO Create Action Button
                                     $detail = '<a href="' . base_url('admin/skck/numbering/' . $data->id_skck) . '" class="btn btn-success" title="Tindak Lanjut"><i class="fa fa-send"></i></a>';
+                                    $edit = '<a href="' . base_url('admin/skck/update/' . $data->id_skck) . '" class="btn btn-warning" title="Edit Data"><i class="fa fa-pencil"></i></a>';
                                     $delete = '<a href="' . base_url('admin/skck/delete/' . $data->id_skck) . '" id="delete-button" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
                                 ?>
                                     <tr>
@@ -54,7 +55,7 @@
                                         <td style="text-align: center"><?php echo datetime_indo3($data->created_at) ?></td>
                                         <td class="hidden" style="text-align: center"><?php echo $data->is_readed ?></td>
                                         <td class="hidden" style="text-align: center"><?php echo $data->is_readed_masteradmin ?></td>
-                                        <td style="text-align: center"><?php echo $detail ?> <?php echo $delete ?></td>
+                                        <td style="text-align: center"><?php echo $detail ?> <?php echo $edit ?> <?php echo $delete ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
