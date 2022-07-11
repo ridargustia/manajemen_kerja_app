@@ -36,6 +36,7 @@
                                     <th style="text-align: center">NIK</th>
                                     <th style="text-align: center">Dibuat pada</th>
                                     <th class="hidden" style="text-align: center">Is Readed</th>
+                                    <th class="hidden" style="text-align: center">Is Readed Master</th>
                                     <th style="text-align: center">Aksi</th>
                                 </tr>
                             </thead>
@@ -52,6 +53,7 @@
                                         <td style="text-align: center"><?php echo $data->nik ?></td>
                                         <td style="text-align: center"><?php echo datetime_indo3($data->created_at) ?></td>
                                         <td class="hidden" style="text-align: center"><?php echo $data->is_readed ?></td>
+                                        <td class="hidden" style="text-align: center"><?php echo $data->is_readed_masteradmin ?></td>
                                         <td style="text-align: center"><?php echo $detail ?> <?php echo $delete ?></td>
                                     </tr>
                                 <?php } ?>
@@ -76,6 +78,10 @@
         $(document).ready(function() {
             $('#dataTable').DataTable({
                 "rowCallback": function(row, data, index) {
+                    if (data[5] == "0") {
+                        $('td', row).css('background-color', '#DCDCDC');
+                    }
+
                     if (data[4] == "0") {
                         $('td', row).css('background-color', '#DCDCDC');
                     }

@@ -75,7 +75,11 @@
               <span class="pull-right-container">
                 <?php
                 if ($m->menu_controller === 'skck') {
-                  $count = $this->Skck_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Skck_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Skck_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                 ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>

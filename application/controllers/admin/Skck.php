@@ -9,8 +9,6 @@ class Skck extends CI_Controller
 
         $this->data['module'] = 'Surat Keterangan (SKCK)';
 
-        // $this->load->model(array('Skck_model'));
-
         $this->data['company_data']             = $this->Company_model->company_profile();
         $this->data['layout_template']          = $this->Template_model->layout();
         $this->data['skins_template']           = $this->Template_model->skins();
@@ -35,10 +33,16 @@ class Skck extends CI_Controller
     {
         //TODO Authentication hak akses usertype
         is_read();
+
         //TODO Inisialisasi variabel judul
         $this->data['page_title'] = 'Data ' . $this->data['module'];
+
         //TODO Get data SKCK dari database
-        $this->data['get_all'] = $this->Skck_model->get_all();
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Skck_model->get_all_by_numbering();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Skck_model->get_all();
+        }
 
         $this->load->view('back/skck/skck_list', $this->data);
     }
@@ -185,8 +189,10 @@ class Skck extends CI_Controller
     {
         is_delete();
 
+        //TODO Get skck by id
         $delete = $this->Skck_model->get_by_id($id_skck);
 
+        //TODO Jika data skck ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -194,13 +200,16 @@ class Skck extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Skck_model->soft_delete($id_skck, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/skck');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/skck');
         }

@@ -23,6 +23,18 @@ class Skck_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_by_numbering()
+    {
+        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.created_at, skck.is_readed_masteradmin');
+
+        $this->db->where('skck.is_delete', '0');
+        $this->db->where('skck.no_surat !=', NULL);
+
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
     function get_all_deleted()
     {
         $this->db->where('skck.is_delete', '1');
@@ -36,6 +48,16 @@ class Skck_model extends CI_Model
     {
         $this->db->where('skck.is_readed', '0');
         $this->db->where('skck.is_delete', '0');
+
+        return $this->db->get($this->table)->num_rows();
+    }
+
+    function total_rows_is_not_readed_masteradmin()
+    {
+        $this->db->where('skck.is_readed', '1');
+        $this->db->where('skck.is_readed_masteradmin', '0');
+        $this->db->where('skck.is_delete', '0');
+        $this->db->where('skck.no_surat !=', NULL);
 
         return $this->db->get($this->table)->num_rows();
     }
