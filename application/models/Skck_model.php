@@ -18,6 +18,7 @@ class Skck_model extends CI_Model
 
         $this->db->where('skck.is_delete', '0');
 
+        $this->db->order_by('skck.is_readed', 'ASC');
         $this->db->order_by($this->id, $this->order);
 
         return $this->db->get($this->table)->result();
@@ -30,6 +31,7 @@ class Skck_model extends CI_Model
         $this->db->where('skck.is_delete', '0');
         $this->db->where('skck.no_surat !=', NULL);
 
+        $this->db->order_by('skck.is_readed_masteradmin', 'ASC');
         $this->db->order_by($this->id, $this->order);
 
         return $this->db->get($this->table)->result();
