@@ -427,10 +427,15 @@ class Skck extends CI_Controller
 
     function deleted_list()
     {
+        //TODO Inisialisasi variabel
         $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
 
         //TODO Get data SKCK dari database
-        $this->data['get_all'] = $this->Skck_model->get_all_deleted();
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Skck_model->get_all_deleted_for_masteradmin();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Skck_model->get_all_deleted();
+        }
 
         $this->load->view('back/skck/skck_deleted_list', $this->data);
     }
