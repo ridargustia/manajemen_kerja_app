@@ -41,7 +41,7 @@
                                 foreach ($get_all as $data) {
                                     //TODO Create Action Button
                                     $restore = '<a href="' . base_url('admin/skck/restore/' . $data->id_skck) . '" class="btn btn-primary" title="Restore Data"><i class="fa fa-refresh"></i></a>';
-                                    $delete = '<a href="' . base_url('admin/skck/delete_permanently/' . $data->id_skck) . '" id="delete-button" class="btn btn-danger" title="Hapus Permanen"><i class="fa fa-trash"></i></a>';
+                                    $delete = '<a href="' . base_url('admin/skck/delete_permanent/' . $data->id_skck) . '" id="delete-button-permanent" class="btn btn-danger" title="Hapus Permanen"><i class="fa fa-trash"></i></a>';
                                 ?>
                                     <tr>
                                         <td style="text-align: center"><?php echo $no++ ?></td>

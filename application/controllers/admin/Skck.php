@@ -425,6 +425,30 @@ class Skck extends CI_Controller
         }
     }
 
+    function delete_permanent($id_skck)
+    {
+        is_delete();
+
+        //TODO Get data skck by id
+        $delete = $this->Skck_model->get_by_id($id_skck);
+
+        //TODO Jika data skck yg akan dihapus ditemukan
+        if ($delete) {
+            //TODO Jalankan proses delete dengan model
+            $this->Skck_model->delete($id_skck);
+
+            write_log();
+
+            //TODO Kirim notifikasi berhasil dihapus permanen
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/skck/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/skck');
+        }
+    }
+
     function deleted_list()
     {
         //TODO Inisialisasi variabel
@@ -438,5 +462,35 @@ class Skck extends CI_Controller
         }
 
         $this->load->view('back/skck/skck_deleted_list', $this->data);
+    }
+
+    function restore($id_skck)
+    {
+        is_restore();
+
+        //TODO Get data skck by id
+        $row = $this->Skck_model->get_by_id($id_skck);
+
+        //TODO Jika data ditemukan
+        if ($row) {
+            $data = array(
+                'is_delete'   => '0',
+                'deleted_by'  => NULL,
+                'deleted_at'  => NULL,
+            );
+
+            //TODO Jalankan proses update dengan model
+            $this->Skck_model->update($id_skck, $data);
+
+            write_log();
+
+            //TODO Kirim notifikasi data berhasil dikembalikan
+            $this->session->set_flashdata('message', 'dikembalikan');
+            redirect('admin/skck/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/skck');
+        }
     }
 }
