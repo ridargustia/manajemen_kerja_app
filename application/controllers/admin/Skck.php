@@ -493,4 +493,118 @@ class Skck extends CI_Controller
             redirect('admin/skck');
         }
     }
+
+    function preview_document($id_skck)
+    {
+        $row = $this->Skck_model->get_by_id($id_skck);
+
+        require FCPATH . '/vendor/autoload.php';
+        require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
+
+        $image = FCPATH . 'assets\images\kop_surat.png';
+
+        // var_dump($image);
+        // die();
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->SetTitle('SKCK a.n ' . $row->name);
+        $pdf->SetTopMargin(10);
+        $pdf->SetLeftMargin(25);
+        $pdf->SetRightMargin(25);
+        $pdf->AddFont('Calibri', '', 'calibri.php');
+        $pdf->AddFont('Calibrib', '', 'calibrib.php');
+        $pdf->AddPage();
+
+        //TODO Image
+        $pdf->Image($image, 25, 10, 24, 25);
+
+        //TODO Judul Surat
+        $pdf->SetFont('Arial', '', '11');
+        $pdf->Cell(0, 6, 'PEMERINTAH KABUPATEN SUMENEP', 0, 1, 'C');
+        $pdf->Cell(0, 6, 'KECAMATAN KANGAYAN', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', '11');
+        $pdf->Cell(0, 6, 'KANTOR KEPALA DESA SAOBI', 0, 1, 'C');
+        $pdf->SetFont('Arial', '', '11');
+        $pdf->Cell(0, 6, 'Jalan Raya Masjid No. 50. Email desasaobi90@gmail.com', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'BU', '11');
+        $pdf->Cell(0, 6, 'S A O B I', 0, 1, 'C');
+        $pdf->Cell(130);
+        $pdf->SetFont('Arial', 'I', '8');
+        $pdf->Cell(0, 3, 'Kode Pos 69491', 0, 1, 'C');
+
+        //TODO Body Surat
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 7, 'SURAT KETERANGAN', 0, 1, 'C');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(0, 5, 'Nomor :133/.../ 435.326.105 / 2022', 0, 1, 'C');
+
+        //TODO make a dummy empty cell as a vertical spacer
+        $pdf->Cell(0, 6, '', 0, 1); //end of line
+
+        //TODO Body Content
+        $pdf->Cell(0, 8, 'Yang bertanda tangan dibawah ini :', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Nama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 8, 'HOSAINI, SH', 0, 1, 'L');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Saobi Kangayan Sumenep', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Jabatan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Kepala Desa Saobi', 0, 1, 'L');
+        $pdf->Cell(0, 8, 'Menerangkan dengan sebenarnya bahwa :', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Nama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 8, 'YUDISTIRA', 0, 1, 'L');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(50, 8, 'Tempat / Tanggal Lahir', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Sumenep, 29-06-2003', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Jenis kelamin', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Laki-laki', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Status perkawinan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Belum Kawin', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Agama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Islam', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Pekerjaan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Pelajar/Mahasiswa', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Pendidikan Terakhir', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'MA (Madrasah Aliyah)', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Dusun ........ Desa Saobi Kangayan Sumenep', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'No. NIK', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, '352927', 0, 1, 'L');
+
+        $pdf->MultiCell(0, 8, '         Adalah benar-benar penduduk Desa Saobi Kangayan Sumenep yang tidak tercatat sebagai orang yang pernah menjalani hukuman tindak pidana atau sedang dalam proses sebagai tersangka tindak pidana.', 0, 'J');
+        $pdf->MultiCell(0, 8, '            Surat keterangan ini dibuat untuk mendapatkan Surat Keterangan Catatan Kepolisian (SKCK) dari pihak berwenang.', 0, 'J');
+        $pdf->MultiCell(0, 8, '     Demikian surat keterangan ini dibuat dengan sebenarnya untuk dipergunakan sebagaimana mestinya.', 0, 'J');
+
+        $pdf->Cell(115);
+        $pdf->SetFont('Arial', 'I', '12');
+        $pdf->Cell(0, 8, 'Saobi, 29 Maret 2022', 0, 1, 'L');
+
+        $pdf->Cell(20);
+        $pdf->SetFont('Arial', '', '12');
+        $pdf->Cell(85, 8, 'Yang bersangkutan', 0, 0, 'L');
+        $pdf->Cell(0, 8, 'Kepala Desa Saobi', 0, 1, 'C');
+
+        //TODO make a dummy empty cell as a vertical spacer
+        $pdf->Cell(0, 20, '', 0, 1); //end of line
+
+        // $pdf->Cell(5);
+        $pdf->SetFont('Arial', 'BU', '12');
+        $pdf->Cell(80, 8, 'YUDISTIRA', 0, 0, 'C');
+        $pdf->Cell(65, 8, 'HOSAINI, SH', 0, 1, 'R');
+
+        $pdf->Output('I', 'SKCK a.n ' . $row->name . '.pdf');
+    }
 }

@@ -115,6 +115,13 @@
                         </div>
                     </div>
                 </div>
+                <?php if ($data_skck->no_surat != NULL) { ?>
+                    <div class="box-footer">
+                        <div class="pull-right">
+                            <a href="<?php echo base_url('admin/skck/preview_document/' . $data_skck->id_skck) ?>" class="btn btn-primary" title="Preview Document"><i class="fa fa-file-text-o"></i> Pratinjau Dokumen</a>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
             <!-- /.box -->
         </section>
