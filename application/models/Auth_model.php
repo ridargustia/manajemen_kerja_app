@@ -509,4 +509,12 @@ class Auth_model extends CI_Model
     $this->db->where('username', $id);
     $this->db->delete('login_attempts');
   }
+
+  function get_by_usertype_master()
+  {
+    $this->db->join('jabatan', 'users.jabatan_id = jabatan.id_jabatan', 'left');
+
+    $this->db->where('usertype_id', '1');
+    return $this->db->get($this->table)->row();
+  }
 }

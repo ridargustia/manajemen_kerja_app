@@ -496,7 +496,14 @@ class Skck extends CI_Controller
 
     function preview_document($id_skck)
     {
-        $row = $this->Skck_model->get_by_id($id_skck);
+        $row = $this->Skck_model->get_by_id_for_document($id_skck);
+        $data_master = $this->Auth_model->get_by_usertype_master();
+
+        if ($row->gender === '1') {
+            $gender = 'Laki-laki';
+        } elseif ($row->gender === '2') {
+            $gender = 'Perempuan';
+        }
 
         require FCPATH . '/vendor/autoload.php';
         require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
@@ -506,7 +513,7 @@ class Skck extends CI_Controller
         // var_dump($image);
         // die();
         $pdf = new FPDF('P', 'mm', 'A4');
-        $pdf->SetTitle('SKCK a.n ' . $row->name);
+        $pdf->SetTitle($this->data['module'] . ' a.n ' . $row->name);
         $pdf->SetTopMargin(10);
         $pdf->SetLeftMargin(25);
         $pdf->SetRightMargin(25);
@@ -535,7 +542,7 @@ class Skck extends CI_Controller
         $pdf->SetFont('Calibrib', '', '12');
         $pdf->Cell(0, 7, 'SURAT KETERANGAN', 0, 1, 'C');
         $pdf->SetFont('Calibri', '', '12');
-        $pdf->Cell(0, 5, 'Nomor :133/.../ 435.326.105 / 2022', 0, 1, 'C');
+        $pdf->Cell(0, 5, 'Nomor : ' . $row->no_surat, 0, 1, 'C');
 
         //TODO make a dummy empty cell as a vertical spacer
         $pdf->Cell(0, 6, '', 0, 1); //end of line
@@ -545,44 +552,44 @@ class Skck extends CI_Controller
         $pdf->Cell(50, 8, 'Nama', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
         $pdf->SetFont('Calibrib', '', '12');
-        $pdf->Cell(0, 8, 'HOSAINI, SH', 0, 1, 'L');
+        $pdf->Cell(0, 8, strtoupper($data_master->name), 0, 1, 'L');
         $pdf->SetFont('Calibri', '', '12');
         $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'Saobi Kangayan Sumenep', 0, 1, 'L');
+        $pdf->Cell(0, 8, $data_master->address, 0, 1, 'L');
         $pdf->Cell(50, 8, 'Jabatan', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'Kepala Desa Saobi', 0, 1, 'L');
+        $pdf->Cell(0, 8, $data_master->jabatan_name, 0, 1, 'L');
         $pdf->Cell(0, 8, 'Menerangkan dengan sebenarnya bahwa :', 0, 1, 'L');
         $pdf->Cell(50, 8, 'Nama', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
         $pdf->SetFont('Calibrib', '', '12');
-        $pdf->Cell(0, 8, 'YUDISTIRA', 0, 1, 'L');
+        $pdf->Cell(0, 8, strtoupper($row->name), 0, 1, 'L');
         $pdf->SetFont('Calibri', '', '12');
         $pdf->Cell(50, 8, 'Tempat / Tanggal Lahir', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'Sumenep, 29-06-2003', 0, 1, 'L');
+        $pdf->Cell(0, 8, $row->birthplace . ', ' . datetime_indo4($row->birthdate), 0, 1, 'L');
         $pdf->Cell(50, 8, 'Jenis kelamin', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'Laki-laki', 0, 1, 'L');
+        $pdf->Cell(0, 8, $gender, 0, 1, 'L');
         $pdf->Cell(50, 8, 'Status perkawinan', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'Belum Kawin', 0, 1, 'L');
+        $pdf->Cell(0, 8, $row->status_name, 0, 1, 'L');
         $pdf->Cell(50, 8, 'Agama', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'Islam', 0, 1, 'L');
+        $pdf->Cell(0, 8, $row->agama_name, 0, 1, 'L');
         $pdf->Cell(50, 8, 'Pekerjaan', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'Pelajar/Mahasiswa', 0, 1, 'L');
+        $pdf->Cell(0, 8, $row->pekerjaan_name, 0, 1, 'L');
         $pdf->Cell(50, 8, 'Pendidikan Terakhir', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'MA (Madrasah Aliyah)', 0, 1, 'L');
+        $pdf->Cell(0, 8, $row->pendidikan_akhir_name, 0, 1, 'L');
         $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, 'Dusun ........ Desa Saobi Kangayan Sumenep', 0, 1, 'L');
+        $pdf->Cell(0, 8, $row->address, 0, 1, 'L');
         $pdf->Cell(50, 8, 'No. NIK', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
-        $pdf->Cell(0, 8, '352927', 0, 1, 'L');
+        $pdf->Cell(0, 8, $row->nik, 0, 1, 'L');
 
         $pdf->MultiCell(0, 8, '         Adalah benar-benar penduduk Desa Saobi Kangayan Sumenep yang tidak tercatat sebagai orang yang pernah menjalani hukuman tindak pidana atau sedang dalam proses sebagai tersangka tindak pidana.', 0, 'J');
         $pdf->MultiCell(0, 8, '            Surat keterangan ini dibuat untuk mendapatkan Surat Keterangan Catatan Kepolisian (SKCK) dari pihak berwenang.', 0, 'J');
@@ -590,7 +597,7 @@ class Skck extends CI_Controller
 
         $pdf->Cell(115);
         $pdf->SetFont('Arial', 'I', '12');
-        $pdf->Cell(0, 8, 'Saobi, 29 Maret 2022', 0, 1, 'L');
+        $pdf->Cell(0, 8, 'Saobi, ' . date_indonesian_only($row->created_at), 0, 1, 'L');
 
         $pdf->Cell(20);
         $pdf->SetFont('Arial', '', '12');
@@ -602,8 +609,8 @@ class Skck extends CI_Controller
 
         // $pdf->Cell(5);
         $pdf->SetFont('Arial', 'BU', '12');
-        $pdf->Cell(80, 8, 'YUDISTIRA', 0, 0, 'C');
-        $pdf->Cell(65, 8, 'HOSAINI, SH', 0, 1, 'R');
+        $pdf->Cell(80, 8, strtoupper($row->name), 0, 0, 'C');
+        $pdf->Cell(65, 8, strtoupper($data_master->name), 0, 1, 'R');
 
         $pdf->Output('I', 'SKCK a.n ' . $row->name . '.pdf');
     }

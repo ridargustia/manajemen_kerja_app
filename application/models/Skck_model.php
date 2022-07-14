@@ -80,6 +80,17 @@ class Skck_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id_for_document($id)
+    {
+        $this->db->join('status', 'skck.status_id = status.id_status');
+        $this->db->join('agama', 'skck.agama_id = agama.id_agama');
+        $this->db->join('pekerjaan', 'skck.pekerjaan_id = pekerjaan.id_pekerjaan');
+        $this->db->join('pendidikan_akhir', 'skck.pendidikan_akhir_id = pendidikan_akhir.id_pendidikan_akhir');
+
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);

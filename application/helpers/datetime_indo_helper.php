@@ -30,8 +30,43 @@ function datetime_indo3($string)
   //TODO output FROM: 2019-02-17 09:50:36 TO Tanggal Bulan Tahun 09:50:36
 }
 
+function datetime_indo4($string)
+{
+  $datetime = $string;
+  $dt       = strtotime($datetime); //make timestamp with datetime string
+  $string   = date("d-m-Y", $dt); //echo the year of the datestamp just created
+
+  return $string;
+
+  //TODO output FROM: 2019-02-17 09:50:36 TO 17-02-2019
+}
+
 function date_only($string)
 {
   $string = date("j F Y", strtotime($string));
   return $string;
+}
+
+function date_indonesian_only($string)
+{
+  $tgl = date("d-m-Y", strtotime($string));
+
+  $bulan = array(
+    1 =>   'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  );
+
+  $pecahkan = explode('-', $tgl);
+
+  return $pecahkan[0] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[2];
 }
