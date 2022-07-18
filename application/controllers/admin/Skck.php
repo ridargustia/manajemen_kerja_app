@@ -614,4 +614,31 @@ class Skck extends CI_Controller
 
         $pdf->Output('I', 'SKCK a.n ' . $row->name . '.pdf');
     }
+
+    function signature($id_skck)
+    {
+        //TODO Authentikasi hak akses usertype
+        if (is_superadmin()) {
+            $this->session->set_flashdata('message', 'tidak memiliki akses');
+            redirect('admin/dashboard');
+        }
+
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'ACC Dokumen ' . $this->data['module'];
+
+        $this->load->view('back/skck/skck_signature', $this->data);
+    }
+
+    function signature_action()
+    {
+        $data = base64_decode($this->input->post('image'));
+
+        $file = './assets/signature_images/' . uniqid() . '.png';
+        file_put_contents($file, $data);
+
+        $image = str_replace('./', '', $file);
+
+        // $this->welcome_model->insert_single_signature($image);
+        echo '<img src="' . base_url() . $image . '">';
+    }
 }
