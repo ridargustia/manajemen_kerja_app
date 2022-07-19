@@ -14,7 +14,7 @@ class Skck_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.created_at, skck.is_readed');
+        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.signature_image, skck.created_at, skck.is_readed');
 
         $this->db->where('skck.is_delete', '0');
 
@@ -26,7 +26,7 @@ class Skck_model extends CI_Model
 
     function get_all_by_numbering()
     {
-        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.created_at, skck.is_readed_masteradmin');
+        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.signature_image, skck.created_at, skck.is_readed_masteradmin');
 
         $this->db->where('skck.is_delete', '0');
         $this->db->where('skck.no_surat !=', NULL);

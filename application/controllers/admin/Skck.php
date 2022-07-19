@@ -664,7 +664,8 @@ class Skck extends CI_Controller
 
         //TODO Simpan pada array
         $data = array(
-            'signature_image'     => $image,
+            'signature_image'       => $image,
+            'is_readed_masteradmin' => '1',
         );
 
         //TODO Jalankan proses update
