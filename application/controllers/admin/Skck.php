@@ -623,22 +623,52 @@ class Skck extends CI_Controller
             redirect('admin/dashboard');
         }
 
-        //TODO Inisialisasi variabel
-        $this->data['page_title'] = 'ACC Dokumen ' . $this->data['module'];
+        //TODO Get data skck by id
+        $this->data['skck'] = $this->Skck_model->get_by_id($id_skck);
 
-        $this->load->view('back/skck/skck_signature', $this->data);
+        //TODO Cek apakah data skck ada
+        if ($this->data['skck']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'ACC Dokumen ' . $this->data['module'];
+
+            //TODO Rancangan form
+            $this->data['id_skck'] = [
+                'name'          => 'id_skck',
+                'id'            => 'id_skck',
+                'type'          => 'hidden',
+            ];
+
+            //TODO load view tampilan signature
+            $this->load->view('back/skck/skck_signature', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/skck');
+        }
     }
 
     function signature_action()
     {
+        //TODO Dekripsi chipertext dengan metode base64
         $data = base64_decode($this->input->post('image'));
 
+        //TODO Set direktori tempat menyimpan tanda tangan
         $file = './assets/signature_images/' . uniqid() . '.png';
+        //TODO Jalankan proses penyimpanan file image ke direktori
         file_put_contents($file, $data);
 
+        //TODO Hilangkan karakter './' pada variabel direktori file
         $image = str_replace('./', '', $file);
 
-        // $this->welcome_model->insert_single_signature($image);
-        echo '<img src="' . base_url() . $image . '">';
+        //TODO Simpan pada array
+        $data = array(
+            'signature_image'     => $image,
+        );
+
+        //TODO Jalankan proses update
+        $this->Skck_model->update($this->input->post('id_skck'), $data);
+
+        write_log();
+
+        $this->session->set_flashdata('message', 'Sukses');
     }
 }

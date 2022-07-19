@@ -27,21 +27,6 @@
             font-size: 1.6rem !important;
         }
 
-        .previewsign {
-            border: 1px dashed #ccc;
-            border-radius: 5px;
-            color: #bbbabb;
-            height: 253px;
-            width: 100%;
-            text-align: center;
-            margin: auto;
-            /* float: right;
-            vertical-align: middle;
-            top: 73px;
-            position: fixed;
-            right: 35px; */
-        }
-
         .m-signature-pad-body {
             border: 1px dashed #ccc;
             border-radius: 5px;
@@ -50,22 +35,6 @@
             width: 100%;
             text-align: center;
             margin: auto;
-            /* float: right; */
-            /* vertical-align: middle; */
-            /* top: 73px;
-            position: fixed;
-            left: 33px; */
-        }
-
-        .m-signature-pad-footer {
-            bottom: 250px;
-            left: 218px;
-            position: fixed;
-        }
-
-        .img {
-            right: 0;
-            position: absolute;
         }
     </style>
 
@@ -95,23 +64,18 @@
                 <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
                 <div class="box box-primary" id="signature-pad">
                     <div class="box-header">
-                        <h3 class="box-title">TANDA TANGAN</h3>
+                        <h3 class="box-title">TANDA TANGAN DISINI</h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4>Bubuhkan tanda tangan anda di bawah ini</h4>
                                 <div class="m-signature-pad-body">
                                     <canvas width="450" height="250"></canvas>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <h4>Hasil Tanda Tangan</h4>
-                                <div id="previewsign1" class="previewsign">
-                                </div>
-                            </div>
                         </div>
                     </div>
+                    <?php echo form_input($id_skck, $skck->id_skck) ?>
                     <div class="box-footer">
                         <button type="button" id="save2" data-action="save" class="btn btn-success"><i class="fa fa-check"></i> Simpan</button>
                         <button type="button" id="clear-button" data-action="clear" class="btn btn-danger"><i class="fa fa-refresh"></i> Reset</button>
@@ -169,7 +133,8 @@
             saveButton.addEventListener("click", function(event) {
 
                 if (signaturePad.isEmpty()) {
-                    $('#myModal').modal('show');
+                    <?php $this->session->set_flashdata('message', 'wajib diisi') ?>
+                    window.location = "<?php echo base_url(); ?>admin/skck/signature/" + $('#id_skck').val();
                 } else {
                     var image = signaturePad.toDataURL();
                     var newImage = image.replace('data:image/png;base64,', '');
@@ -180,14 +145,33 @@
                         url: "<?php echo base_url(); ?>admin/skck/signature_action",
                         data: {
                             image: newImage2,
+                            id_skck: $('#id_skck').val()
                         },
                         success: function(datas1) {
                             signaturePad.clear();
-                            $('.previewsign').html(datas1);
+
+                            window.location = "<?php echo base_url(); ?>admin/skck/numbering/" + $('#id_skck').val();
                         }
                     });
                 }
             });
+        </script>
+
+        <script type="text/javascript">
+            const flashData = $('.flash-data').data('flashdata');
+            if (flashData === 'wajib diisi') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan',
+                    text: 'Tanda tangan ' + flashData + '!',
+                    showClass: {
+                        popup: 'animate__animated animate__tada'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                });
+            }
         </script>
 
     </div>
