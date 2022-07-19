@@ -509,9 +509,8 @@ class Skck extends CI_Controller
         require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
 
         $image = FCPATH . 'assets\images\kop_surat.png';
+        $ttd_kades = base_url($row->signature_image);
 
-        // var_dump($image);
-        // die();
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->SetTitle($this->data['module'] . ' a.n ' . $row->name);
         $pdf->SetTopMargin(10);
@@ -607,7 +606,11 @@ class Skck extends CI_Controller
         //TODO make a dummy empty cell as a vertical spacer
         $pdf->Cell(0, 20, '', 0, 1); //end of line
 
-        // $pdf->Cell(5);
+        if (!empty($row->signature_image)) {
+            //TODO Image
+            $pdf->Image($ttd_kades, 140, 242, 35, 25);
+        }
+
         $pdf->SetFont('Arial', 'BU', '12');
         $pdf->Cell(80, 8, strtoupper($row->name), 0, 0, 'C');
         $pdf->Cell(65, 8, strtoupper($data_master->name), 0, 1, 'R');
