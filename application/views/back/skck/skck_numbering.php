@@ -24,7 +24,11 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <img src="<?php echo base_url('assets/images/file_icon.png') ?>" width="100%" style="opacity: 0.5;">
+                            <?php if (empty($data_skck->signature_image)) { ?>
+                                <img src="<?php echo base_url('assets/images/file_icon.png') ?>" width="100%" style="opacity: 0.5;">
+                            <?php } else { ?>
+                                <img src="<?php echo base_url('assets/images/file_icon_approved.png') ?>" width="100%">
+                            <?php } ?>
                         </div>
                         <div class="col-md-9">
                             <table class="table">

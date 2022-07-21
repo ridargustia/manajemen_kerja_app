@@ -88,11 +88,11 @@
         $(document).ready(function() {
             $('#dataTable').DataTable({
                 "rowCallback": function(row, data, index) {
-                    if (data[5] == "0") {
+                    if (data[6] == "0") {
                         $('td', row).css('background-color', '#DCDCDC');
                     }
 
-                    if (data[4] == "0") {
+                    if (data[5] == "0") {
                         $('td', row).css('background-color', '#DCDCDC');
                     }
                 }
