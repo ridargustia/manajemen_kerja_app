@@ -123,7 +123,7 @@
                     <div class="box-footer">
                         <div class="pull-right">
                             <a href="<?php echo base_url('admin/skck/preview_document/' . $data_skck->id_skck) ?>" class="btn btn-primary" title="Preview Document" target="_blank"><i class="fa fa-file-text-o"></i> Pratinjau Dokumen</a>
-                            <?php if (is_masteradmin()) { ?>
+                            <?php if (is_masteradmin() and $data_skck->signature_image === NULL) { ?>
                                 <a href="<?php echo base_url('admin/skck/signature/' . $data_skck->id_skck) ?>" class="btn btn-success" title="ACC Dokumen"><i class="fa fa-pencil-square-o"></i> ACC Dokumen</a>
                             <?php } ?>
                         </div>
