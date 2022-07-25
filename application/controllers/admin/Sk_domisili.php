@@ -33,10 +33,16 @@ class Sk_domisili extends CI_Controller
     {
         //TODO Authentication hak akses usertype
         is_read();
+
         //TODO Inisialisasi variabel judul
         $this->data['page_title'] = 'Data ' . $this->data['module'];
+
         //TODO Get data SK Domisili dari database
-        $this->data['get_all'] = $this->Sk_domisili_model->get_all();
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Sk_domisili_model->get_all_by_numbering();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Sk_domisili_model->get_all();
+        }
 
         $this->load->view('back/sk_domisili/sk_domisili_list', $this->data);
     }

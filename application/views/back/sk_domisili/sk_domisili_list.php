@@ -34,14 +34,23 @@
                                     <th style="text-align: center">No</th>
                                     <th style="text-align: center">Nama</th>
                                     <th style="text-align: center">NIK</th>
+                                    <th style="text-align: center">Status</th>
                                     <th style="text-align: center">Dibuat pada</th>
                                     <th class="hidden" style="text-align: center">Is Readed</th>
+                                    <th class="hidden" style="text-align: center">Is Readed Master</th>
                                     <th style="text-align: center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $no = 1;
                                 foreach ($get_all as $data) {
+                                    //TODO Status dokumen
+                                    if ($data->signature_image === NULL) {
+                                        $status = "<button class='btn btn-xs btn-danger'><i class='fa fa-close'></i> BELUM ACC</button> ";
+                                    } else {
+                                        $status = "<button class='btn btn-xs btn-success'><i class='fa fa-check'></i> SUDAH ACC</button> ";
+                                    }
+
                                     //TODO Create Action Button
                                     $detail = '<a href="' . base_url('admin/sk_domisili/numbering/' . $data->id_sk_domisili) . '" class="btn btn-success" title="Tindak Lanjut"><i class="fa fa-send"></i></a>';
                                     $edit = '<a href="' . base_url('admin/sk_domisili/update/' . $data->id_sk_domisili) . '" class="btn btn-warning" title="Edit Data"><i class="fa fa-pencil"></i></a>';
@@ -51,8 +60,10 @@
                                         <td style="text-align: center"><?php echo $no++ ?></td>
                                         <td style="text-align: center"><?php echo $data->name ?></td>
                                         <td style="text-align: center"><?php echo $data->nik ?></td>
+                                        <td style="text-align: center"><?php echo $status ?></td>
                                         <td style="text-align: center"><?php echo datetime_indo3($data->created_at) ?></td>
                                         <td class="hidden" style="text-align: center"><?php echo $data->is_readed ?></td>
+                                        <td class="hidden" style="text-align: center"><?php echo $data->is_readed_masteradmin ?></td>
                                         <td style="text-align: center"><?php echo $detail ?> <?php echo $edit ?> <?php echo $delete ?></td>
                                     </tr>
                                 <?php } ?>
@@ -77,7 +88,11 @@
         $(document).ready(function() {
             $('#dataTable').DataTable({
                 "rowCallback": function(row, data, index) {
-                    if (data[4] == "0") {
+                    if (data[6] == "0") {
+                        $('td', row).css('background-color', '#DCDCDC');
+                    }
+
+                    if (data[5] == "0") {
                         $('td', row).css('background-color', '#DCDCDC');
                     }
                 }
