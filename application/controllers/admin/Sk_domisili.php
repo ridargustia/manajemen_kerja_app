@@ -363,8 +363,10 @@ class Sk_domisili extends CI_Controller
     {
         is_delete();
 
+        //TODO Get sk domisili by id
         $delete = $this->Sk_domisili_model->get_by_id($id_sk_domisili);
 
+        //TODO Jika data sk domisili ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -372,13 +374,16 @@ class Sk_domisili extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Sk_domisili_model->soft_delete($id_sk_domisili, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/sk_domisili');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/sk_domisili');
         }
