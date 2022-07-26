@@ -388,4 +388,63 @@ class Sk_domisili extends CI_Controller
             redirect('admin/sk_domisili');
         }
     }
+
+    function numbering($id_sk_domisili)
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Penomoran ' . $this->data['module'];
+        $this->data['action']     = 'admin/sk_domisili/numbering_action';
+
+        //TODO Rancangan form
+        $this->data['id_sk_domisili'] = [
+            'name'          => 'id_sk_domisili',
+            'type'          => 'hidden',
+        ];
+        $this->data['no_surat'] = [
+            'name'          => 'no_surat',
+            'id'            => 'no_surat',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+
+        //TODO Get detail sk domisili by id
+        $this->data['data_sk_domisili'] = $this->Sk_domisili_model->get_by_id($id_sk_domisili);
+        $this->data['status'] = $this->Status_model->get_by_id($this->data['data_sk_domisili']->status_id);
+        $this->data['agama'] = $this->Agama_model->get_by_id($this->data['data_sk_domisili']->agama_id);
+
+        //TODO Load view dengan mengirim data
+        $this->load->view('back/sk_domisili/sk_domisili_numbering', $this->data);
+    }
+
+    function numbering_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('no_surat', 'No Surat', 'required');
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('admin/sk_domisili/numbering/' . $this->input->post('id_sk_domisili'));
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'no_surat'              => $this->input->post('no_surat'),
+                'is_readed'             => '1',
+                'numbered_by'           => $this->session->username,
+                'numbered_at'           => date('Y-m-d H:i:a'),
+            );
+
+            //TODO Post to database with model
+            $this->Sk_domisili_model->update($this->input->post('id_sk_domisili'), $data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/sk_domisili/numbering/' . $this->input->post('id_sk_domisili'));
+        }
+    }
 }
