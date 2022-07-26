@@ -447,4 +447,73 @@ class Sk_domisili extends CI_Controller
             redirect('admin/sk_domisili/numbering/' . $this->input->post('id_sk_domisili'));
         }
     }
+
+    function delete_permanent($id_sk_domisili)
+    {
+        is_delete();
+
+        //TODO Get data sk_domisili by id
+        $delete = $this->Sk_domisili_model->get_by_id($id_sk_domisili);
+
+        //TODO Jika data sk_domisili yg akan dihapus ditemukan
+        if ($delete) {
+            //TODO Jalankan proses delete dengan model
+            $this->Sk_domisili_model->delete($id_sk_domisili);
+
+            write_log();
+
+            //TODO Kirim notifikasi berhasil dihapus permanen
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_domisili/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_domisili');
+        }
+    }
+
+    function deleted_list()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        //TODO Get data SK Domisili dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Sk_domisili_model->get_all_deleted_for_masteradmin();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Sk_domisili_model->get_all_deleted();
+        }
+
+        $this->load->view('back/sk_domisili/sk_domisili_deleted_list', $this->data);
+    }
+
+    function restore($id_sk_domisili)
+    {
+        is_restore();
+
+        //TODO Get data sk_domisili by id
+        $row = $this->Sk_domisili_model->get_by_id($id_sk_domisili);
+
+        //TODO Jika data ditemukan
+        if ($row) {
+            $data = array(
+                'is_delete'   => '0',
+                'deleted_by'  => NULL,
+                'deleted_at'  => NULL,
+            );
+
+            //TODO Jalankan proses update dengan model
+            $this->Sk_domisili_model->update($id_sk_domisili, $data);
+
+            write_log();
+
+            //TODO Kirim notifikasi data berhasil dikembalikan
+            $this->session->set_flashdata('message', 'dikembalikan');
+            redirect('admin/sk_domisili/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_domisili');
+        }
+    }
 }

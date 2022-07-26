@@ -39,7 +39,7 @@ class Skck_model extends CI_Model
 
     function get_all_deleted()
     {
-        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.created_at, skck.is_readed');
+        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.signature_image, skck.created_at, skck.is_readed');
 
         $this->db->where('skck.is_delete', '1');
 
@@ -51,7 +51,7 @@ class Skck_model extends CI_Model
 
     function get_all_deleted_for_masteradmin()
     {
-        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.created_at, skck.is_readed_masteradmin');
+        $this->db->select('skck.id_skck, skck.nik, skck.name, skck.signature_image, skck.created_at, skck.is_readed_masteradmin');
 
         $this->db->where('skck.is_delete', '1');
         $this->db->where('skck.no_surat !=', NULL);

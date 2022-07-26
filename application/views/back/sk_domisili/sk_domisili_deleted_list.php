@@ -48,8 +48,8 @@
                                     }
 
                                     //TODO Create Action Button
-                                    $restore = '<a href="' . base_url('admin/skck/restore/' . $data->id_skck) . '" class="btn btn-primary" title="Restore Data"><i class="fa fa-refresh"></i></a>';
-                                    $delete = '<a href="' . base_url('admin/skck/delete_permanent/' . $data->id_skck) . '" id="delete-button-permanent" class="btn btn-danger" title="Hapus Permanen"><i class="fa fa-trash"></i></a>';
+                                    $restore = '<a href="' . base_url('admin/sk_domisili/restore/' . $data->id_sk_domisili) . '" class="btn btn-primary" title="Restore Data"><i class="fa fa-refresh"></i></a>';
+                                    $delete = '<a href="' . base_url('admin/sk_domisili/delete_permanent/' . $data->id_sk_domisili) . '" id="delete-button-permanent" class="btn btn-danger" title="Hapus Permanen"><i class="fa fa-trash"></i></a>';
                                 ?>
                                     <tr>
                                         <td style="text-align: center"><?php echo $no++ ?></td>
