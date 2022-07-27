@@ -530,6 +530,7 @@ class Skck extends CI_Controller
 
         $image = FCPATH . 'assets\images\kop_surat.png';
         $ttd_kades = base_url($row->signature_image);
+        $stempel = base_url('assets/images/stempel.png');
 
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->SetTitle($this->data['module'] . ' a.n ' . $row->name);
@@ -628,6 +629,7 @@ class Skck extends CI_Controller
 
         if (!empty($row->signature_image)) {
             //TODO Image
+            $pdf->Image($stempel, 120, 242, 35, 35);
             $pdf->Image($ttd_kades, 140, 242, 35, 25);
         }
 

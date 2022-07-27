@@ -103,12 +103,22 @@ class Sk_domisili extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['address'] = [
-            'name'          => 'address',
-            'id'            => 'address',
+        $this->data['dusun'] = [
+            'name'          => 'dusun',
+            'id'            => 'dusun',
             'class'         => 'form-control',
-            'autocomplete'  => 'off',
-            'rows'          => '2',
+            'required'      => '',
+        ];
+        $this->data['rt'] = [
+            'name'          => 'rt',
+            'id'            => 'rt',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+        $this->data['rw'] = [
+            'name'          => 'rw',
+            'id'            => 'rw',
+            'class'         => 'form-control',
             'required'      => '',
         ];
 
@@ -128,7 +138,9 @@ class Sk_domisili extends CI_Controller
         $this->form_validation->set_rules('agama', 'Agama', 'required');
         $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
         $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
-        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('dusun', 'Dusun', 'required');
+        $this->form_validation->set_rules('rt', 'RT', 'required');
+        $this->form_validation->set_rules('rw', 'RW', 'required');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
         $this->form_validation->set_message('is_numeric', '{field} harus angka');
@@ -140,6 +152,8 @@ class Sk_domisili extends CI_Controller
             //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
         } else {
+            $address = 'Dusun ' . $this->input->post('dusun') . ', RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
+
             //TODO Simpan data ke array
             $data = array(
                 'name'                  => $this->input->post('name'),
@@ -152,7 +166,7 @@ class Sk_domisili extends CI_Controller
                 'agama_id'              => $this->input->post('agama'),
                 'kebangsaan'            => $this->input->post('kebangsaan'),
                 'pekerjaan'             => $this->input->post('pekerjaan'),
-                'address'               => $this->input->post('address'),
+                'address'               => $address,
             );
 
             //TODO Post to database with model

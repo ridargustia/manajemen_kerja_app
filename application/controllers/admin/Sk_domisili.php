@@ -133,12 +133,22 @@ class Sk_domisili extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['address'] = [
-            'name'          => 'address',
-            'id'            => 'address',
+        $this->data['dusun'] = [
+            'name'          => 'dusun',
+            'id'            => 'dusun',
             'class'         => 'form-control',
-            'autocomplete'  => 'off',
-            'rows'          => '2',
+            'required'      => '',
+        ];
+        $this->data['rt'] = [
+            'name'          => 'rt',
+            'id'            => 'rt',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+        $this->data['rw'] = [
+            'name'          => 'rw',
+            'id'            => 'rw',
+            'class'         => 'form-control',
             'required'      => '',
         ];
 
@@ -158,7 +168,9 @@ class Sk_domisili extends CI_Controller
         $this->form_validation->set_rules('agama', 'Agama', 'required');
         $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
         $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
-        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('dusun', 'Dusun', 'required');
+        $this->form_validation->set_rules('rt', 'RT', 'required|is_numeric');
+        $this->form_validation->set_rules('rw', 'RW', 'required|is_numeric');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
         $this->form_validation->set_message('is_numeric', '{field} harus angka');
@@ -170,6 +182,8 @@ class Sk_domisili extends CI_Controller
             //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
         } else {
+            $address = 'Dusun ' . $this->input->post('dusun') . ', RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
+
             //TODO Simpan data ke array
             $data = array(
                 'name'                  => $this->input->post('name'),
@@ -182,7 +196,7 @@ class Sk_domisili extends CI_Controller
                 'agama_id'              => $this->input->post('agama'),
                 'kebangsaan'            => $this->input->post('kebangsaan'),
                 'pekerjaan'             => $this->input->post('pekerjaan'),
-                'address'               => $this->input->post('address'),
+                'address'               => $address,
                 'created_by'            => $this->session->username,
             );
 
@@ -539,6 +553,7 @@ class Sk_domisili extends CI_Controller
 
         $image = FCPATH . 'assets\images\kop_surat.png';
         $ttd_kades = base_url($row->signature_image);
+        $stempel = base_url('assets/images/stempel.png');
 
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->SetTitle($this->data['module'] . ' a.n ' . $row->name);
@@ -615,11 +630,14 @@ class Sk_domisili extends CI_Controller
         $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
         $pdf->Cell(0, 8, $row->address, 0, 1, 'L');
+        $pdf->Cell(50, 8, '', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Desa Saobi Kec.Kangayan Kab. Sumenep', 0, 1, 'L');
         $pdf->Cell(50, 8, 'No. NIK', 0, 0, 'L');
         $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
         $pdf->Cell(0, 8, $row->nik, 0, 1, 'L');
 
-        $pdf->MultiCell(0, 8, '         Adalah benar-benar penduduk Desa Saobi yang bertempat tinggal di ' . $row->address . ' yang telah tercatat di buku register Desa.', 0, 'J');
+        $pdf->MultiCell(0, 8, '         Adalah benar-benar penduduk Desa Saobi yang bertempat tinggal di ' . $row->address . ' Desa Saobi Kecamatan Kangayan Kabupaten Sumenep yang telah tercatat di buku register Desa.', 0, 'J');
         $pdf->MultiCell(0, 8, 'Demikian surat keterangan ini dibuat untuk dipergunakan sebagaimana mestinya.', 0, 'J');
 
         $pdf->Cell(115);
@@ -636,7 +654,8 @@ class Sk_domisili extends CI_Controller
 
         if (!empty($row->signature_image)) {
             //TODO Image
-            $pdf->Image($ttd_kades, 140, 242, 35, 25);
+            $pdf->Image($stempel, 120, 226, 35, 35);
+            $pdf->Image($ttd_kades, 140, 226, 35, 25);
         }
 
         $pdf->SetFont('Arial', 'BU', '12');
@@ -644,5 +663,63 @@ class Sk_domisili extends CI_Controller
         $pdf->Cell(65, 8, strtoupper($data_master->name), 0, 1, 'R');
 
         $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
+    }
+
+    function signature($id_sk_domisili)
+    {
+        //TODO Authentikasi hak akses usertype
+        if (is_superadmin()) {
+            $this->session->set_flashdata('message', 'tidak memiliki akses');
+            redirect('admin/dashboard');
+        }
+
+        //TODO Get data sk_domisili by id
+        $this->data['sk_domisili'] = $this->Sk_domisili_model->get_by_id($id_sk_domisili);
+
+        //TODO Cek apakah data sk_domisili ada
+        if ($this->data['sk_domisili']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'ACC Dokumen ' . $this->data['module'];
+
+            //TODO Rancangan form
+            $this->data['id_sk_domisili'] = [
+                'name'          => 'id_sk_domisili',
+                'id'            => 'id_sk_domisili',
+                'type'          => 'hidden',
+            ];
+
+            //TODO load view tampilan signature
+            $this->load->view('back/sk_domisili/sk_domisili_signature', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_domisili');
+        }
+    }
+
+    function signature_action()
+    {
+        //TODO Dekripsi chipertext dengan metode base64
+        $data = base64_decode($this->input->post('image'));
+
+        //TODO Set direktori tempat menyimpan tanda tangan
+        $file = './assets/signature_images/' . uniqid() . '.png';
+        //TODO Jalankan proses penyimpanan file image ke direktori
+        file_put_contents($file, $data);
+
+        //TODO Hilangkan karakter './' pada variabel direktori file
+        $image = str_replace('./', '', $file);
+
+        //TODO Simpan pada array
+        $data = array(
+            'signature_image'       => $image,
+            'is_readed_masteradmin' => '1',
+        );
+
+        //TODO Jalankan proses update
+        $this->Sk_domisili_model->update($this->input->post('id_sk_domisili'), $data);
+
+        write_log();
+
+        $this->session->set_flashdata('message', 'Sukses');
     }
 }
