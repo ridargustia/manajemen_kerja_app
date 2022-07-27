@@ -83,12 +83,10 @@ class Sk_jalan extends CI_Controller
             '1'             => 'Warga Negara Indonesia',
             '2'             => 'Warga Negara Asing',
         ];
-        $this->data['address'] = [
-            'name'          => 'address',
-            'id'            => 'address',
+        $this->data['dusun'] = [
+            'name'          => 'dusun',
+            'id'            => 'dusun',
             'class'         => 'form-control',
-            'autocomplete'  => 'off',
-            'rows'          => '2',
             'required'      => '',
         ];
         $this->data['kepentingan'] = [
@@ -108,6 +106,7 @@ class Sk_jalan extends CI_Controller
             'name'          => 'tgl_berangkat',
             'id'            => 'tgl_berangkat',
             'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
         $this->data['barang_dibawa'] = [
@@ -144,7 +143,7 @@ class Sk_jalan extends CI_Controller
         $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('agama', 'Agama', 'required');
         $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
-        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('dusun', 'Dusun', 'required');
         $this->form_validation->set_rules('kepentingan', 'Kepentingan', 'required');
         $this->form_validation->set_rules('tempat_tujuan', 'Tempat Tujuan', 'required');
         $this->form_validation->set_rules('tgl_berangkat', 'Tanggal Berangkat', 'required');
@@ -167,7 +166,7 @@ class Sk_jalan extends CI_Controller
                 'gender'                => $this->input->post('gender'),
                 'agama_id'              => $this->input->post('agama'),
                 'kebangsaan'            => $this->input->post('kebangsaan'),
-                'address'               => $this->input->post('address'),
+                'address'               => $this->input->post('dusun'),
                 'kepentingan'           => $this->input->post('kepentingan'),
                 'tempat_tujuan'         => $this->input->post('tempat_tujuan'),
                 'tgl_berangkat'         => $this->input->post('tgl_berangkat'),
