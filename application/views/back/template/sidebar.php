@@ -86,70 +86,110 @@
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_domisili') {
-                  $count = $this->Sk_domisili_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_domisili_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_domisili_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_jalan') {
-                  $count = $this->Sk_jalan_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_jalan_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_jalan_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_hilang_ktp') {
-                  $count = $this->Sk_hilang_ktp_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_hilang_ktp_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_hilang_ktp_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_meninggal_dunia') {
-                  $count = $this->Sk_meninggal_dunia_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_meninggal_dunia_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_meninggal_dunia_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_nikah') {
-                  $count = $this->Sk_nikah_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_nikah_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_nikah_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_usaha') {
-                  $count = $this->Sk_usaha_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_usaha_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_usaha_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'surat_pengantar_nikah') {
-                  $count = $this->Surat_pengantar_nikah_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Surat_pengantar_nikah_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Surat_pengantar_nikah_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'surat_pernyataan_miskin') {
-                  $count = $this->Surat_pernyataan_miskin_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Surat_pernyataan_miskin_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Surat_pernyataan_miskin_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'surat_rekomendasi') {
-                  $count = $this->Surat_rekomendasi_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Surat_rekomendasi_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Surat_rekomendasi_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_pindah') {
-                  $count = $this->Sk_pindah_model->total_rows_is_not_readed();
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_pindah_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_pindah_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>

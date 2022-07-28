@@ -45,6 +45,16 @@ class Sk_jalan_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function total_rows_is_not_readed_masteradmin()
+    {
+        $this->db->where('sk_jalan.is_readed', '1');
+        $this->db->where('sk_jalan.is_readed_masteradmin', '0');
+        $this->db->where('sk_jalan.is_delete', '0');
+        $this->db->where('sk_jalan.no_surat !=', NULL);
+
+        return $this->db->get($this->table)->num_rows();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);

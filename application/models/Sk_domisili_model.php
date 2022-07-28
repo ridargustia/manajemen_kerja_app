@@ -70,6 +70,16 @@ class Sk_domisili_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function total_rows_is_not_readed_masteradmin()
+    {
+        $this->db->where('sk_domisili.is_readed', '1');
+        $this->db->where('sk_domisili.is_readed_masteradmin', '0');
+        $this->db->where('sk_domisili.is_delete', '0');
+        $this->db->where('sk_domisili.no_surat !=', NULL);
+
+        return $this->db->get($this->table)->num_rows();
+    }
+
     function get_by_id_for_document($id)
     {
         $this->db->join('status', 'sk_domisili.status_id = status.id_status');

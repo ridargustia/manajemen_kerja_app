@@ -31,6 +31,16 @@ class Sk_pindah_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function total_rows_is_not_readed_masteradmin()
+    {
+        $this->db->where('sk_pindah.is_readed', '1');
+        $this->db->where('sk_pindah.is_readed_masteradmin', '0');
+        $this->db->where('sk_pindah.is_delete', '0');
+        $this->db->where('sk_pindah.no_surat !=', NULL);
+
+        return $this->db->get($this->table)->num_rows();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);
