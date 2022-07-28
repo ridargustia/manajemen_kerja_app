@@ -62,7 +62,7 @@ class Sk_jalan extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '- Pilih Jenis Kelamin -',
+            ''              => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -79,7 +79,7 @@ class Sk_jalan extends CI_Controller
             'required'      => '',
         ];
         $this->data['kebangsaan_value'] = [
-            '0'             => '- Pilih Kebangsaan -',
+            ''              => '- Pilih Kebangsaan -',
             '1'             => 'Warga Negara Indonesia',
             '2'             => 'Warga Negara Asing',
         ];
@@ -137,7 +137,7 @@ class Sk_jalan extends CI_Controller
     {
         //TODO sistem validasi data inputan
         $this->form_validation->set_rules('name', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
         $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
         $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
@@ -149,6 +149,7 @@ class Sk_jalan extends CI_Controller
         $this->form_validation->set_rules('tgl_berangkat', 'Tanggal Berangkat', 'required');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
 
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 

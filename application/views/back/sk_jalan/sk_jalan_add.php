@@ -76,8 +76,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Alamat*</label>
-                        <?php echo form_textarea($address) ?>
+                        <label class="control-label">Dusun*</label>
+                        <?php echo form_input($dusun) ?>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -102,17 +102,17 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Barang Yang Dibawa</label>
+                                <label class="control-label">Barang Yang Dibawa (Opsional)</label>
                                 <?php echo form_input($barang_dibawa) ?>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Lama Pergi</label>
+                        <label class="control-label">Lama Pergi (opsional)</label>
                         <?php echo form_input($lama_pergi) ?>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Pengikut</label>
+                        <label class="control-label">Pengikut (Opsional)</label>
                         <?php echo form_input($pengikut) ?>
                     </div>
                     <div class="form-group">
