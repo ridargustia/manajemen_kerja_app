@@ -72,7 +72,7 @@ class Skck extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '- Pilih Jenis Kelamin -',
+            ''              => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -117,7 +117,7 @@ class Skck extends CI_Controller
     {
         //TODO sistem validasi data inputan
         $this->form_validation->set_rules('name', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
         $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
         $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
