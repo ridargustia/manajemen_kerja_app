@@ -15,7 +15,7 @@
                 <!-- Main content -->
                 <section class="content">
                     <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
-
+                    <?php echo validation_errors() ?>
                     <?php echo form_open_multipart($action, array('id' => 'add_form')) ?>
                     <div class="row">
                         <div class="col-lg-12">
