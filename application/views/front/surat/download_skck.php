@@ -106,7 +106,7 @@
                                 </div>
                                 <div class="box-footer">
                                     <div class="pull-right">
-                                        <a href="<?php echo base_url('skck/preview_document/' . $skck->id_skck) ?>" class="btn btn-success" target="_blank"><i class="fa fa-save"></i> Download Surat</a>
+                                        <a href="<?php echo base_url('skck/preview_document/' . $skck->id_skck) ?>" class="btn btn-success" target="_blank"><i class="fa fa-download"></i> Download Surat</a>
                                     </div>
                                 </div>
                             </div>

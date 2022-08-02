@@ -130,6 +130,8 @@
                             <a href="<?php echo base_url('admin/skck/preview_document/' . $data_skck->id_skck) ?>" class="btn btn-primary" title="Preview Document" target="_blank"><i class="fa fa-file-text-o"></i> Pratinjau Dokumen</a>
                             <?php if (is_masteradmin() and $data_skck->signature_image === NULL) { ?>
                                 <a href="<?php echo base_url('admin/skck/signature/' . $data_skck->id_skck) ?>" class="btn btn-success" title="ACC Dokumen"><i class="fa fa-pencil-square-o"></i> ACC Dokumen</a>
+                            <?php } elseif (is_superadmin() and $data_skck->token != NULL) { ?>
+                                <a href="https://web.whatsapp.com/send?phone=<?php echo $data_skck->phone ?>&text=Assalamu'alaikum,%0aKami dari Kantor Desa Saobi, menyampaikan informasi bahwa surat permohonan anda sudah selesai diproses, silahkan kunjungi web kami di https://saobi.eduarsip.id untuk download surat tersebut. Dengan memasukkan token berikut *<?php echo $data_skck->token ?>*, jangan memberikan token ini ke orang lain. Terima kasih" class="btn btn-success" title="Teruskan Pemohon" target="_blank"><i class="fa fa-share"></i> Teruskan Pemohon</a>
                             <?php } ?>
                         </div>
                     </div>
