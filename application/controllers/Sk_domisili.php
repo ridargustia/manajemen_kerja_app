@@ -60,6 +60,7 @@ class Sk_domisili extends CI_Controller
             'name'          => 'phone',
             'id'            => 'phone',
             'class'         => 'form-control',
+            'onChange'      => 'checkFormatPhone()',
             'autocomplete'  => 'off',
             'required'      => '',
         ];
@@ -147,12 +148,21 @@ class Sk_domisili extends CI_Controller
 
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
+        $check_format_phone = substr($this->input->post('phone'), '0', '2');
+
         //?Apakah validasi gagal?
         if ($this->form_validation->run() === FALSE) {
             //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
+        } elseif ($check_format_phone != '08') {
+            $this->session->set_flashdata('message', 'no HP/Telephone salah');
+            redirect('sk_domisili/create');
         } else {
             $address = 'Dusun ' . $this->input->post('dusun') . ', RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
+
+            //TODO Ubah Format phone number +62
+            $selection_phone = substr($this->input->post('phone'), '1');
+            $phone = '62' . $selection_phone;
 
             //TODO Simpan data ke array
             $data = array(
@@ -160,7 +170,7 @@ class Sk_domisili extends CI_Controller
                 'nik'                   => $this->input->post('nik'),
                 'birthplace'            => $this->input->post('birthplace'),
                 'birthdate'             => $this->input->post('birthdate'),
-                'phone'                 => $this->input->post('phone'),
+                'phone'                 => $phone,
                 'gender'                => $this->input->post('gender'),
                 'status_id'             => $this->input->post('status'),
                 'agama_id'              => $this->input->post('agama'),
@@ -177,6 +187,17 @@ class Sk_domisili extends CI_Controller
             //TODO Tampilkan notifikasi dan redirect
             $this->session->set_flashdata('message', 'Sukses');
             redirect('sk_domisili/create');
+        }
+    }
+
+    function check_format_phone()
+    {
+        $phone = $this->input->post('phone');
+        $check_phone = substr($phone, '0', '2');
+
+        if ($check_phone != '08') {
+            // var_dump($check_phone);
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid</div>";
         }
     }
 }

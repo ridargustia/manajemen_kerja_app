@@ -78,7 +78,7 @@
                                     <tr>
                                         <td style="width:120px">No HP/Telepon</td>
                                         <td>:</td>
-                                        <td class="text-left"><?php echo $data_sk_domisili->phone ?></td>
+                                        <td class="text-left">+<?php echo $data_sk_domisili->phone ?></td>
                                     </tr>
                                     <tr>
                                         <td>Jenis Kelamin</td>

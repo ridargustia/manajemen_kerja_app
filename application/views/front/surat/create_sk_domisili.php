@@ -55,6 +55,7 @@
                                             <div class="form-group">
                                                 <label class="control-label">No HP/Telepon*</label>
                                                 <?php echo form_input($phone) ?>
+                                                <span id="phone-availability-status"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -148,6 +149,18 @@
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
+
+            function checkFormatPhone() {
+                jQuery.ajax({
+                    url: "<?php echo base_url('sk_domisili/check_format_phone') ?>",
+                    data: 'phone=' + $("#phone").val(),
+                    type: "POST",
+                    success: function(data) {
+                        $("#phone-availability-status").html(data);
+                    },
+                    error: function() {}
+                });
+            }
         </script>
 
 </body>

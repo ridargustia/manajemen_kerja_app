@@ -103,6 +103,18 @@
           popup: 'animate__animated animate__fadeOutUp'
         },
       });
+    } else if (flashData === 'no HP/Telephone salah') {
+      Swal.fire({
+        title: 'Terjadi Kesalahan',
+        text: 'Format penulisan ' + flashData,
+        icon: 'error',
+        showClass: {
+          popup: 'animate__animated animate__tada'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        },
+      });
     }
 
     $(document).on('click', '#delete-button', function(e) {

@@ -26,11 +26,23 @@
 
   <script type="text/javascript">
   	const flashData = $('.flash-data').data('flashdata');
-  	if (flashData) {
+  	if (flashData === 'Sukses') {
   		Swal.fire({
   			title: flashData,
   			text: 'Data berhasil dikirim',
   			icon: 'success',
+  			showClass: {
+  				popup: 'animate__animated animate__tada'
+  			},
+  			hideClass: {
+  				popup: 'animate__animated animate__fadeOutUp'
+  			},
+  		});
+  	} else if (flashData === 'no HP/Telephone salah') {
+  		Swal.fire({
+  			title: 'Terjadi Kesalahan',
+  			text: 'Format penulisan ' + flashData,
+  			icon: 'error',
   			showClass: {
   				popup: 'animate__animated animate__tada'
   			},
