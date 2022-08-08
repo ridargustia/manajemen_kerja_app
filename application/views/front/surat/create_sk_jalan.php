@@ -39,16 +39,23 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Tempat Lahir*</label>
                                                 <?php echo form_input($birthplace) ?>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Tanggal Lahir*</label>
                                                 <?php echo form_input($birthdate) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">No HP/Telepon*</label>
+                                                <?php echo form_input($phone) ?>
+                                                <span id="phone-availability-status"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -163,6 +170,18 @@
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
+
+            function checkFormatPhone() {
+                jQuery.ajax({
+                    url: "<?php echo base_url('sk_jalan/check_format_phone') ?>",
+                    data: 'phone=' + $("#phone").val(),
+                    type: "POST",
+                    success: function(data) {
+                        $("#phone-availability-status").html(data);
+                    },
+                    error: function() {}
+                });
+            }
         </script>
 
 </body>
