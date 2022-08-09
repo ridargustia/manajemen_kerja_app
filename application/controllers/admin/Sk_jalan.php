@@ -287,6 +287,13 @@ class Sk_jalan extends CI_Controller
                 'autocomplete'  => 'off',
                 'required'      => '',
             ];
+            $this->data['phone'] = [
+                'name'          => 'phone',
+                'id'            => 'phone',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
             $this->data['gender'] = [
                 'name'          => 'gender',
                 'id'            => 'gender',
@@ -376,6 +383,7 @@ class Sk_jalan extends CI_Controller
         $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
         $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
         $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('agama', 'Agama', 'required');
         $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
@@ -399,6 +407,7 @@ class Sk_jalan extends CI_Controller
                 'nik'                   => $this->input->post('nik'),
                 'birthplace'            => $this->input->post('birthplace'),
                 'birthdate'             => $this->input->post('birthdate'),
+                'phone'                 => $this->input->post('phone'),
                 'gender'                => $this->input->post('gender'),
                 'agama_id'              => $this->input->post('agama'),
                 'kebangsaan'            => $this->input->post('kebangsaan'),
