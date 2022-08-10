@@ -57,6 +57,14 @@ class Sk_hilang_ktp extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
         ];
+        $this->data['phone'] = [
+            'name'          => 'phone',
+            'id'            => 'phone',
+            'class'         => 'form-control',
+            'onChange'      => 'checkFormatPhone()',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
         $this->data['gender'] = [
             'name'          => 'gender',
             'id'            => 'gender',
@@ -64,7 +72,7 @@ class Sk_hilang_ktp extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '- Pilih Jenis Kelamin -',
+            ''             => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -104,6 +112,7 @@ class Sk_hilang_ktp extends CI_Controller
             'name'          => 'tgl_kehilangan',
             'id'            => 'tgl_kehilangan',
             'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
 
@@ -157,6 +166,17 @@ class Sk_hilang_ktp extends CI_Controller
             //TODO Tampilkan notifikasi dan redirect
             $this->session->set_flashdata('message', 'Sukses');
             redirect('sk_hilang_ktp/create');
+        }
+    }
+
+    function check_format_phone()
+    {
+        $phone = $this->input->post('phone');
+        $check_phone = substr($phone, '0', '2');
+
+        if ($check_phone != '08') {
+            // var_dump($check_phone);
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid</div>";
         }
     }
 }
