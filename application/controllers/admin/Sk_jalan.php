@@ -436,8 +436,10 @@ class Sk_jalan extends CI_Controller
     {
         is_delete();
 
+        //TODO Get sk jalan by id
         $delete = $this->Sk_jalan_model->get_by_id($id_sk_jalan);
 
+        //TODO Jika data sk jalan ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -445,13 +447,16 @@ class Sk_jalan extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Sk_jalan_model->soft_delete($id_sk_jalan, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/sk_jalan');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/sk_jalan');
         }
