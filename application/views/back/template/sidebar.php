@@ -108,11 +108,11 @@
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_hilang_ktp') {
-                  // if (is_masteradmin()) {
-                  //   $count = $this->Sk_hilang_ktp_model->total_rows_is_not_readed_masteradmin();
-                  // } elseif (is_superadmin()) {
-                  $count = $this->Sk_hilang_ktp_model->total_rows_is_not_readed();
-                  // }
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_hilang_ktp_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_hilang_ktp_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
