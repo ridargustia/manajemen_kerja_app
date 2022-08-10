@@ -589,6 +589,152 @@ class Sk_jalan extends CI_Controller
         }
     }
 
+    function preview_document($id_sk_jalan)
+    {
+        $row = $this->Sk_jalan_model->get_by_id_for_document($id_sk_jalan);
+        $data_master = $this->Auth_model->get_by_usertype_master();
+
+        if ($row->gender === '1') {
+            $gender = 'Laki-laki';
+        } elseif ($row->gender === '2') {
+            $gender = 'Perempuan';
+        }
+
+        if ($row->kebangsaan === '1') {
+            $kebangsaan = 'Indonesia';
+        } elseif ($row->kebangsaan === '2') {
+            $kebangsaan = 'Asing';
+        }
+
+        require FCPATH . '/vendor/autoload.php';
+        require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
+
+        $image = FCPATH . 'assets\images\kop_surat.png';
+        $ttd_kades = base_url($row->signature_image);
+        $stempel = base_url('assets/images/stempel.png');
+
+        $pdf = new FPDF('P', 'mm', 'Legal');
+        $pdf->SetTitle($this->data['module'] . ' a.n ' . $row->name);
+        $pdf->SetTopMargin(10);
+        $pdf->SetLeftMargin(25);
+        $pdf->SetRightMargin(25);
+        $pdf->AddFont('Calibri', '', 'calibri.php');
+        $pdf->AddFont('Calibrib', '', 'calibrib.php');
+        $pdf->AddPage();
+
+        //TODO Image
+        $pdf->Image($image, 25, 10, 24, 25);
+
+        //TODO Judul Surat
+        $pdf->SetFont('Arial', '', '11');
+        $pdf->Cell(0, 6, 'PEMERINTAH KABUPATEN SUMENEP', 0, 1, 'C');
+        $pdf->Cell(0, 6, 'KECAMATAN KANGAYAN', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', '11');
+        $pdf->Cell(0, 6, 'KANTOR KEPALA DESA SAOBI', 0, 1, 'C');
+        $pdf->SetFont('Arial', '', '11');
+        $pdf->Cell(0, 6, 'Jalan Raya Masjid No. 50. Email desasaobi90@gmail.com', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'BU', '11');
+        $pdf->Cell(0, 6, 'S A O B I', 0, 1, 'C');
+        $pdf->Cell(130);
+        $pdf->SetFont('Arial', 'I', '8');
+        $pdf->Cell(0, 3, 'Kode Pos 69491', 0, 1, 'C');
+
+        //TODO Body Surat
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 7, 'SURAT KETERANGAN JALAN', 0, 1, 'C');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(0, 5, 'NOMOR : ' . $row->no_surat, 0, 1, 'C');
+
+        //TODO make a dummy empty cell as a vertical spacer
+        $pdf->Cell(0, 6, '', 0, 1); //end of line
+
+        //TODO Body Content
+        $pdf->Cell(0, 8, 'Yang bertanda tangan dibawah ini :', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Nama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 8, strtoupper($data_master->name), 0, 1, 'L');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $data_master->address, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Jabatan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $data_master->jabatan_name, 0, 1, 'L');
+        $pdf->Cell(0, 8, 'Menerangkan dengan sebenarnya bahwa :', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Nama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 8, strtoupper($row->name), 0, 1, 'L');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(50, 8, 'Tempat, Tanggal Lahir', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->birthplace . ', ' . datetime_indo4($row->birthdate), 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Jenis kelamin', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $gender, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Dsn. ' . $row->address . ' Desa Saobi Kangayan Sumenep', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Agama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->agama_name, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Kewarganegaraan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $kebangsaan, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'No. NIK', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->nik, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Kepentingan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->kepentingan, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Tempat Tujuan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->tempat_tujuan, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Berangkat Tanggal', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, date_indonesian_only($row->tgl_berangkat), 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Barang yang dibawa', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->barang_dibawa, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Lamanya', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->lama_pergi, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Pengikut', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->pengikut, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Lain-lain', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->lain_lain, 0, 1, 'L');
+
+        $pdf->MultiCell(0, 8, '         Adalah benar - benar penduduk Desa Saobi yang bertempat tinggal di Desa Saobi yang telah tercatat di buku register Desa, dan orang tersebut di atas orang baik-baik dan dalam kondisi baik-baik, serta tidak pernah terlibat G 30 S PKI  dan tidak pernah terlibat jaringan kriminal lainnya.', 0, 'J');
+        $pdf->MultiCell(0, 8, '     Demikian surat keterangan ini, kami buat dengan sebenar-benarnya dan dapat dipergunakan sebagaimana mestinya.', 0, 'J');
+
+        $pdf->Cell(115);
+        $pdf->SetFont('Arial', 'I', '12');
+        $pdf->Cell(0, 8, 'Saobi, ' . date_indonesian_only($row->created_at), 0, 1, 'L');
+
+        $pdf->Cell(20);
+        $pdf->SetFont('Arial', '', '12');
+        $pdf->Cell(85, 8, 'Yang berkepentingan', 0, 0, 'L');
+        $pdf->Cell(0, 8, 'Kepala Desa Saobi', 0, 1, 'C');
+
+        //TODO make a dummy empty cell as a vertical spacer
+        $pdf->Cell(0, 20, '', 0, 1); //end of line
+
+        if (!empty($row->signature_image)) {
+            //TODO Image
+            $pdf->Image($stempel, 123, 274, 35, 35);
+            $pdf->Image($ttd_kades, 143, 274, 35, 25);
+        }
+
+        $pdf->SetFont('Arial', 'BU', '12');
+        $pdf->Cell(80, 8, strtoupper($row->name), 0, 0, 'C');
+        $pdf->Cell(65, 8, strtoupper($data_master->name), 0, 1, 'R');
+
+        $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
