@@ -735,6 +735,65 @@ class Sk_jalan extends CI_Controller
         $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
     }
 
+    function signature($id_sk_jalan)
+    {
+        //TODO Authentikasi hak akses usertype
+        if (is_superadmin()) {
+            $this->session->set_flashdata('message', 'tidak memiliki akses');
+            redirect('admin/dashboard');
+        }
+
+        //TODO Get data sk_jalan by id
+        $this->data['sk_jalan'] = $this->Sk_jalan_model->get_by_id($id_sk_jalan);
+
+        //TODO Cek apakah data sk_jalan ada
+        if ($this->data['sk_jalan']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'ACC Dokumen ' . $this->data['module'];
+
+            //TODO Rancangan form
+            $this->data['id_sk_jalan'] = [
+                'name'          => 'id_sk_jalan',
+                'id'            => 'id_sk_jalan',
+                'type'          => 'hidden',
+            ];
+
+            //TODO load view tampilan signature
+            $this->load->view('back/sk_jalan/sk_jalan_signature', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_jalan');
+        }
+    }
+
+    function signature_action()
+    {
+        //TODO Dekripsi chipertext dengan metode base64
+        $data = base64_decode($this->input->post('image'));
+
+        //TODO Set direktori tempat menyimpan tanda tangan
+        $file = './assets/signature_images/' . uniqid() . '.png';
+        //TODO Jalankan proses penyimpanan file image ke direktori
+        file_put_contents($file, $data);
+
+        //TODO Hilangkan karakter './' pada variabel direktori file
+        $image = str_replace('./', '', $file);
+
+        //TODO Simpan pada array
+        $data = array(
+            'signature_image'       => $image,
+            'is_readed_masteradmin' => '1',
+            'token'                 => substr(md5(random_bytes(10)), 0, 10),
+        );
+
+        //TODO Jalankan proses update
+        $this->Sk_jalan_model->update($this->input->post('id_sk_jalan'), $data);
+
+        write_log();
+
+        $this->session->set_flashdata('message', 'Sukses');
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
