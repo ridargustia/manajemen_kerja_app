@@ -123,9 +123,10 @@ class Sk_hilang_ktp extends CI_Controller
     {
         //TODO sistem validasi data inputan
         $this->form_validation->set_rules('name', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
         $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
         $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
         $this->form_validation->set_rules('agama', 'Agama', 'required');
@@ -135,20 +136,31 @@ class Sk_hilang_ktp extends CI_Controller
         $this->form_validation->set_rules('tgl_kehilangan', 'Tanggal Kehilangan', 'required');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
 
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        $check_format_phone = substr($this->input->post('phone'), '0', '2');
 
         //?Apakah validasi gagal?
         if ($this->form_validation->run() === FALSE) {
             //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
+        } elseif ($check_format_phone != '08') {
+            $this->session->set_flashdata('message', 'no HP/Telephone salah');
+            redirect('sk_hilang_ktp/create');
         } else {
+            //TODO Ubah Format phone number +62
+            $selection_phone = substr($this->input->post('phone'), '1');
+            $phone = '62' . $selection_phone;
+
             //TODO Simpan data ke array
             $data = array(
                 'name'                  => $this->input->post('name'),
                 'nik'                   => $this->input->post('nik'),
                 'birthplace'            => $this->input->post('birthplace'),
                 'birthdate'             => $this->input->post('birthdate'),
+                'phone'                 => $phone,
                 'gender'                => $this->input->post('gender'),
                 'status_id'             => $this->input->post('status'),
                 'agama_id'              => $this->input->post('agama'),
