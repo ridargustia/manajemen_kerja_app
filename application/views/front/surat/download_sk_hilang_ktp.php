@@ -21,7 +21,7 @@
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <?php if (empty($skck->signature_image)) { ?>
+                                            <?php if (empty($sk_hilang_ktp->signature_image)) { ?>
                                                 <img src="<?php echo base_url('assets/images/file_icon.png') ?>" width="100%" style="opacity: 0.5;">
                                             <?php } else { ?>
                                                 <img src="<?php echo base_url('assets/images/file_icon_approved.png') ?>" width="100%">
@@ -33,41 +33,41 @@
                                                     <tr>
                                                         <td>No Surat</td>
                                                         <td style="width:10px">:</td>
-                                                        <td class="text-left"><?php echo $skck->no_surat ?></td>
+                                                        <td class="text-left"><?php echo $sk_hilang_ktp->no_surat ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Nama</td>
                                                         <td style="width:10px">:</td>
-                                                        <td class="text-left"><?php echo $skck->name ?></td>
+                                                        <td class="text-left"><?php echo $sk_hilang_ktp->name ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td>NIK</td>
                                                         <td>:</td>
-                                                        <td class="text-left"><?php echo $skck->nik ?></td>
+                                                        <td class="text-left"><?php echo $sk_hilang_ktp->nik ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td style="width:120px">Tempat Lahir</td>
                                                         <td>:</td>
-                                                        <td class="text-left"><?php echo $skck->birthplace ?></td>
+                                                        <td class="text-left"><?php echo $sk_hilang_ktp->birthplace ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Tanggal Lahir</td>
                                                         <td>:</td>
-                                                        <td class="text-left"><?php echo $skck->birthdate ?></td>
+                                                        <td class="text-left"><?php echo $sk_hilang_ktp->birthdate ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td style="width:120px">No HP/Telepon</td>
                                                         <td>:</td>
-                                                        <td class="text-left">+<?php echo $skck->phone ?></td>
+                                                        <td class="text-left">+<?php echo $sk_hilang_ktp->phone ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Jenis Kelamin</td>
                                                         <td>:</td>
                                                         <td class="text-left">
                                                             <?php
-                                                            if ($skck->gender === '1') {
+                                                            if ($sk_hilang_ktp->gender === '1') {
                                                                 $gender = 'Laki-laki';
-                                                            } elseif ($skck->gender === '2') {
+                                                            } elseif ($sk_hilang_ktp->gender === '2') {
                                                                 $gender = 'Perempuan';
                                                             }
                                                             echo $gender;
@@ -90,14 +90,19 @@
                                                         <td class="text-left"><?php echo $pekerjaan->pekerjaan_name ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Pendidikan Akhir</td>
-                                                        <td>:</td>
-                                                        <td class="text-left"><?php echo $pendidikan_akhir->pendidikan_akhir_name ?></td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>Alamat</td>
                                                         <td>:</td>
-                                                        <td class="text-left"><?php echo $skck->address ?></td>
+                                                        <td class="text-left"><?php echo $sk_hilang_ktp->address ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Tempat Kehilangan</td>
+                                                        <td>:</td>
+                                                        <td class="text-left"><?php echo $sk_hilang_ktp->tempat_kehilangan ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Tanggal Kehilangan</td>
+                                                        <td>:</td>
+                                                        <td class="text-left"><?php echo $sk_hilang_ktp->tgl_kehilangan ?></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -106,7 +111,7 @@
                                 </div>
                                 <div class="box-footer">
                                     <div class="pull-right">
-                                        <a href="<?php echo base_url('skck/preview_document/' . $skck->id_skck) ?>" class="btn btn-success" target="_blank"><i class="fa fa-download"></i> Download Surat</a>
+                                        <a href="<?php echo base_url('sk_hilang_ktp/preview_document/' . $sk_hilang_ktp->id_sk_hilang_ktp) ?>" class="btn btn-success" target="_blank"><i class="fa fa-download"></i> Download Surat</a>
                                     </div>
                                 </div>
                             </div>
