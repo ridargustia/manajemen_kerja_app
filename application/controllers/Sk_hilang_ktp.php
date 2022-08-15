@@ -72,7 +72,7 @@ class Sk_hilang_ktp extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            ''             => '- Pilih Jenis Kelamin -',
+            ''              => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];

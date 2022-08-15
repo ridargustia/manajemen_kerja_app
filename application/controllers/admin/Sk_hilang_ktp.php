@@ -89,6 +89,14 @@ class Sk_hilang_ktp extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
         ];
+        $this->data['phone'] = [
+            'name'          => 'phone',
+            'id'            => 'phone',
+            'class'         => 'form-control',
+            'onChange'      => 'checkFormatPhone()',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
         $this->data['gender'] = [
             'name'          => 'gender',
             'id'            => 'gender',
@@ -96,7 +104,7 @@ class Sk_hilang_ktp extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '- Pilih Jenis Kelamin -',
+            ''              => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -118,12 +126,22 @@ class Sk_hilang_ktp extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['address'] = [
-            'name'          => 'address',
-            'id'            => 'address',
+        $this->data['dusun'] = [
+            'name'          => 'dusun',
+            'id'            => 'dusun',
             'class'         => 'form-control',
-            'autocomplete'  => 'off',
-            'rows'          => '2',
+            'required'      => '',
+        ];
+        $this->data['rt'] = [
+            'name'          => 'rt',
+            'id'            => 'rt',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+        $this->data['rw'] = [
+            'name'          => 'rw',
+            'id'            => 'rw',
+            'class'         => 'form-control',
             'required'      => '',
         ];
         $this->data['tempat_kehilangan'] = [
@@ -147,37 +165,54 @@ class Sk_hilang_ktp extends CI_Controller
     {
         //TODO sistem validasi data inputan
         $this->form_validation->set_rules('name', 'Nama', 'trim|required');
-        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'is_numeric|required');
         $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
         $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
         $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
         $this->form_validation->set_rules('agama', 'Agama', 'required');
         $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
-        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('dusun', 'Dusun', 'required');
+        $this->form_validation->set_rules('rw', 'RW', 'required|is_numeric');
+        $this->form_validation->set_rules('rt', 'RT', 'required|is_numeric');
         $this->form_validation->set_rules('tempat_kehilangan', 'Tempat Kehilangan', 'required');
         $this->form_validation->set_rules('tgl_kehilangan', 'Tanggal Kehilangan', 'required');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
 
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        $check_format_phone = substr($this->input->post('phone'), '0', '2');
 
         //?Apakah validasi gagal?
         if ($this->form_validation->run() === FALSE) {
             //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
+        } elseif ($check_format_phone != '08') {
+            $this->session->set_flashdata('message', 'no HP/Telephone salah');
+            redirect('admin/sk_hilang_ktp/create');
         } else {
+            //TODO Ubah Format phone number +62
+            $selection_phone = substr($this->input->post('phone'), '1');
+            $phone = '62' . $selection_phone;
+
+            //TODO Format address
+            $address = 'Dusun ' . $this->input->post('dusun') . ' RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
+
             //TODO Simpan data ke array
             $data = array(
                 'name'                  => $this->input->post('name'),
                 'nik'                   => $this->input->post('nik'),
                 'birthplace'            => $this->input->post('birthplace'),
                 'birthdate'             => $this->input->post('birthdate'),
+                'phone'                 => $phone,
                 'gender'                => $this->input->post('gender'),
                 'status_id'             => $this->input->post('status'),
                 'agama_id'              => $this->input->post('agama'),
                 'pekerjaan_id'          => $this->input->post('pekerjaan'),
-                'address'               => $this->input->post('address'),
+                'address'               => $address,
                 'tempat_kehilangan'     => $this->input->post('tempat_kehilangan'),
                 'tgl_kehilangan'        => $this->input->post('tgl_kehilangan'),
                 'created_by'            => $this->session->username,
@@ -216,6 +251,17 @@ class Sk_hilang_ktp extends CI_Controller
         } else {
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/sk_hilang_ktp');
+        }
+    }
+
+    function check_format_phone()
+    {
+        $phone = $this->input->post('phone');
+        $check_phone = substr($phone, '0', '2');
+
+        if ($check_phone != '08') {
+            // var_dump($check_phone);
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid</div>";
         }
     }
 }
