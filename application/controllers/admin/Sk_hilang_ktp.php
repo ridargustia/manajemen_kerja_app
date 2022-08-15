@@ -424,6 +424,66 @@ class Sk_hilang_ktp extends CI_Controller
         }
     }
 
+    function numbering($id_sk_hilang_ktp)
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Penomoran ' . $this->data['module'];
+        $this->data['action']     = 'admin/sk_hilang_ktp/numbering_action';
+
+        //TODO Rancangan form
+        $this->data['id_sk_hilang_ktp'] = [
+            'name'          => 'id_sk_hilang_ktp',
+            'type'          => 'hidden',
+        ];
+        $this->data['no_surat'] = [
+            'name'          => 'no_surat',
+            'id'            => 'no_surat',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+
+        //TODO Get detail sk_hilang_ktp by id
+        $this->data['data_sk_hilang_ktp'] = $this->Sk_hilang_ktp_model->get_by_id($id_sk_hilang_ktp);
+        $this->data['status'] = $this->Status_model->get_by_id($this->data['data_sk_hilang_ktp']->status_id);
+        $this->data['agama'] = $this->Agama_model->get_by_id($this->data['data_sk_hilang_ktp']->agama_id);
+        $this->data['pekerjaan'] = $this->Pekerjaan_model->get_by_id($this->data['data_sk_hilang_ktp']->pekerjaan_id);
+
+        //TODO Load view dengan mengirim data
+        $this->load->view('back/sk_hilang_ktp/sk_hilang_ktp_numbering', $this->data);
+    }
+
+    function numbering_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('no_surat', 'No Surat', 'required');
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('admin/sk_hilang_ktp/numbering/' . $this->input->post('id_sk_hilang_ktp'));
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'no_surat'              => $this->input->post('no_surat'),
+                'is_readed'             => '1',
+                'numbered_by'           => $this->session->username,
+                'numbered_at'           => date('Y-m-d H:i:a'),
+            );
+
+            //TODO Post to database with model
+            $this->Sk_hilang_ktp_model->update($this->input->post('id_sk_hilang_ktp'), $data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/sk_hilang_ktp/numbering/' . $this->input->post('id_sk_hilang_ktp'));
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
