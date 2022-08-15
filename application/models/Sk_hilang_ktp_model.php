@@ -37,6 +37,31 @@ class Sk_hilang_ktp_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_deleted()
+    {
+        $this->db->select('sk_hilang_ktp.id_sk_hilang_ktp, sk_hilang_ktp.nik, sk_hilang_ktp.name, sk_hilang_ktp.signature_image, sk_hilang_ktp.created_at, sk_hilang_ktp.is_readed');
+
+        $this->db->where('sk_hilang_ktp.is_delete', '1');
+
+        $this->db->order_by('sk_hilang_ktp.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_deleted_for_masteradmin()
+    {
+        $this->db->select('sk_hilang_ktp.id_sk_hilang_ktp, sk_hilang_ktp.nik, sk_hilang_ktp.name, sk_hilang_ktp.signature_image, sk_hilang_ktp.created_at, sk_hilang_ktp.is_readed_masteradmin');
+
+        $this->db->where('sk_hilang_ktp.is_delete', '1');
+        $this->db->where('sk_hilang_ktp.no_surat !=', NULL);
+
+        $this->db->order_by('sk_hilang_ktp.is_readed_masteradmin', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
     function total_rows_is_not_readed()
     {
         $this->db->where('sk_hilang_ktp.is_readed', '0');
@@ -95,5 +120,11 @@ class Sk_hilang_ktp_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         $this->db->update($this->table, $data);
+    }
+
+    function delete($id)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->delete($this->table);
     }
 }

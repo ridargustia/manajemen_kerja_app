@@ -484,6 +484,75 @@ class Sk_hilang_ktp extends CI_Controller
         }
     }
 
+    function delete_permanent($id_sk_hilang_ktp)
+    {
+        is_delete();
+
+        //TODO Get data sk_hilang_ktp by id
+        $delete = $this->Sk_hilang_ktp_model->get_by_id($id_sk_hilang_ktp);
+
+        //TODO Jika data sk_hilang_ktp yg akan dihapus ditemukan
+        if ($delete) {
+            //TODO Jalankan proses delete dengan model
+            $this->Sk_hilang_ktp_model->delete($id_sk_hilang_ktp);
+
+            write_log();
+
+            //TODO Kirim notifikasi berhasil dihapus permanen
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_hilang_ktp/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_hilang_ktp');
+        }
+    }
+
+    function deleted_list()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        //TODO Get data Sk_hilang_ktp dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Sk_hilang_ktp_model->get_all_deleted_for_masteradmin();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Sk_hilang_ktp_model->get_all_deleted();
+        }
+
+        $this->load->view('back/sk_hilang_ktp/sk_hilang_ktp_deleted_list', $this->data);
+    }
+
+    function restore($id_sk_hilang_ktp)
+    {
+        is_restore();
+
+        //TODO Get data sk_hilang_ktp by id
+        $row = $this->Sk_hilang_ktp_model->get_by_id($id_sk_hilang_ktp);
+
+        //TODO Jika data ditemukan
+        if ($row) {
+            $data = array(
+                'is_delete'   => '0',
+                'deleted_by'  => NULL,
+                'deleted_at'  => NULL,
+            );
+
+            //TODO Jalankan proses update dengan model
+            $this->Sk_hilang_ktp_model->update($id_sk_hilang_ktp, $data);
+
+            write_log();
+
+            //TODO Kirim notifikasi data berhasil dikembalikan
+            $this->session->set_flashdata('message', 'dikembalikan');
+            redirect('admin/sk_hilang_ktp/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_hilang_ktp');
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
