@@ -35,10 +35,16 @@ class Sk_hilang_ktp extends CI_Controller
     {
         //TODO Authentication hak akses usertype
         is_read();
+
         //TODO Inisialisasi variabel judul
         $this->data['page_title'] = 'Data ' . $this->data['module'];
-        //TODO Get data SKCK dari database
-        $this->data['get_all'] = $this->Sk_hilang_ktp_model->get_all();
+
+        //TODO Get data SK Hilang KTP dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Sk_hilang_ktp_model->get_all_by_numbering();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Sk_hilang_ktp_model->get_all();
+        }
 
         $this->load->view('back/sk_hilang_ktp/sk_hilang_ktp_list', $this->data);
     }

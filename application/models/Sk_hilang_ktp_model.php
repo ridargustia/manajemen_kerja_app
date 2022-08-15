@@ -14,10 +14,24 @@ class Sk_hilang_ktp_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_hilang_ktp.id_sk_hilang_ktp, sk_hilang_ktp.nik, sk_hilang_ktp.name, sk_hilang_ktp.created_at, sk_hilang_ktp.is_readed');
+        $this->db->select('sk_hilang_ktp.id_sk_hilang_ktp, sk_hilang_ktp.nik, sk_hilang_ktp.name, sk_hilang_ktp.signature_image, sk_hilang_ktp.created_at, sk_hilang_ktp.is_readed');
 
         $this->db->where('sk_hilang_ktp.is_delete', '0');
 
+        $this->db->order_by('sk_hilang_ktp.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_by_numbering()
+    {
+        $this->db->select('sk_hilang_ktp.id_sk_hilang_ktp, sk_hilang_ktp.nik, sk_hilang_ktp.name, sk_hilang_ktp.signature_image, sk_hilang_ktp.created_at, sk_hilang_ktp.is_readed_masteradmin');
+
+        $this->db->where('sk_hilang_ktp.is_delete', '0');
+        $this->db->where('sk_hilang_ktp.no_surat !=', NULL);
+
+        $this->db->order_by('sk_hilang_ktp.is_readed_masteradmin', 'ASC');
         $this->db->order_by($this->id, $this->order);
 
         return $this->db->get($this->table)->result();
