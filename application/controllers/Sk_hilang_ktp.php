@@ -94,12 +94,22 @@ class Sk_hilang_ktp extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['address'] = [
-            'name'          => 'address',
-            'id'            => 'address',
+        $this->data['dusun'] = [
+            'name'          => 'dusun',
+            'id'            => 'dusun',
             'class'         => 'form-control',
-            'autocomplete'  => 'off',
-            'rows'          => '2',
+            'required'      => '',
+        ];
+        $this->data['rt'] = [
+            'name'          => 'rt',
+            'id'            => 'rt',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+        $this->data['rw'] = [
+            'name'          => 'rw',
+            'id'            => 'rw',
+            'class'         => 'form-control',
             'required'      => '',
         ];
         $this->data['tempat_kehilangan'] = [
@@ -131,7 +141,9 @@ class Sk_hilang_ktp extends CI_Controller
         $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
         $this->form_validation->set_rules('agama', 'Agama', 'required');
         $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
-        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('dusun', 'Dusun', 'required');
+        $this->form_validation->set_rules('rw', 'RW', 'required|is_numeric');
+        $this->form_validation->set_rules('rt', 'RT', 'required|is_numeric');
         $this->form_validation->set_rules('tempat_kehilangan', 'Tempat Kehilangan', 'required');
         $this->form_validation->set_rules('tgl_kehilangan', 'Tanggal Kehilangan', 'required');
 
@@ -154,6 +166,9 @@ class Sk_hilang_ktp extends CI_Controller
             $selection_phone = substr($this->input->post('phone'), '1');
             $phone = '62' . $selection_phone;
 
+            //TODO Format address
+            $address = 'Dusun ' . $this->input->post('dusun') . ' RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
+
             //TODO Simpan data ke array
             $data = array(
                 'name'                  => $this->input->post('name'),
@@ -165,7 +180,7 @@ class Sk_hilang_ktp extends CI_Controller
                 'status_id'             => $this->input->post('status'),
                 'agama_id'              => $this->input->post('agama'),
                 'pekerjaan_id'          => $this->input->post('pekerjaan'),
-                'address'               => $this->input->post('address'),
+                'address'               => $address,
                 'tempat_kehilangan'     => $this->input->post('tempat_kehilangan'),
                 'tgl_kehilangan'        => $this->input->post('tgl_kehilangan'),
             );
@@ -230,6 +245,134 @@ class Sk_hilang_ktp extends CI_Controller
                 redirect('sk_hilang_ktp/auth_download');
             }
         }
+    }
+
+    function preview_document($id_sk_hilang_ktp)
+    {
+        $row = $this->Sk_hilang_ktp_model->get_by_id_for_document($id_sk_hilang_ktp);
+        $data_master = $this->Auth_model->get_by_usertype_master();
+
+        if ($row->gender === '1') {
+            $gender = 'Laki-laki';
+        } elseif ($row->gender === '2') {
+            $gender = 'Perempuan';
+        }
+
+        require FCPATH . '/vendor/autoload.php';
+        require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
+
+        $image = FCPATH . 'assets\images\kop_surat.png';
+        $ttd_kades = base_url($row->signature_image);
+        $stempel = base_url('assets/images/stempel.png');
+
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->SetTitle($this->data['module'] . ' a.n ' . $row->name);
+        $pdf->SetTopMargin(10);
+        $pdf->SetLeftMargin(25);
+        $pdf->SetRightMargin(25);
+        $pdf->AddFont('Calibri', '', 'calibri.php');
+        $pdf->AddFont('Calibrib', '', 'calibrib.php');
+        $pdf->AddPage();
+
+        //TODO Image
+        $pdf->Image($image, 25, 10, 24, 25);
+
+        //TODO Judul Surat
+        $pdf->SetFont('Arial', '', '11');
+        $pdf->Cell(0, 6, 'PEMERINTAH KABUPATEN SUMENEP', 0, 1, 'C');
+        $pdf->Cell(0, 6, 'KECAMATAN KANGAYAN', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', '11');
+        $pdf->Cell(0, 6, 'KANTOR KEPALA DESA SAOBI', 0, 1, 'C');
+        $pdf->SetFont('Arial', '', '11');
+        $pdf->Cell(0, 6, 'Jalan Raya Masjid No. 50. Email desasaobi90@gmail.com', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'BU', '11');
+        $pdf->Cell(0, 6, 'S A O B I', 0, 1, 'C');
+        $pdf->Cell(130);
+        $pdf->SetFont('Arial', 'I', '8');
+        $pdf->Cell(0, 3, 'Kode Pos 69491', 0, 1, 'C');
+
+        //TODO Body Surat
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 7, 'SURAT KETERANGAN KEHILANGAN KTP', 0, 1, 'C');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(0, 5, 'NOMOR : ' . $row->no_surat, 0, 1, 'C');
+
+        //TODO make a dummy empty cell as a vertical spacer
+        $pdf->Cell(0, 6, '', 0, 1); //end of line
+
+        //TODO Body Content
+        $pdf->Cell(0, 8, 'Yang bertanda tangan dibawah ini :', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Nama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 8, strtoupper($data_master->name), 0, 1, 'L');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $data_master->address, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Jabatan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $data_master->jabatan_name, 0, 1, 'L');
+        $pdf->Cell(0, 8, 'Menerangkan dengan sebenarnya bahwa :', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Nama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->SetFont('Calibrib', '', '12');
+        $pdf->Cell(0, 8, strtoupper($row->name), 0, 1, 'L');
+        $pdf->SetFont('Calibri', '', '12');
+        $pdf->Cell(50, 8, 'Tempat, Tanggal Lahir', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->birthplace . ', ' . datetime_indo4($row->birthdate), 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Status', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->status_name, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Jenis kelamin', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $gender, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Agama', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->agama_name, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Pekerjaan', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->pekerjaan_name, 0, 1, 'L');
+        $pdf->Cell(50, 8, 'Alamat', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->address, 0, 1, 'L');
+        $pdf->Cell(50, 8, '', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, 'Desa Saobi Kec.Kangayan Kab. Sumenep', 0, 1, 'L');
+        $pdf->Cell(50, 8, 'No. NIK', 0, 0, 'L');
+        $pdf->Cell(5, 8, ' : ', 0, 0, 'C');
+        $pdf->Cell(0, 8, $row->nik, 0, 1, 'L');
+
+        $pdf->MultiCell(0, 8, '         Adalah benar-benar penduduk Desa Saobi yang kehilangan KTP di ' . $row->address . ' Desa Saobi Kangayan pada tanggal ' . date_indonesian_only($row->tgl_kehilangan) . '.', 0, 'J');
+        $pdf->MultiCell(0, 8, '     Demikian surat keterangan ini kami buat dengan sebenarnya dan diberikan kepada yang bersangkutan guna untuk digunakan seperlunya.', 0, 'J');
+
+        $pdf->Cell(115);
+        $pdf->SetFont('Arial', 'I', '12');
+        $pdf->Cell(0, 8, 'Saobi, ' . date_indonesian_only($row->created_at), 0, 1, 'L');
+
+        $pdf->Cell(115);
+        $pdf->SetFont('Arial', '', '12');
+        $pdf->Cell(0, 8, 'Mengetahui,', 0, 1, 'L');
+
+        $pdf->Cell(20);
+        $pdf->Cell(85, 8, 'Yang bersangkutan', 0, 0, 'L');
+        $pdf->Cell(0, 8, 'Kepala Desa Saobi', 0, 1, 'C');
+
+        //TODO make a dummy empty cell as a vertical spacer
+        $pdf->Cell(0, 20, '', 0, 1); //end of line
+
+        if (!empty($row->signature_image)) {
+            //TODO Image
+            $pdf->Image($stempel, 120, 226, 35, 35);
+            $pdf->Image($ttd_kades, 140, 226, 35, 25);
+        }
+
+        $pdf->SetFont('Arial', 'BU', '12');
+        $pdf->Cell(80, 8, strtoupper($row->name), 0, 0, 'C');
+        $pdf->Cell(65, 8, strtoupper($data_master->name), 0, 1, 'R');
+
+        $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
     }
 
     function check_format_phone()

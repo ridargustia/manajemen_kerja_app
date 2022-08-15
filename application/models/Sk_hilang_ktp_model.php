@@ -41,6 +41,16 @@ class Sk_hilang_ktp_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id_for_document($id)
+    {
+        $this->db->join('status', 'sk_hilang_ktp.status_id = status.id_status');
+        $this->db->join('agama', 'sk_hilang_ktp.agama_id = agama.id_agama');
+        $this->db->join('pekerjaan', 'sk_hilang_ktp.pekerjaan_id = pekerjaan.id_pekerjaan');
+
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function get_by_token($id)
     {
         $this->db->where('token', $id);
