@@ -136,7 +136,7 @@
                             <?php if (is_masteradmin() and $data_sk_hilang_ktp->signature_image === NULL) { ?>
                                 <a href="<?php echo base_url('admin/sk_hilang_ktp/signature/' . $data_sk_hilang_ktp->id_sk_hilang_ktp) ?>" class="btn btn-success" title="ACC Dokumen"><i class="fa fa-pencil-square-o"></i> ACC Dokumen</a>
                             <?php } elseif (is_superadmin() and $data_sk_hilang_ktp->token != NULL) { ?>
-                                <a href="https://web.whatsapp.com/send?phone=<?php echo $data_sk_hilang_ktp->phone ?>&text=Assalamu'alaikum,%0aKami dari Kantor Desa Saobi, menyampaikan informasi bahwa surat permohonan anda sudah selesai diproses, silahkan kunjungi web kami di https://saobi.eduarsip.id untuk download surat tersebut. Dengan memasukkan token berikut *<?php echo $data_sk_hilang_ktp->token ?>*, jangan memberikan token ini ke orang lain. Terima kasih" class="btn btn-success" title="Teruskan Pemohon" target="_blank"><i class="fa fa-share"></i> Teruskan Pemohon</a>
+                                <a href="https://web.whatsapp.com/send?phone=<?php echo $data_sk_hilang_ktp->phone ?>&text=Assalamu'alaikum,%0aKami dari Kantor Desa Saobi, menyampaikan informasi bahwa surat permohonan anda sudah selesai diproses, silahkan klik link berikut <?php echo base_url('sk_hilang_ktp/auth_download') ?> untuk download surat tersebut. Dengan memasukkan token berikut *<?php echo $data_sk_hilang_ktp->token ?>*, jangan memberikan token ini ke orang lain. Terima kasih" class="btn btn-success" title="Teruskan Pemohon" target="_blank"><i class="fa fa-share"></i> Teruskan Pemohon</a>
                             <?php } ?>
                         </div>
                     </div>
