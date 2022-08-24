@@ -14,10 +14,24 @@ class Sk_meninggal_dunia_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_meninggal_dunia.id_sk_meninggal_dunia, sk_meninggal_dunia.name, sk_meninggal_dunia.created_at, sk_meninggal_dunia.is_readed');
+        $this->db->select('sk_meninggal_dunia.id_sk_meninggal_dunia, sk_meninggal_dunia.name, sk_meninggal_dunia.signature_image, sk_meninggal_dunia.created_at, sk_meninggal_dunia.is_readed');
 
         $this->db->where('sk_meninggal_dunia.is_delete', '0');
 
+        $this->db->order_by('sk_meninggal_dunia.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_by_numbering()
+    {
+        $this->db->select('sk_meninggal_dunia.id_sk_meninggal_dunia, sk_meninggal_dunia.name, sk_meninggal_dunia.signature_image, sk_meninggal_dunia.created_at, sk_meninggal_dunia.is_readed_masteradmin');
+
+        $this->db->where('sk_meninggal_dunia.is_delete', '0');
+        $this->db->where('sk_meninggal_dunia.no_surat !=', NULL);
+
+        $this->db->order_by('sk_meninggal_dunia.is_readed_masteradmin', 'ASC');
         $this->db->order_by($this->id, $this->order);
 
         return $this->db->get($this->table)->result();
