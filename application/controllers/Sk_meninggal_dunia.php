@@ -23,9 +23,6 @@ class Sk_meninggal_dunia extends CI_Controller
         $this->data['page_title'] = 'Surat Keterangan Meninggal Dunia';
         $this->data['action']     = 'sk_meninggal_dunia/create_action';
 
-        //TODO Get data untuk dropdown reference
-        $this->data['get_all_combobox_pekerjaan'] = $this->Pekerjaan_model->get_all_combobox();
-
         //TODO Rancangan form
         $this->data['name'] = [
             'name'          => 'name',
@@ -48,6 +45,14 @@ class Sk_meninggal_dunia extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
         ];
+        $this->data['phone'] = [
+            'name'          => 'phone',
+            'id'            => 'phone',
+            'class'         => 'form-control',
+            'onChange'      => 'checkFormatPhone()',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
         $this->data['gender'] = [
             'name'          => 'gender',
             'id'            => 'gender',
@@ -55,7 +60,7 @@ class Sk_meninggal_dunia extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '- Pilih Jenis Kelamin -',
+            ''             => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -65,12 +70,22 @@ class Sk_meninggal_dunia extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['address'] = [
-            'name'          => 'address',
-            'id'            => 'address',
+        $this->data['dusun'] = [
+            'name'          => 'dusun',
+            'id'            => 'dusun',
             'class'         => 'form-control',
-            'autocomplete'  => 'off',
-            'rows'          => '2',
+            'required'      => '',
+        ];
+        $this->data['rt'] = [
+            'name'          => 'rt',
+            'id'            => 'rt',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+        $this->data['rw'] = [
+            'name'          => 'rw',
+            'id'            => 'rw',
+            'class'         => 'form-control',
             'required'      => '',
         ];
         $this->data['tgl_meninggal'] = [
@@ -97,29 +112,46 @@ class Sk_meninggal_dunia extends CI_Controller
         $this->form_validation->set_rules('name', 'Nama', 'trim|required');
         $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
         $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telephone', 'required|is_numeric');
         $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
-        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('rt', 'RT', 'required|is_numeric');
+        $this->form_validation->set_rules('rw', 'RW', 'required|is_numeric');
+        $this->form_validation->set_rules('dusun', 'Dusun', 'required');
         $this->form_validation->set_rules('tgl_meninggal', 'Tanggal Meninggal', 'required');
         $this->form_validation->set_rules('penyebab_kematian', 'Penyebab Kematian', 'required');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
 
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        $check_format_phone = substr($this->input->post('phone'), '0', '2');
 
         //?Apakah validasi gagal?
         if ($this->form_validation->run() === FALSE) {
             //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
+        } elseif ($check_format_phone != '08') {
+            $this->session->set_flashdata('message', 'no HP/Telephone salah');
+            redirect('sk_meninggal_dunia/create');
         } else {
+            //TODO Ubah Format phone number +62
+            $selection_phone = substr($this->input->post('phone'), '1');
+            $phone = '62' . $selection_phone;
+
+            //TODO Format address
+            $address = 'Dusun ' . $this->input->post('dusun') . ' RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
+
             //TODO Simpan data ke array
             $data = array(
                 'name'                  => $this->input->post('name'),
                 'birthplace'            => $this->input->post('birthplace'),
                 'birthdate'             => $this->input->post('birthdate'),
+                'phone'                 => $phone,
                 'gender'                => $this->input->post('gender'),
-                'pekerjaan_id'          => $this->input->post('pekerjaan'),
-                'address'               => $this->input->post('address'),
+                'pekerjaan'             => $this->input->post('pekerjaan'),
+                'address'               => $address,
                 'tgl_meninggal'         => $this->input->post('tgl_meninggal'),
                 'penyebab_kematian'     => $this->input->post('penyebab_kematian'),
             );
@@ -132,6 +164,17 @@ class Sk_meninggal_dunia extends CI_Controller
             //TODO Tampilkan notifikasi dan redirect
             $this->session->set_flashdata('message', 'Sukses');
             redirect('sk_meninggal_dunia/create');
+        }
+    }
+
+    function check_format_phone()
+    {
+        $phone = $this->input->post('phone');
+        $check_phone = substr($phone, '0', '2');
+
+        if ($check_phone != '08') {
+            // var_dump($check_phone);
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid</div>";
         }
     }
 }
