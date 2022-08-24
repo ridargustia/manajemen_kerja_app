@@ -70,3 +70,28 @@ function date_indonesian_only($string)
 
   return $pecahkan[0] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[2];
 }
+
+function datetime_indonesian($string)
+{
+  $tgl = date("d-m-Y", strtotime($string));
+  $time = date("G.i", strtotime($string));
+
+  $bulan = array(
+    1 =>   'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  );
+
+  $pecahkan = explode('-', $tgl);
+
+  return $pecahkan[0] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[2] . ', Pkl. ' . $time . ' WIB';
+}
