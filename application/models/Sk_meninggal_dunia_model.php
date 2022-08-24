@@ -41,6 +41,15 @@ class Sk_meninggal_dunia_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_token($id)
+    {
+        $this->db->where('token', $id);
+        $this->db->where('no_surat !=', NULL);
+        $this->db->where('signature_image !=', NULL);
+
+        return $this->db->get($this->table)->row();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);
