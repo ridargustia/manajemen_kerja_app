@@ -652,7 +652,11 @@ class Sk_domisili extends CI_Controller
 
         $pdf->Cell(115);
         $pdf->SetFont('Arial', 'I', '12');
-        $pdf->Cell(0, 8, 'Saobi, ' . date_indonesian_only($row->created_at), 0, 1, 'L');
+        if ($row->acc_at !== NULL) {
+            $pdf->Cell(0, 8, 'Saobi, ' . date_indonesian_only($row->acc_at), 0, 1, 'L');
+        } else {
+            $pdf->Cell(0, 8, 'Saobi, ', 0, 1, 'L');
+        }
 
         $pdf->Cell(20);
         $pdf->SetFont('Arial', '', '12');
@@ -724,6 +728,8 @@ class Sk_domisili extends CI_Controller
             'signature_image'       => $image,
             'is_readed_masteradmin' => '1',
             'token'                 => substr(md5(random_bytes(10)), 0, 10),
+            'acc_by'                => $this->session->username,
+            'acc_at'                => date('Y-m-d H:i:a'),
         );
 
         //TODO Jalankan proses update
@@ -741,7 +747,7 @@ class Sk_domisili extends CI_Controller
 
         if ($check_phone != '08') {
             // var_dump($check_phone);
-            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid</div>";
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid. Awali dengan 08xxxxxxxxxx</div>";
         }
     }
 }

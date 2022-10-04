@@ -141,7 +141,7 @@ class Sk_meninggal_dunia extends CI_Controller
             $phone = '62' . $selection_phone;
 
             //TODO Format address
-            $address = 'Dusun ' . $this->input->post('dusun') . ' RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
+            $address = 'Dsn ' . $this->input->post('dusun') . ' RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
 
             //TODO Simpan data ke array
             $data = array(
@@ -331,7 +331,7 @@ class Sk_meninggal_dunia extends CI_Controller
 
         if ($check_phone != '08') {
             // var_dump($check_phone);
-            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid</div>";
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid. Awali dengan 08xxxxxxxxxx</div>";
         }
     }
 }

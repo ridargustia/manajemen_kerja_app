@@ -409,7 +409,7 @@ class Sk_jalan extends CI_Controller
 
         if ($check_phone != '08') {
             // var_dump($check_phone);
-            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid</div>";
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid. Awali dengan 08xxxxxxxxxx</div>";
         }
     }
 }
