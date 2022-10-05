@@ -248,6 +248,38 @@ class Sk_meninggal_dunia extends CI_Controller
         $this->load->view('back/sk_meninggal_dunia/sk_meninggal_dunia_numbering', $this->data);
     }
 
+    function numbering_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('no_surat', 'No Surat', 'required');
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('admin/sk_meninggal_dunia/numbering/' . $this->input->post('id_sk_meninggal_dunia'));
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'no_surat'              => $this->input->post('no_surat'),
+                'is_readed'             => '1',
+                'numbered_by'           => $this->session->username,
+                'numbered_at'           => date('Y-m-d H:i:a'),
+            );
+
+            //TODO Post to database with model
+            $this->Sk_meninggal_dunia_model->update($this->input->post('id_sk_meninggal_dunia'), $data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/sk_meninggal_dunia/numbering/' . $this->input->post('id_sk_meninggal_dunia'));
+        }
+    }
+
     function preview_document($id_sk_meninggal_dunia)
     {
         $row = $this->Sk_meninggal_dunia_model->get_by_id_for_document($id_sk_meninggal_dunia);
