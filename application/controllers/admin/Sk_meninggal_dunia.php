@@ -7,7 +7,7 @@ class Sk_meninggal_dunia extends CI_Controller
     {
         parent::__construct();
 
-        $this->data['module'] = 'Surat Keterangan Meninggal Dunia';
+        $this->data['module'] = 'Srt Ket. Meninggal Dunia';
 
         $this->data['company_data']             = $this->Company_model->company_profile();
         $this->data['layout_template']          = $this->Template_model->layout();
@@ -338,8 +338,10 @@ class Sk_meninggal_dunia extends CI_Controller
     {
         is_delete();
 
+        //TODO Get sk meninggal dunia by id
         $delete = $this->Sk_meninggal_dunia_model->get_by_id($id_sk_meninggal_dunia);
 
+        //TODO Jika data skck ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -347,13 +349,16 @@ class Sk_meninggal_dunia extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Sk_meninggal_dunia_model->soft_delete($id_sk_meninggal_dunia, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/sk_meninggal_dunia');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/sk_meninggal_dunia');
         }
@@ -413,6 +418,75 @@ class Sk_meninggal_dunia extends CI_Controller
             //TODO Tampilkan notifikasi dan redirect
             $this->session->set_flashdata('message', 'Sukses');
             redirect('admin/sk_meninggal_dunia/numbering/' . $this->input->post('id_sk_meninggal_dunia'));
+        }
+    }
+
+    function delete_permanent($id_sk_meninggal_dunia)
+    {
+        is_delete();
+
+        //TODO Get data sk_meninggal_dunia by id
+        $delete = $this->Sk_meninggal_dunia_model->get_by_id($id_sk_meninggal_dunia);
+
+        //TODO Jika data sk_meninggal_dunia yg akan dihapus ditemukan
+        if ($delete) {
+            //TODO Jalankan proses delete dengan model
+            $this->Sk_meninggal_dunia_model->delete($id_sk_meninggal_dunia);
+
+            write_log();
+
+            //TODO Kirim notifikasi berhasil dihapus permanen
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_meninggal_dunia/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_meninggal_dunia');
+        }
+    }
+
+    function deleted_list()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        //TODO Get data Sk_meninggal_dunia dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Sk_meninggal_dunia_model->get_all_deleted_for_masteradmin();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Sk_meninggal_dunia_model->get_all_deleted();
+        }
+
+        $this->load->view('back/sk_meninggal_dunia/sk_meninggal_dunia_deleted_list', $this->data);
+    }
+
+    function restore($id_sk_meninggal_dunia)
+    {
+        is_restore();
+
+        //TODO Get data sk_meninggal_dunia by id
+        $row = $this->Sk_meninggal_dunia_model->get_by_id($id_sk_meninggal_dunia);
+
+        //TODO Jika data ditemukan
+        if ($row) {
+            $data = array(
+                'is_delete'   => '0',
+                'deleted_by'  => NULL,
+                'deleted_at'  => NULL,
+            );
+
+            //TODO Jalankan proses update dengan model
+            $this->Sk_meninggal_dunia_model->update($id_sk_meninggal_dunia, $data);
+
+            write_log();
+
+            //TODO Kirim notifikasi data berhasil dikembalikan
+            $this->session->set_flashdata('message', 'dikembalikan');
+            redirect('admin/sk_meninggal_dunia/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_meninggal_dunia');
         }
     }
 
