@@ -198,6 +198,142 @@ class Sk_meninggal_dunia extends CI_Controller
         }
     }
 
+    function update($id_sk_meninggal_dunia)
+    {
+        is_update();
+
+        //TODO Get by id data sk_meninggal_dunia
+        $this->data['sk_meninggal_dunia']     = $this->Sk_meninggal_dunia_model->get_by_id($id_sk_meninggal_dunia);
+
+        //TODO Jika sk_meninggal_dunia ditemukan
+        if ($this->data['sk_meninggal_dunia']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'Update Data ' . $this->data['module'];
+            $this->data['action']     = 'admin/sk_meninggal_dunia/update_action';
+
+            //TODO Rancangan form
+            $this->data['id_sk_meninggal_dunia'] = [
+                'name'          => 'id_sk_meninggal_dunia',
+                'type'          => 'hidden',
+            ];
+            $this->data['name'] = [
+                'name'          => 'name',
+                'id'            => 'name',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthplace'] = [
+                'name'          => 'birthplace',
+                'id'            => 'birthplace',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthdate'] = [
+                'name'          => 'birthdate',
+                'id'            => 'birthdate',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['phone'] = [
+                'name'          => 'phone',
+                'id'            => 'phone',
+                'class'         => 'form-control',
+                'onChange'      => 'checkFormatPhone()',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['gender'] = [
+                'name'          => 'gender',
+                'id'            => 'gender',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['gender_value'] = [
+                ''             => '- Pilih Jenis Kelamin -',
+                '1'             => 'Laki-laki',
+                '2'             => 'Perempuan',
+            ];
+            $this->data['pekerjaan'] = [
+                'name'          => 'pekerjaan',
+                'id'            => 'pekerjaan',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['address'] = [
+                'name'          => 'address',
+                'id'            => 'address',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['tgl_meninggal'] = [
+                'name'          => 'tgl_meninggal',
+                'id'            => 'tgl_meninggal',
+                'class'         => 'form-control',
+                'type'          => 'datetime-local',
+                'required'      => '',
+            ];
+            $this->data['penyebab_kematian'] = [
+                'name'          => 'penyebab_kematian',
+                'id'            => 'penyebab_kematian',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+
+            $this->load->view('back/sk_meninggal_dunia/sk_meninggal_dunia_edit', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_meninggal_dunia');
+        }
+    }
+
+    function update_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
+        $this->form_validation->set_rules('address', 'Tempat Tinggal', 'required');
+        $this->form_validation->set_rules('tgl_meninggal', 'Tanggal Meninggal', 'required');
+        $this->form_validation->set_rules('penyebab_kematian', 'Penyebab Kematian', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //TODO Jika data tidak lolos validasi
+        if ($this->form_validation->run() === FALSE) {
+            $this->update($this->input->post('id_sk_meninggal_dunia'));
+        } else {
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'phone'                 => $this->input->post('phone'),
+                'gender'                => $this->input->post('gender'),
+                'pekerjaan'             => $this->input->post('pekerjaan'),
+                'address'               => $this->input->post('address'),
+                'tgl_meninggal'         => $this->input->post('tgl_meninggal'),
+                'penyebab_kematian'     => $this->input->post('penyebab_kematian'),
+                'modified_by'           => $this->session->username,
+            );
+
+            //TODO Jalankan proses update
+            $this->Sk_meninggal_dunia_model->update($this->input->post('id_sk_meninggal_dunia'), $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/sk_meninggal_dunia');
+        }
+    }
+
     function delete($id_sk_meninggal_dunia)
     {
         is_delete();
