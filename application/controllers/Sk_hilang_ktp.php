@@ -349,7 +349,11 @@ class Sk_hilang_ktp extends CI_Controller
 
         $pdf->Cell(115);
         $pdf->SetFont('Arial', 'I', '12');
-        $pdf->Cell(0, 8, 'Saobi, ' . date_indonesian_only($row->created_at), 0, 1, 'L');
+        if ($row->acc_at !== NULL) {
+            $pdf->Cell(0, 8, 'Saobi, ' . date_indonesian_only($row->acc_at), 0, 1, 'L');
+        } else {
+            $pdf->Cell(0, 8, 'Saobi, ', 0, 1, 'L');
+        }
 
         $pdf->Cell(115);
         $pdf->SetFont('Arial', '', '12');
