@@ -14,10 +14,24 @@ class Sk_nikah_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_nikah.id_sk_nikah, sk_nikah.suami_name, sk_nikah.istri_name, sk_nikah.created_at, sk_nikah.is_readed');
+        $this->db->select('sk_nikah.id_sk_nikah, sk_nikah.suami_name, sk_nikah.istri_name, sk_nikah.signature_image, sk_nikah.created_at, sk_nikah.is_readed');
 
         $this->db->where('sk_nikah.is_delete', '0');
 
+        $this->db->order_by('sk_nikah.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_by_numbering()
+    {
+        $this->db->select('sk_nikah.id_sk_nikah, sk_nikah.suami_name, sk_nikah.istri_name, sk_nikah.signature_image, sk_nikah.created_at, sk_nikah.is_readed_masteradmin');
+
+        $this->db->where('sk_nikah.is_delete', '0');
+        $this->db->where('sk_nikah.no_surat !=', NULL);
+
+        $this->db->order_by('sk_nikah.is_readed_masteradmin', 'ASC');
         $this->db->order_by($this->id, $this->order);
 
         return $this->db->get($this->table)->result();
