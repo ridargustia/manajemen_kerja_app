@@ -130,11 +130,11 @@
                   <?php
                   }
                 } elseif ($m->menu_controller === 'sk_nikah') {
-                  // if (is_masteradmin()) {
-                  //   $count = $this->Sk_nikah_model->total_rows_is_not_readed_masteradmin();
-                  // } elseif (is_superadmin()) {
-                  $count = $this->Sk_nikah_model->total_rows_is_not_readed();
-                  // }
+                  if (is_masteradmin()) {
+                    $count = $this->Sk_nikah_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Sk_nikah_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>

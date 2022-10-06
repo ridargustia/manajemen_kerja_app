@@ -442,8 +442,10 @@ class Sk_nikah extends CI_Controller
     {
         is_delete();
 
+        //TODO Get sk_nikah by id
         $delete = $this->Sk_nikah_model->get_by_id($id_sk_nikah);
 
+        //TODO Jika data sk_nikah ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -451,15 +453,80 @@ class Sk_nikah extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Sk_nikah_model->soft_delete($id_sk_nikah, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/sk_nikah');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/sk_nikah');
+        }
+    }
+
+    function numbering($id_sk_nikah)
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Penomoran ' . $this->data['module'];
+        $this->data['action']     = 'admin/sk_nikah/numbering_action';
+
+        //TODO Rancangan form
+        $this->data['id_sk_nikah'] = [
+            'name'          => 'id_sk_nikah',
+            'type'          => 'hidden',
+        ];
+        $this->data['no_surat'] = [
+            'name'          => 'no_surat',
+            'id'            => 'no_surat',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+
+        //TODO Get detail sk_nikah by id
+        $this->data['data_sk_nikah'] = $this->Sk_nikah_model->get_by_id($id_sk_nikah);
+
+        $this->data['suami_status'] = $this->Status_model->get_by_id($this->data['data_sk_nikah']->suami_status_id);
+        $this->data['istri_status'] = $this->Status_model->get_by_id($this->data['data_sk_nikah']->istri_status_id);
+        $this->data['suami_agama'] = $this->Agama_model->get_by_id($this->data['data_sk_nikah']->suami_agama_id);
+        $this->data['istri_agama'] = $this->Agama_model->get_by_id($this->data['data_sk_nikah']->istri_agama_id);
+
+        //TODO Load view dengan mengirim data
+        $this->load->view('back/sk_nikah/sk_nikah_numbering', $this->data);
+    }
+
+    function numbering_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('no_surat', 'No Surat', 'required');
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('admin/sk_nikah/numbering/' . $this->input->post('id_sk_nikah'));
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'no_surat'              => $this->input->post('no_surat'),
+                'is_readed'             => '1',
+                'numbered_by'           => $this->session->username,
+                'numbered_at'           => date('Y-m-d H:i:a'),
+            );
+
+            //TODO Post to database with model
+            $this->Sk_nikah_model->update($this->input->post('id_sk_nikah'), $data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/sk_nikah/numbering/' . $this->input->post('id_sk_nikah'));
         }
     }
 
