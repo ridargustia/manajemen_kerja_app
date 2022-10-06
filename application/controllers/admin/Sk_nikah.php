@@ -530,6 +530,30 @@ class Sk_nikah extends CI_Controller
         }
     }
 
+    function delete_permanent($id_sk_nikah)
+    {
+        is_delete();
+
+        //TODO Get data sk_nikah by id
+        $delete = $this->Sk_nikah_model->get_by_id($id_sk_nikah);
+
+        //TODO Jika data sk_nikah yg akan dihapus ditemukan
+        if ($delete) {
+            //TODO Jalankan proses delete dengan model
+            $this->Sk_nikah_model->delete($id_sk_nikah);
+
+            write_log();
+
+            //TODO Kirim notifikasi berhasil dihapus permanen
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_nikah/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_nikah');
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');

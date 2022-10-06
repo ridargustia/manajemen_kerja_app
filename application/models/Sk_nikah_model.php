@@ -77,4 +77,10 @@ class Sk_nikah_model extends CI_Model
         $this->db->where($this->id, $id);
         $this->db->update($this->table, $data);
     }
+
+    function delete($id)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->delete($this->table);
+    }
 }
