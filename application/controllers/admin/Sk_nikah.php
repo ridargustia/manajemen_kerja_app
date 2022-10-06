@@ -63,6 +63,14 @@ class Sk_nikah extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
         ];
+        $this->data['phone'] = [
+            'name'          => 'phone',
+            'id'            => 'phone',
+            'class'         => 'form-control',
+            'onChange'      => 'checkFormatPhone()',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
         $this->data['suami_birthplace'] = [
             'name'          => 'suami_birthplace',
             'id'            => 'suami_birthplace',
@@ -167,6 +175,7 @@ class Sk_nikah extends CI_Controller
     {
         //TODO sistem validasi data inputan
         $this->form_validation->set_rules('suami_name', 'Nama Suami', 'trim|required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
         $this->form_validation->set_rules('suami_birthplace', 'Tempat Lahir Suami', 'trim|required');
         $this->form_validation->set_rules('suami_birthdate', 'Tanggal Lahir Suami', 'required');
         $this->form_validation->set_rules('suami_gender', 'Jenis Kelamin Suami', 'required');
@@ -182,17 +191,28 @@ class Sk_nikah extends CI_Controller
         $this->form_validation->set_rules('kebangsaan_istri', 'Kebangsaan Istri', 'required');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
 
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        $check_format_phone = substr($this->input->post('phone'), '0', '2');
 
         //?Apakah validasi gagal?
         if ($this->form_validation->run() === FALSE) {
             //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
+        } elseif ($check_format_phone != '08') {
+            $this->session->set_flashdata('message', 'no HP/Telephone salah');
+            redirect('admin/sk_nikah/create');
         } else {
+            //TODO Ubah Format phone number +62
+            $selection_phone = substr($this->input->post('phone'), '1');
+            $phone = '62' . $selection_phone;
+
             //TODO Simpan data ke array
             $data = array(
                 'suami_name'            => $this->input->post('suami_name'),
+                'phone'                 => $phone,
                 'suami_birthplace'      => $this->input->post('suami_birthplace'),
                 'suami_birthdate'       => $this->input->post('suami_birthdate'),
                 'suami_gender'          => $this->input->post('suami_gender'),
@@ -242,6 +262,17 @@ class Sk_nikah extends CI_Controller
         } else {
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/sk_nikah');
+        }
+    }
+
+    function check_format_phone()
+    {
+        $phone = $this->input->post('phone');
+        $check_phone = substr($phone, '0', '2');
+
+        if ($check_phone != '08') {
+            // var_dump($check_phone);
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid. Awali dengan 08xxxxxxxxxx</div>";
         }
     }
 }
