@@ -80,6 +80,15 @@ class Sk_nikah_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id_for_document($id)
+    {
+        $this->db->join('status', 'sk_nikah.suami_status_id = status.id_status');
+        $this->db->join('agama', 'sk_nikah.suami_agama_id = agama.id_agama');
+
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);
