@@ -15,6 +15,7 @@
                 <!-- Main content -->
                 <section class="content">
                     <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
+                    <?php echo validation_errors() ?>
                     <?php echo form_open_multipart($action, array('id' => 'add_form')) ?>
                     <div class="row">
                         <div class="col-lg-12">
@@ -32,9 +33,20 @@
                                     <h4 class="box-title">DATA SUAMI</h4>
                                 </div>
                                 <div class="box-body">
-                                    <div class="form-group">
-                                        <label class="control-label">Nama*</label>
-                                        <?php echo form_input($suami_name) ?>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Nama*</label>
+                                                <?php echo form_input($suami_name) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">No HP/Telepon*</label>
+                                                <?php echo form_input($phone) ?>
+                                                <span id="phone-availability-status"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -182,6 +194,18 @@
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
+
+            function checkFormatPhone() {
+                jQuery.ajax({
+                    url: "<?php echo base_url('sk_nikah/check_format_phone') ?>",
+                    data: 'phone=' + $("#phone").val(),
+                    type: "POST",
+                    success: function(data) {
+                        $("#phone-availability-status").html(data);
+                    },
+                    error: function() {}
+                });
+            }
         </script>
 
 </body>

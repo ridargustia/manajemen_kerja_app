@@ -157,12 +157,12 @@ class Sk_nikah extends CI_Controller
         ];
         //TODO Value dropdown reference
         $this->data['gender_value'] = [
-            '0'             => '- Pilih Jenis Kelamin -',
+            ''              => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
         $this->data['kebangsaan_value'] = [
-            '0'             => '- Pilih Kebangsaan -',
+            ''              => '- Pilih Kebangsaan -',
             '1'             => 'Warga Negara Indonesia',
             '2'             => 'Warga Negara Asing',
         ];
@@ -364,12 +364,12 @@ class Sk_nikah extends CI_Controller
             ];
             //TODO Value dropdown reference
             $this->data['gender_value'] = [
-                '0'             => '- Pilih Jenis Kelamin -',
+                ''              => '- Pilih Jenis Kelamin -',
                 '1'             => 'Laki-laki',
                 '2'             => 'Perempuan',
             ];
             $this->data['kebangsaan_value'] = [
-                '0'             => '- Pilih Kebangsaan -',
+                ''              => '- Pilih Kebangsaan -',
                 '1'             => 'Warga Negara Indonesia',
                 '2'             => 'Warga Negara Asing',
             ];
