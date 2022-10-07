@@ -211,6 +211,59 @@ class Sk_nikah extends CI_Controller
         }
     }
 
+    function auth_download()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Authentikasi Download Dokumen';
+        $this->data['action']     = 'sk_nikah/auth_download_action';
+
+        //TODO Kondisi menampilkan halaman Auth download dokumen
+        $this->data['token'] = [
+            'name'              => 'token',
+            'id'                => 'token',
+            'class'             => 'form-control',
+            'autocomplete'      => 'off',
+            'required'          => '',
+            'value'             => $this->form_validation->set_value('token'),
+        ];
+
+        //TODO Load view halaman login
+        $this->load->view('front/surat/auth_download_sk_nikah', $this->data);
+    }
+
+    function auth_download_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('token', 'Token', 'trim|required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('sk_nikah/auth_download');
+        } else {
+            $this->data['sk_nikah'] = $this->Sk_nikah_model->get_by_token($this->input->post('token'));
+
+            if ($this->data['sk_nikah']) {
+                $this->data['page_title'] = 'Download ' . $this->data['module'];
+
+                $this->data['suami_status'] = $this->Status_model->get_by_id($this->data['sk_nikah']->suami_status_id);
+                $this->data['istri_status'] = $this->Status_model->get_by_id($this->data['sk_nikah']->istri_status_id);
+                $this->data['suami_agama'] = $this->Agama_model->get_by_id($this->data['sk_nikah']->suami_agama_id);
+                $this->data['istri_agama'] = $this->Agama_model->get_by_id($this->data['sk_nikah']->istri_agama_id);
+
+                $this->load->view('front/surat/download_sk_nikah', $this->data);
+            } else {
+                //TODO Tampilkan notifikasi dan redirect
+                $this->session->set_flashdata('message', '<div class="alert alert-danger">Akses gagal, silahkan hubungi Admin.</div>');
+                redirect('sk_nikah/auth_download');
+            }
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
