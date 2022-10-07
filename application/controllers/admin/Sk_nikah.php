@@ -554,6 +554,51 @@ class Sk_nikah extends CI_Controller
         }
     }
 
+    function deleted_list()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        //TODO Get data SK Nikah dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Sk_nikah_model->get_all_deleted_for_masteradmin();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Sk_nikah_model->get_all_deleted();
+        }
+
+        $this->load->view('back/sk_nikah/sk_nikah_deleted_list', $this->data);
+    }
+
+    function restore($id_sk_nikah)
+    {
+        is_restore();
+
+        //TODO Get data sk_nikah by id
+        $row = $this->Sk_nikah_model->get_by_id($id_sk_nikah);
+
+        //TODO Jika data ditemukan
+        if ($row) {
+            $data = array(
+                'is_delete'   => '0',
+                'deleted_by'  => NULL,
+                'deleted_at'  => NULL,
+            );
+
+            //TODO Jalankan proses update dengan model
+            $this->Sk_nikah_model->update($id_sk_nikah, $data);
+
+            write_log();
+
+            //TODO Kirim notifikasi data berhasil dikembalikan
+            $this->session->set_flashdata('message', 'dikembalikan');
+            redirect('admin/sk_nikah/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_nikah');
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
