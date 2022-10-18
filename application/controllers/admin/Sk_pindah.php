@@ -636,8 +636,10 @@ class Sk_pindah extends CI_Controller
     {
         is_delete();
 
+        //TODO Get sk_pindah by id
         $delete = $this->Sk_pindah_model->get_by_id($id_sk_pindah);
 
+        //TODO Jika data sk_pindah ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -645,13 +647,16 @@ class Sk_pindah extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Sk_pindah_model->soft_delete($id_sk_pindah, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/sk_pindah');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/sk_pindah');
         }
