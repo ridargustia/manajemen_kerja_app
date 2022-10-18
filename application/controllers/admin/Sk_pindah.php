@@ -662,6 +662,69 @@ class Sk_pindah extends CI_Controller
         }
     }
 
+    function numbering($id_sk_pindah)
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Penomoran ' . $this->data['module'];
+        $this->data['action']     = 'admin/sk_pindah/numbering_action';
+
+        //TODO Rancangan form
+        $this->data['id_sk_pindah'] = [
+            'name'          => 'id_sk_pindah',
+            'type'          => 'hidden',
+        ];
+        $this->data['no_surat'] = [
+            'name'          => 'no_surat',
+            'id'            => 'no_surat',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+
+        //TODO Get detail sk_pindah by id
+        $this->data['data_sk_pindah'] = $this->Sk_pindah_model->get_by_id($id_sk_pindah);
+        $this->data['pengikut'] = $this->Sk_pindah_model->get_pengikut_by_id_sk_pindah($id_sk_pindah);
+
+        $this->data['status'] = $this->Status_model->get_by_id($this->data['data_sk_pindah']->status_id);
+        $this->data['agama'] = $this->Agama_model->get_by_id($this->data['data_sk_pindah']->agama_id);
+        $this->data['pekerjaan'] = $this->Pekerjaan_model->get_by_id($this->data['data_sk_pindah']->pekerjaan_id);
+        $this->data['pendidikan_akhir'] = $this->Pendidikan_akhir_model->get_by_id($this->data['data_sk_pindah']->pendidikan_akhir_id);
+
+        //TODO Load view dengan mengirim data
+        $this->load->view('back/sk_pindah/sk_pindah_numbering', $this->data);
+    }
+
+    function numbering_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('no_surat', 'No Surat', 'required');
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('admin/sk_pindah/numbering/' . $this->input->post('id_sk_pindah'));
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'no_surat'              => $this->input->post('no_surat'),
+                'is_readed'             => '1',
+                'numbered_by'           => $this->session->username,
+                'numbered_at'           => date('Y-m-d H:i:a'),
+            );
+
+            //TODO Post to database with model
+            $this->Sk_pindah_model->update($this->input->post('id_sk_pindah'), $data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/sk_pindah/numbering/' . $this->input->post('id_sk_pindah'));
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
