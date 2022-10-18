@@ -55,6 +55,16 @@ class Sk_pindah_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_pengikut_by_id_sk_pindah($id)
+    {
+        $this->db->select('pengikut_sk_pindah.id_pengikut_sk_pindah, pengikut_sk_pindah.nik_pengikut, pengikut_sk_pindah.pengikut_name, pengikut_sk_pindah.keterangan');
+
+        $this->db->where('pengikut_sk_pindah.sk_pindah_id', $id);
+        $this->db->where('pengikut_sk_pindah.is_delete', 0);
+
+        return $this->db->get('pengikut_sk_pindah')->result();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);
@@ -70,5 +80,23 @@ class Sk_pindah_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         $this->db->update($this->table, $data);
+    }
+
+    function update($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
+    }
+
+    function delete_pengikut_by_id_sk_pindah($id)
+    {
+        $this->db->where('pengikut_sk_pindah.sk_pindah_id', $id);
+        $this->db->delete('pengikut_sk_pindah');
+    }
+
+    function delete($id)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->delete($this->table);
     }
 }
