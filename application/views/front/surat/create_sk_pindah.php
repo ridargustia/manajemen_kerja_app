@@ -24,16 +24,23 @@
                                 </div>
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Nama*</label>
                                                 <?php echo form_input($name) ?>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">NIK*</label>
                                                 <?php echo form_input($nik) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">No HP/Telepon*</label>
+                                                <?php echo form_input($phone) ?>
+                                                <span id="phone-availability-status"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -91,26 +98,50 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Alamat Lengkap Saat Ini*</label>
-                                        <?php echo form_textarea($address) ?>
-                                    </div>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Alamat Pindah*</label>
+                                                <label class="control-label">Dusun*</label>
+                                                <?php echo form_input($dusun) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">RW*</label>
+                                                <?php echo form_input($rw) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">RT*</label>
+                                                <?php echo form_input($rt) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">TUJUAN PINDAH</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Alamat*</label>
                                                 <?php echo form_input($alamat_pindah) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Desa (Tempat Pindah)*</label>
+                                                <label class="control-label">Desa*</label>
                                                 <?php echo form_input($desa_pindah) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Kecamatan (Tempat Pindah)*</label>
+                                                <label class="control-label">Kecamatan*</label>
                                                 <?php echo form_input($kecamatan_pindah) ?>
                                             </div>
                                         </div>
@@ -118,19 +149,19 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Kota (Tempat Pindah)*</label>
+                                                <label class="control-label">Kota*</label>
                                                 <?php echo form_input($kota_pindah) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Kabupaten (Tempat Pindah)*</label>
+                                                <label class="control-label">Kabupaten*</label>
                                                 <?php echo form_input($kabupaten_pindah) ?>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Provinsi (Tempat Pindah)*</label>
+                                                <label class="control-label">Provinsi*</label>
                                                 <?php echo form_input($provinsi_pindah) ?>
                                             </div>
                                         </div>
@@ -150,6 +181,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
                     </div>
@@ -159,36 +191,17 @@
                                 <div class="box-header">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h4>Data Pengikut</h4>
+                                            <h3 class="box-title">TAMBAH DATA PENGIKUT</h3>
                                         </div>
                                         <div class="col-md-6">
                                             <button class="btn btn-sm btn-success add-more pull-right" type="button">
-                                                <i class="glyphicon glyphicon-plus"></i> Add
+                                                <i class="glyphicon glyphicon-plus"></i> Tambah
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="box-body">
-                                    <div class="row after-add-more">
-                                        <!-- <div class="col-md-4">
-                                            <div class="form-group">
-                                                <?php //echo form_input($nik_pengikut)
-                                                ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <?php //echo form_input($pengikut_name)
-                                                ?>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <?php //echo form_input($keterangan)
-                                                ?>
-                                            </div>
-                                        </div> -->
-                                    </div>
+                                    <div class="row after-add-more"></div>
                                 </div>
                                 <div class="box-footer">
                                     <div class="pull-right">
@@ -270,6 +283,18 @@
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
+
+            function checkFormatPhone() {
+                jQuery.ajax({
+                    url: "<?php echo base_url('sk_pindah/check_format_phone') ?>",
+                    data: 'phone=' + $("#phone").val(),
+                    type: "POST",
+                    success: function(data) {
+                        $("#phone-availability-status").html(data);
+                    },
+                    error: function() {}
+                });
+            }
         </script>
 
 </body>
