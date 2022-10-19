@@ -725,6 +725,75 @@ class Sk_pindah extends CI_Controller
         }
     }
 
+    function delete_permanent($id_sk_pindah)
+    {
+        is_delete();
+
+        //TODO Get data sk_pindah by id
+        $delete = $this->Sk_pindah_model->get_by_id($id_sk_pindah);
+
+        //TODO Jika data sk_pindah yg akan dihapus ditemukan
+        if ($delete) {
+            //TODO Jalankan proses delete dengan model
+            $this->Sk_pindah_model->delete($id_sk_pindah);
+
+            write_log();
+
+            //TODO Kirim notifikasi berhasil dihapus permanen
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/sk_pindah/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_pindah');
+        }
+    }
+
+    function deleted_list()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        //TODO Get data Sk_pindah dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Sk_pindah_model->get_all_deleted_for_masteradmin();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Sk_pindah_model->get_all_deleted();
+        }
+
+        $this->load->view('back/sk_pindah/sk_pindah_deleted_list', $this->data);
+    }
+
+    function restore($id_sk_pindah)
+    {
+        is_restore();
+
+        //TODO Get data sk_pindah by id
+        $row = $this->Sk_pindah_model->get_by_id($id_sk_pindah);
+
+        //TODO Jika data ditemukan
+        if ($row) {
+            $data = array(
+                'is_delete'   => '0',
+                'deleted_by'  => NULL,
+                'deleted_at'  => NULL,
+            );
+
+            //TODO Jalankan proses update dengan model
+            $this->Sk_pindah_model->update($id_sk_pindah, $data);
+
+            write_log();
+
+            //TODO Kirim notifikasi data berhasil dikembalikan
+            $this->session->set_flashdata('message', 'dikembalikan');
+            redirect('admin/sk_pindah/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_pindah');
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');

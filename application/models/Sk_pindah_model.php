@@ -37,6 +37,31 @@ class Sk_pindah_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_deleted()
+    {
+        $this->db->select('sk_pindah.id_sk_pindah, sk_pindah.nik, sk_pindah.name, sk_pindah.signature_image, sk_pindah.created_at, sk_pindah.is_readed');
+
+        $this->db->where('sk_pindah.is_delete', '1');
+
+        $this->db->order_by('sk_pindah.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_deleted_for_masteradmin()
+    {
+        $this->db->select('sk_pindah.id_sk_pindah, sk_pindah.nik, sk_pindah.name, sk_pindah.signature_image, sk_pindah.created_at, sk_pindah.is_readed_masteradmin');
+
+        $this->db->where('sk_pindah.is_delete', '1');
+        $this->db->where('sk_pindah.no_surat !=', NULL);
+
+        $this->db->order_by('sk_pindah.is_readed_masteradmin', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
     function total_rows_is_not_readed()
     {
         $this->db->where('sk_pindah.is_readed', '0');
