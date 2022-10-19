@@ -80,6 +80,17 @@ class Sk_pindah_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id_for_document($id)
+    {
+        $this->db->join('status', 'sk_pindah.status_id = status.id_status');
+        $this->db->join('agama', 'sk_pindah.agama_id = agama.id_agama');
+        $this->db->join('pekerjaan', 'sk_pindah.pekerjaan_id = pekerjaan.id_pekerjaan');
+        $this->db->join('pendidikan_akhir', 'sk_pindah.pendidikan_akhir_id = pendidikan_akhir.id_pendidikan_akhir');
+
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function get_pengikut_by_id_sk_pindah($id)
     {
         $this->db->select('pengikut_sk_pindah.id_pengikut_sk_pindah, pengikut_sk_pindah.nik_pengikut, pengikut_sk_pindah.pengikut_name, pengikut_sk_pindah.keterangan');
@@ -94,6 +105,13 @@ class Sk_pindah_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         return $this->db->get($this->table)->row();
+    }
+
+    function total_rows_pengikut($id)
+    {
+        $this->db->where('pengikut_sk_pindah.sk_pindah_id', $id);
+
+        return $this->db->get('pengikut_sk_pindah')->num_rows();
     }
 
     function total_rows()
