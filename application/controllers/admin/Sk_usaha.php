@@ -383,8 +383,10 @@ class Sk_usaha extends CI_Controller
     {
         is_delete();
 
+        //TODO Get sk_usaha by id
         $delete = $this->Sk_usaha_model->get_by_id($id_sk_usaha);
 
+        //TODO Jika data sk_usaha ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -392,13 +394,16 @@ class Sk_usaha extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Sk_usaha_model->soft_delete($id_sk_usaha, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/sk_usaha');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/sk_usaha');
         }
