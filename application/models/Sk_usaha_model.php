@@ -14,10 +14,24 @@ class Sk_usaha_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('sk_usaha.id_sk_usaha, sk_usaha.nik, sk_usaha.name, sk_usaha.created_at, sk_usaha.is_readed');
+        $this->db->select('sk_usaha.id_sk_usaha, sk_usaha.nik, sk_usaha.name, sk_usaha.signature_image, sk_usaha.created_at, sk_usaha.is_readed');
 
         $this->db->where('sk_usaha.is_delete', '0');
 
+        $this->db->order_by('sk_usaha.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_by_numbering()
+    {
+        $this->db->select('sk_usaha.id_sk_usaha, sk_usaha.nik, sk_usaha.name, sk_usaha.signature_image, sk_usaha.created_at, sk_usaha.is_readed_masteradmin');
+
+        $this->db->where('sk_usaha.is_delete', '0');
+        $this->db->where('sk_usaha.no_surat !=', NULL);
+
+        $this->db->order_by('sk_usaha.is_readed_masteradmin', 'ASC');
         $this->db->order_by($this->id, $this->order);
 
         return $this->db->get($this->table)->result();
