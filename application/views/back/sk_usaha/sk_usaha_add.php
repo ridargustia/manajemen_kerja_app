@@ -21,23 +21,30 @@
         <section class="content">
             <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
             <?php echo validation_errors() ?>
+            <?php echo form_open($action) ?>
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">TAMBAH DATA</h3>
                 </div>
-                <?php echo form_open($action) ?>
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Nama*</label>
                                 <?php echo form_input($name) ?>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">NIK*</label>
                                 <?php echo form_input($nik) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">No HP/Telepon*</label>
+                                <?php echo form_input($phone) ?>
+                                <span id="phone-availability-status"></span>
                             </div>
                         </div>
                     </div>
@@ -69,21 +76,56 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Alamat Lengkap*</label>
-                        <?php echo form_textarea($address) ?>
-                    </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Nama Usaha*</label>
-                                <?php echo form_input($usaha_name) ?>
+                                <label class="control-label">Dusun*</label>
+                                <?php echo form_input($dusun) ?>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Alamat (Tempat Usaha)*</label>
-                                <?php echo form_input($address_usaha) ?>
+                                <label class="control-label">RW*</label>
+                                <?php echo form_input($rw) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">RT*</label>
+                                <?php echo form_input($rt) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">TAMBAH DATA USAHA</h3>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="control-label">Nama Usaha*</label>
+                        <?php echo form_input($usaha_name) ?>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Dusun*</label>
+                                <?php echo form_input($dusun_usaha) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">RW*</label>
+                                <?php echo form_input($rw_usaha) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">RT*</label>
+                                <?php echo form_input($rt_usaha) ?>
                             </div>
                         </div>
                     </div>
@@ -93,9 +135,8 @@
                     <button type="reset" name="button" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php echo $btn_reset ?></button>
                 </div>
                 <!-- /.box-body -->
-                <?php echo form_close() ?>
             </div>
-            <!-- /.box -->
+            <?php echo form_close() ?>
         </section>
         <!-- /.content -->
     </div>
@@ -121,6 +162,18 @@
             zIndexOffset: 9999,
             todayHighlight: true,
         });
+
+        function checkFormatPhone() {
+            jQuery.ajax({
+                url: "<?php echo base_url('admin/sk_usaha/check_format_phone') ?>",
+                data: 'phone=' + $("#phone").val(),
+                type: "POST",
+                success: function(data) {
+                    $("#phone-availability-status").html(data);
+                },
+                error: function() {}
+            });
+        }
     </script>
 
 </div>
