@@ -230,6 +230,155 @@ class Sk_usaha extends CI_Controller
         }
     }
 
+    function update($id_sk_usaha)
+    {
+        is_update();
+
+        //TODO Get by id data sk_usaha
+        $this->data['sk_usaha']     = $this->Sk_usaha_model->get_by_id($id_sk_usaha);
+
+        //TODO Jika sk_usaha ditemukan
+        if ($this->data['sk_usaha']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'Update Data ' . $this->data['module'];
+            $this->data['action']     = 'admin/sk_usaha/update_action';
+
+            //TODO Get data untuk dropdown reference
+            $this->data['get_all_combobox_agama'] = $this->Agama_model->get_all_combobox();
+
+            //TODO Rancangan form
+            $this->data['id_sk_usaha'] = [
+                'name'          => 'id_sk_usaha',
+                'type'          => 'hidden',
+            ];
+            $this->data['name'] = [
+                'name'          => 'name',
+                'id'            => 'name',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['nik'] = [
+                'name'          => 'nik',
+                'id'            => 'nik',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthplace'] = [
+                'name'          => 'birthplace',
+                'id'            => 'birthplace',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthdate'] = [
+                'name'          => 'birthdate',
+                'id'            => 'birthdate',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['phone'] = [
+                'name'          => 'phone',
+                'id'            => 'phone',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['gender'] = [
+                'name'          => 'gender',
+                'id'            => 'gender',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['gender_value'] = [
+                ''             => '- Pilih Jenis Kelamin -',
+                '1'             => 'Laki-laki',
+                '2'             => 'Perempuan',
+            ];
+            $this->data['agama'] = [
+                'name'          => 'agama',
+                'id'            => 'agama',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['address'] = [
+                'name'          => 'address',
+                'id'            => 'address',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['usaha_name'] = [
+                'name'          => 'usaha_name',
+                'id'            => 'usaha_name',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['address_usaha'] = [
+                'name'          => 'address_usaha',
+                'id'            => 'address_usaha',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+
+            $this->load->view('back/sk_usaha/sk_usaha_edit', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_usaha');
+        }
+    }
+
+    function update_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('agama', 'Agama', 'required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('usaha_name', 'Nama Usaha', 'required');
+        $this->form_validation->set_rules('address_usaha', 'Alamat Tempat Usaha', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //TODO Jika data tidak lolos validasi
+        if ($this->form_validation->run() === FALSE) {
+            $this->update($this->input->post('id_sk_usaha'));
+        } else {
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'nik'                   => $this->input->post('nik'),
+                'phone'                 => $this->input->post('phone'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'gender'                => $this->input->post('gender'),
+                'agama_id'              => $this->input->post('agama'),
+                'address'               => $this->input->post('address'),
+                'usaha_name'            => $this->input->post('usaha_name'),
+                'address_usaha'         => $this->input->post('address_usaha'),
+                'modified_by'           => $this->session->username,
+            );
+
+            //TODO Jalankan proses update
+            $this->Sk_usaha_model->update($this->input->post('id_sk_usaha'), $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/sk_usaha');
+        }
+    }
+
     function delete($id_sk_usaha)
     {
         is_delete();
