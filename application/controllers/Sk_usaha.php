@@ -199,6 +199,55 @@ class Sk_usaha extends CI_Controller
         }
     }
 
+    function auth_download()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Authentikasi Download Dokumen';
+        $this->data['action']     = 'sk_usaha/auth_download_action';
+
+        //TODO Kondisi menampilkan halaman Auth download dokumen
+        $this->data['token'] = [
+            'name'              => 'token',
+            'id'                => 'token',
+            'class'             => 'form-control',
+            'autocomplete'      => 'off',
+            'required'          => '',
+            'value'             => $this->form_validation->set_value('token'),
+        ];
+
+        //TODO Load view halaman login
+        $this->load->view('front/surat/auth_download_sk_usaha', $this->data);
+    }
+
+    function auth_download_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('token', 'Token', 'trim|required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('sk_usaha/auth_download');
+        } else {
+            $this->data['sk_usaha'] = $this->Sk_usaha_model->get_by_token($this->input->post('token'));
+
+            if ($this->data['sk_usaha']) {
+                $this->data['page_title'] = 'Download ' . $this->data['module'];
+                $this->data['agama'] = $this->Agama_model->get_by_id($this->data['sk_usaha']->agama_id);
+
+                $this->load->view('front/surat/download_sk_usaha', $this->data);
+            } else {
+                //TODO Tampilkan notifikasi dan redirect
+                $this->session->set_flashdata('message', '<div class="alert alert-danger">Akses gagal, silahkan hubungi Admin.</div>');
+                redirect('sk_usaha/auth_download');
+            }
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
