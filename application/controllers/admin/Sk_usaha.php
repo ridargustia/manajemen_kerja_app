@@ -654,12 +654,12 @@ class Sk_usaha extends CI_Controller
         $pdf->Cell(0, 8, 'Kepala Desa Saobi', 0, 1, 'C');
 
         //TODO make a dummy empty cell as a vertical spacer
-        $pdf->Cell(0, 20, '', 0, 1); //end of line
+        $pdf->Cell(0, 8, '', 0, 1); //end of line
 
         if (!empty($row->signature_image)) {
             //TODO Image
-            $pdf->Cell(50, 6, $pdf->Image($stempel, $pdf->GetX() + 95, $pdf->GetY() - 15, 35, 35), 0, 1, 'C');
-            $pdf->Cell(50, 6, $pdf->Image($ttd_kades, $pdf->GetX() + 118, $pdf->GetY() - 17, 35, 25), 0, 1, 'C');
+            $pdf->Cell(50, 6, $pdf->Image($stempel, $pdf->GetX() + 100, $pdf->GetY() - 15, 35, 35), 0, 1, 'C');
+            $pdf->Cell(50, 6, $pdf->Image($ttd_kades, $pdf->GetX() + 120, $pdf->GetY() - 17, 35, 25), 0, 1, 'C');
         }
 
         $pdf->SetFont('Arial', 'BU', '12');
@@ -667,6 +667,67 @@ class Sk_usaha extends CI_Controller
         $pdf->Cell(60, 8, strtoupper($data_master->name), 0, 1, 'C');
 
         $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
+    }
+
+    function signature($id_sk_usaha)
+    {
+        //TODO Authentikasi hak akses usertype
+        if (is_superadmin()) {
+            $this->session->set_flashdata('message', 'tidak memiliki akses');
+            redirect('admin/dashboard');
+        }
+
+        //TODO Get data sk_usaha by id
+        $this->data['sk_usaha'] = $this->Sk_usaha_model->get_by_id($id_sk_usaha);
+
+        //TODO Cek apakah data sk_usaha ada
+        if ($this->data['sk_usaha']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'ACC Dokumen ' . $this->data['module'];
+
+            //TODO Rancangan form
+            $this->data['id_sk_usaha'] = [
+                'name'          => 'id_sk_usaha',
+                'id'            => 'id_sk_usaha',
+                'type'          => 'hidden',
+            ];
+
+            //TODO load view tampilan signature
+            $this->load->view('back/sk_usaha/sk_usaha_signature', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/sk_usaha');
+        }
+    }
+
+    function signature_action()
+    {
+        //TODO Dekripsi chipertext dengan metode base64
+        $data = base64_decode($this->input->post('image'));
+
+        //TODO Set direktori tempat menyimpan tanda tangan
+        $file = './assets/signature_images/' . uniqid() . '.png';
+        //TODO Jalankan proses penyimpanan file image ke direktori
+        file_put_contents($file, $data);
+
+        //TODO Hilangkan karakter './' pada variabel direktori file
+        $image = str_replace('./', '', $file);
+
+        //TODO Simpan pada array
+        $data = array(
+            'signature_image'       => $image,
+            'is_readed_masteradmin' => '1',
+            'token'                 => substr(md5(random_bytes(10)), 0, 10),
+            'acc_by'                => $this->session->username,
+            'acc_at'                => date('Y-m-d H:i:a'),
+        );
+
+        //TODO Jalankan proses update
+        $this->Sk_usaha_model->update($this->input->post('id_sk_usaha'), $data);
+
+        write_log();
+
+        $this->session->set_flashdata('message', 'Sukses');
     }
 
     function check_format_phone()
