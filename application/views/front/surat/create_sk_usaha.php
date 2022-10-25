@@ -8,13 +8,12 @@
         <div class="content-wrapper bg">
             <div class="container">
                 <!-- Content Header (Page header) -->
-                <section class="content-header">
-
-                </section>
+                <section class="content-header"></section>
 
                 <!-- Main content -->
                 <section class="content">
                     <div class="flash-data" data-flashdata="<?php echo $this->session->flashdata('message') ?>"></div>
+                    <?php echo validation_errors() ?>
                     <?php echo form_open_multipart($action, array('id' => 'add_form')) ?>
                     <div class="row">
                         <div class="col-lg-12">
@@ -24,16 +23,23 @@
                                 </div>
                                 <div class="box-body">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Nama*</label>
                                                 <?php echo form_input($name) ?>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">NIK*</label>
                                                 <?php echo form_input($nik) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">No HP/Telepon*</label>
+                                                <?php echo form_input($phone) ?>
+                                                <span id="phone-availability-status"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -65,21 +71,56 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Alamat Lengkap*</label>
-                                        <?php echo form_textarea($address) ?>
-                                    </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Nama Usaha*</label>
-                                                <?php echo form_input($usaha_name) ?>
+                                                <label class="control-label">Dusun*</label>
+                                                <?php echo form_input($dusun) ?>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Alamat (Tempat Usaha)*</label>
-                                                <?php echo form_input($address_usaha) ?>
+                                                <label class="control-label">RW*</label>
+                                                <?php echo form_input($rw) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">RT*</label>
+                                                <?php echo form_input($rt) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <h3 class="box-title">Form Data Usaha</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="control-label">Nama Usaha*</label>
+                                        <?php echo form_input($usaha_name) ?>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Dusun*</label>
+                                                <?php echo form_input($dusun_usaha) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">RW*</label>
+                                                <?php echo form_input($rw_usaha) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">RT*</label>
+                                                <?php echo form_input($rt_usaha) ?>
                                             </div>
                                         </div>
                                     </div>
@@ -123,6 +164,18 @@
                 zIndexOffset: 9999,
                 todayHighlight: true,
             });
+
+            function checkFormatPhone() {
+                jQuery.ajax({
+                    url: "<?php echo base_url('sk_usaha/check_format_phone') ?>",
+                    data: 'phone=' + $("#phone").val(),
+                    type: "POST",
+                    success: function(data) {
+                        $("#phone-availability-status").html(data);
+                    },
+                    error: function() {}
+                });
+            }
         </script>
 
 </body>
