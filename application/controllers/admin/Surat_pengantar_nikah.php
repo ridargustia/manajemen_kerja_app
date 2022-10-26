@@ -843,6 +843,67 @@ class Surat_pengantar_nikah extends CI_Controller
         $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
     }
 
+    function signature($id_surat_pengantar_nikah)
+    {
+        //TODO Authentikasi hak akses usertype
+        if (is_superadmin()) {
+            $this->session->set_flashdata('message', 'tidak memiliki akses');
+            redirect('admin/dashboard');
+        }
+
+        //TODO Get data surat_pengantar_nikah by id
+        $this->data['surat_pengantar_nikah'] = $this->Surat_pengantar_nikah_model->get_by_id($id_surat_pengantar_nikah);
+
+        //TODO Cek apakah data surat_pengantar_nikah ada
+        if ($this->data['surat_pengantar_nikah']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'ACC Dokumen ' . $this->data['module'];
+
+            //TODO Rancangan form
+            $this->data['id_surat_pengantar_nikah'] = [
+                'name'          => 'id_surat_pengantar_nikah',
+                'id'            => 'id_surat_pengantar_nikah',
+                'type'          => 'hidden',
+            ];
+
+            //TODO load view tampilan signature
+            $this->load->view('back/surat_pengantar_nikah/surat_pengantar_nikah_signature', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_pengantar_nikah');
+        }
+    }
+
+    function signature_action()
+    {
+        //TODO Dekripsi chipertext dengan metode base64
+        $data = base64_decode($this->input->post('image'));
+
+        //TODO Set direktori tempat menyimpan tanda tangan
+        $file = './assets/signature_images/' . uniqid() . '.png';
+        //TODO Jalankan proses penyimpanan file image ke direktori
+        file_put_contents($file, $data);
+
+        //TODO Hilangkan karakter './' pada variabel direktori file
+        $image = str_replace('./', '', $file);
+
+        //TODO Simpan pada array
+        $data = array(
+            'signature_image'       => $image,
+            'is_readed_masteradmin' => '1',
+            'token'                 => substr(md5(random_bytes(10)), 0, 10),
+            'acc_by'                => $this->session->username,
+            'acc_at'                => date('Y-m-d H:i:a'),
+        );
+
+        //TODO Jalankan proses update
+        $this->Surat_pengantar_nikah_model->update($this->input->post('id_surat_pengantar_nikah'), $data);
+
+        write_log();
+
+        $this->session->set_flashdata('message', 'Sukses');
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
