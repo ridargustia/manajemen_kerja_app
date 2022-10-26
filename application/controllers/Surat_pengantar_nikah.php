@@ -57,7 +57,7 @@ class Surat_pengantar_nikah extends CI_Controller
             'required'      => '',
         ];
         $this->data['gender_value'] = [
-            '0'             => '- Pilih Jenis Kelamin -',
+            ''             => '- Pilih Jenis Kelamin -',
             '1'             => 'Laki-laki',
             '2'             => 'Perempuan',
         ];
@@ -75,6 +75,14 @@ class Surat_pengantar_nikah extends CI_Controller
             'autocomplete'  => 'off',
             'required'      => '',
         ];
+        $this->data['phone'] = [
+            'name'          => 'phone',
+            'id'            => 'phone',
+            'class'         => 'form-control',
+            'onChange'      => 'checkFormatPhone()',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
         $this->data['kebangsaan'] = [
             'name'          => 'kebangsaan',
             'id'            => 'kebangsaan',
@@ -82,7 +90,7 @@ class Surat_pengantar_nikah extends CI_Controller
             'required'      => '',
         ];
         $this->data['kebangsaan_value'] = [
-            '0'             => '- Pilih Kebangsaan -',
+            ''             => '- Pilih Kebangsaan -',
             '1'             => 'Warga Negara Indonesia',
             '2'             => 'Warga Negara Asing',
         ];
@@ -104,54 +112,74 @@ class Surat_pengantar_nikah extends CI_Controller
             'class'         => 'form-control',
             'required'      => '',
         ];
-        $this->data['address'] = [
-            'name'          => 'address',
-            'id'            => 'address',
-            'class'         => 'form-control',
-            'autocomplete'  => 'off',
-            'rows'          => '2',
-            'required'      => '',
-        ];
         $this->data['dusun'] = [
             'name'          => 'dusun',
             'id'            => 'dusun',
             'class'         => 'form-control',
-            'required'      => '',
-        ];
-        $this->data['rt'] = [
-            'name'          => 'rt',
-            'id'            => 'rt',
-            'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
         $this->data['rw'] = [
             'name'          => 'rw',
             'id'            => 'rw',
             'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
-        $this->data['desa'] = [
-            'name'          => 'desa',
-            'id'            => 'desa',
+        $this->data['rt'] = [
+            'name'          => 'rt',
+            'id'            => 'rt',
             'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
-        $this->data['kecamatan'] = [
-            'name'          => 'kecamatan',
-            'id'            => 'kecamatan',
+        $this->data['dusun_tujuan'] = [
+            'name'          => 'dusun_tujuan',
+            'id'            => 'dusun_tujuan',
             'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
-        $this->data['kabupaten'] = [
-            'name'          => 'kabupaten',
-            'id'            => 'kabupaten',
+        $this->data['rw_tujuan'] = [
+            'name'          => 'rw_tujuan',
+            'id'            => 'rw_tujuan',
             'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
-        $this->data['provinsi'] = [
-            'name'          => 'provinsi',
-            'id'            => 'provinsi',
+        $this->data['rt_tujuan'] = [
+            'name'          => 'rt_tujuan',
+            'id'            => 'rt_tujuan',
             'class'         => 'form-control',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
+        $this->data['desa_tujuan'] = [
+            'name'          => 'desa_tujuan',
+            'id'            => 'desa_tujuan',
+            'class'         => 'form-control',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
+        $this->data['kecamatan_tujuan'] = [
+            'name'          => 'kecamatan_tujuan',
+            'id'            => 'kecamatan_tujuan',
+            'class'         => 'form-control',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
+        $this->data['kabupaten_tujuan'] = [
+            'name'          => 'kabupaten_tujuan',
+            'id'            => 'kabupaten_tujuan',
+            'class'         => 'form-control',
+            'autocomplete'  => 'off',
+            'required'      => '',
+        ];
+        $this->data['provinsi_tujuan'] = [
+            'name'          => 'provinsi_tujuan',
+            'id'            => 'provinsi_tujuan',
+            'class'         => 'form-control',
+            'autocomplete'  => 'off',
             'required'      => '',
         ];
 
@@ -168,28 +196,44 @@ class Surat_pengantar_nikah extends CI_Controller
         $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
         $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
         $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
         $this->form_validation->set_rules('agama', 'Agama', 'required');
         $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
         $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
-        $this->form_validation->set_rules('address', 'Alamat', 'required');
         $this->form_validation->set_rules('dusun', 'Dusun', 'required');
-        $this->form_validation->set_rules('rt', 'RT', 'required');
         $this->form_validation->set_rules('rw', 'RW', 'required');
-        $this->form_validation->set_rules('desa', 'Desa', 'required');
-        $this->form_validation->set_rules('kecamatan', 'Kecamatan', 'required');
-        $this->form_validation->set_rules('kabupaten', 'Kabupaten', 'required');
-        $this->form_validation->set_rules('provinsi', 'Provinsi', 'required');
+        $this->form_validation->set_rules('rt', 'RT', 'required');
+        $this->form_validation->set_rules('dusun_tujuan', 'Dusun Tujuan', 'required');
+        $this->form_validation->set_rules('rt_tujuan', 'RT Tujuan', 'required');
+        $this->form_validation->set_rules('rw_tujuan', 'RW Tujuan', 'required');
+        $this->form_validation->set_rules('desa_tujuan', 'Desa Tujuan', 'required');
+        $this->form_validation->set_rules('kecamatan_tujuan', 'Kecamatan Tujuan', 'required');
+        $this->form_validation->set_rules('kabupaten_tujuan', 'Kabupaten Tujuan', 'required');
+        $this->form_validation->set_rules('provinsi_tujuan', 'Provinsi Tujuan', 'required');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
 
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        $check_format_phone = substr($this->input->post('phone'), '0', '2');
 
         //?Apakah validasi gagal?
         if ($this->form_validation->run() === FALSE) {
             //TODO Kondisi validasi gagal, redirect ke halaman create
             $this->create();
+        } elseif ($check_format_phone != '08') {
+            $this->session->set_flashdata('message', 'no HP/Telephone salah');
+            redirect('surat_pengantar_nikah/create');
         } else {
+            //TODO Ubah Format phone number +62
+            $selection_phone = substr($this->input->post('phone'), '1');
+            $phone = '62' . $selection_phone;
+
+            //TODO Format address
+            $address = 'Dusun ' . $this->input->post('dusun') . ' RT/RW ' . $this->input->post('rt') . '/' . $this->input->post('rw');
+
             //TODO Simpan data ke array
             $data = array(
                 'name'                  => $this->input->post('name'),
@@ -199,18 +243,19 @@ class Surat_pengantar_nikah extends CI_Controller
                 'gender'                => $this->input->post('gender'),
                 'birthplace'            => $this->input->post('birthplace'),
                 'birthdate'             => $this->input->post('birthdate'),
+                'phone'                 => $phone,
                 'kebangsaan'            => $this->input->post('kebangsaan'),
                 'agama_id'              => $this->input->post('agama'),
                 'status_id'             => $this->input->post('status'),
                 'pekerjaan_id'          => $this->input->post('pekerjaan'),
-                'address'               => $this->input->post('address'),
-                'dusun'                 => $this->input->post('dusun'),
-                'rt'                    => $this->input->post('rt'),
-                'rw'                    => $this->input->post('rw'),
-                'desa'                  => $this->input->post('desa'),
-                'kecamatan'             => $this->input->post('kecamatan'),
-                'kabupaten'             => $this->input->post('kabupaten'),
-                'provinsi'              => $this->input->post('provinsi'),
+                'address'               => $address,
+                'dusun'                 => $this->input->post('dusun_tujuan'),
+                'rt'                    => $this->input->post('rt_tujuan'),
+                'rw'                    => $this->input->post('rw_tujuan'),
+                'desa'                  => $this->input->post('desa_tujuan'),
+                'kecamatan'             => $this->input->post('kecamatan_tujuan'),
+                'kabupaten'             => $this->input->post('kabupaten_tujuan'),
+                'provinsi'              => $this->input->post('provinsi_tujuan'),
             );
 
             //TODO Post to database with model
@@ -221,6 +266,17 @@ class Surat_pengantar_nikah extends CI_Controller
             //TODO Tampilkan notifikasi dan redirect
             $this->session->set_flashdata('message', 'Sukses');
             redirect('surat_pengantar_nikah/create');
+        }
+    }
+
+    function check_format_phone()
+    {
+        $phone = $this->input->post('phone');
+        $check_phone = substr($phone, '0', '2');
+
+        if ($check_phone != '08') {
+            // var_dump($check_phone);
+            echo "<div class='text-red'>Format penulisan no HP/Telephone tidak valid. Awali dengan 08xxxxxxxxxx</div>";
         }
     }
 }
