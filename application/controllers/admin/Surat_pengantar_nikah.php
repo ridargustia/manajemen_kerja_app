@@ -564,6 +564,67 @@ class Surat_pengantar_nikah extends CI_Controller
         }
     }
 
+    function numbering($id_surat_pengantar_nikah)
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Penomoran ' . $this->data['module'];
+        $this->data['action']     = 'admin/surat_pengantar_nikah/numbering_action';
+
+        //TODO Rancangan form
+        $this->data['id_surat_pengantar_nikah'] = [
+            'name'          => 'id_surat_pengantar_nikah',
+            'type'          => 'hidden',
+        ];
+        $this->data['no_surat'] = [
+            'name'          => 'no_surat',
+            'id'            => 'no_surat',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+
+        //TODO Get detail surat_pengantar_nikah by id
+        $this->data['data_surat_pengantar_nikah'] = $this->Surat_pengantar_nikah_model->get_by_id($id_surat_pengantar_nikah);
+
+        $this->data['status'] = $this->Status_model->get_by_id($this->data['data_surat_pengantar_nikah']->status_id);
+        $this->data['agama'] = $this->Agama_model->get_by_id($this->data['data_surat_pengantar_nikah']->agama_id);
+        $this->data['pekerjaan'] = $this->Pekerjaan_model->get_by_id($this->data['data_surat_pengantar_nikah']->pekerjaan_id);
+
+        //TODO Load view dengan mengirim data
+        $this->load->view('back/surat_pengantar_nikah/surat_pengantar_nikah_numbering', $this->data);
+    }
+
+    function numbering_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('no_surat', 'No Surat', 'required');
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('admin/surat_pengantar_nikah/numbering/' . $this->input->post('id_surat_pengantar_nikah'));
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'no_surat'              => $this->input->post('no_surat'),
+                'is_readed'             => '1',
+                'numbered_by'           => $this->session->username,
+                'numbered_at'           => date('Y-m-d H:i:a'),
+            );
+
+            //TODO Post to database with model
+            $this->Surat_pengantar_nikah_model->update($this->input->post('id_surat_pengantar_nikah'), $data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/surat_pengantar_nikah/numbering/' . $this->input->post('id_surat_pengantar_nikah'));
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
