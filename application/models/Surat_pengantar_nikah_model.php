@@ -71,4 +71,10 @@ class Surat_pengantar_nikah_model extends CI_Model
         $this->db->where($this->id, $id);
         $this->db->update($this->table, $data);
     }
+
+    function update($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
+    }
 }
