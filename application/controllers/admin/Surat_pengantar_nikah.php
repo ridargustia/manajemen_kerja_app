@@ -538,8 +538,10 @@ class Surat_pengantar_nikah extends CI_Controller
     {
         is_delete();
 
+        //TODO Get surat_pengantar_nikah by id
         $delete = $this->Surat_pengantar_nikah_model->get_by_id($id_surat_pengantar_nikah);
 
+        //TODO Jika data surat_pengantar_nikah ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -547,13 +549,16 @@ class Surat_pengantar_nikah extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Surat_pengantar_nikah_model->soft_delete($id_surat_pengantar_nikah, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/surat_pengantar_nikah');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/surat_pengantar_nikah');
         }
