@@ -14,10 +14,24 @@ class Surat_pengantar_nikah_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('surat_pengantar_nikah.id_surat_pengantar_nikah, surat_pengantar_nikah.nik, surat_pengantar_nikah.name, surat_pengantar_nikah.created_at, surat_pengantar_nikah.is_readed');
+        $this->db->select('surat_pengantar_nikah.id_surat_pengantar_nikah, surat_pengantar_nikah.nik, surat_pengantar_nikah.name, surat_pengantar_nikah.signature_image, surat_pengantar_nikah.created_at, surat_pengantar_nikah.is_readed');
 
         $this->db->where('surat_pengantar_nikah.is_delete', '0');
 
+        $this->db->order_by('surat_pengantar_nikah.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_by_numbering()
+    {
+        $this->db->select('surat_pengantar_nikah.id_surat_pengantar_nikah, surat_pengantar_nikah.nik, surat_pengantar_nikah.name, surat_pengantar_nikah.signature_image, surat_pengantar_nikah.created_at, surat_pengantar_nikah.is_readed_masteradmin');
+
+        $this->db->where('surat_pengantar_nikah.is_delete', '0');
+        $this->db->where('surat_pengantar_nikah.no_surat !=', NULL);
+
+        $this->db->order_by('surat_pengantar_nikah.is_readed_masteradmin', 'ASC');
         $this->db->order_by($this->id, $this->order);
 
         return $this->db->get($this->table)->result();
