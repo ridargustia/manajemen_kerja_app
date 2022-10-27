@@ -28,16 +28,23 @@
                 <?php echo form_open($action) ?>
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Nama*</label>
                                 <?php echo form_input($name) ?>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">NIK*</label>
                                 <?php echo form_input($nik) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">No HP/Telepon*</label>
+                                <?php echo form_input($phone) ?>
+                                <span id="phone-availability-status"></span>
                             </div>
                         </div>
                     </div>
@@ -75,9 +82,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Alamat Lengkap*</label>
-                        <?php echo form_textarea($address) ?>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Dusun *</label>
+                                <?php echo form_input($dusun) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">RW *</label>
+                                <?php echo form_input($rw) ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">RT *</label>
+                                <?php echo form_input($rt) ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="box-footer">
@@ -113,6 +136,18 @@
             zIndexOffset: 9999,
             todayHighlight: true,
         });
+
+        function checkFormatPhone() {
+            jQuery.ajax({
+                url: "<?php echo base_url('admin/surat_pernyataan_miskin/check_format_phone') ?>",
+                data: 'phone=' + $("#phone").val(),
+                type: "POST",
+                success: function(data) {
+                    $("#phone-availability-status").html(data);
+                },
+                error: function() {}
+            });
+        }
     </script>
 
 </div>
