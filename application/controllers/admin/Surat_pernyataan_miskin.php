@@ -383,6 +383,65 @@ class Surat_pernyataan_miskin extends CI_Controller
         }
     }
 
+    function numbering($id_surat_pernyataan_miskin)
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Penomoran ' . $this->data['module'];
+        $this->data['action']     = 'admin/surat_pernyataan_miskin/numbering_action';
+
+        //TODO Rancangan form
+        $this->data['id_surat_pernyataan_miskin'] = [
+            'name'          => 'id_surat_pernyataan_miskin',
+            'type'          => 'hidden',
+        ];
+        $this->data['no_surat'] = [
+            'name'          => 'no_surat',
+            'id'            => 'no_surat',
+            'class'         => 'form-control',
+            'required'      => '',
+        ];
+
+        //TODO Get detail surat_pernyataan_miskin by id
+        $this->data['data_surat_pernyataan_miskin'] = $this->Surat_pernyataan_miskin_model->get_by_id($id_surat_pernyataan_miskin);
+
+        $this->data['agama'] = $this->Agama_model->get_by_id($this->data['data_surat_pernyataan_miskin']->agama_id);
+
+        //TODO Load view dengan mengirim data
+        $this->load->view('back/surat_pernyataan_miskin/surat_pernyataan_miskin_numbering', $this->data);
+    }
+
+    function numbering_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('no_surat', 'No Surat', 'required');
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('admin/surat_pernyataan_miskin/numbering/' . $this->input->post('id_surat_pernyataan_miskin'));
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'no_surat'              => $this->input->post('no_surat'),
+                'is_readed'             => '1',
+                'numbered_by'           => $this->session->username,
+                'numbered_at'           => date('Y-m-d H:i:a'),
+            );
+
+            //TODO Post to database with model
+            $this->Surat_pernyataan_miskin_model->update($this->input->post('id_surat_pernyataan_miskin'), $data);
+
+            write_log();
+
+            //TODO Tampilkan notifikasi dan redirect
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/surat_pernyataan_miskin/numbering/' . $this->input->post('id_surat_pernyataan_miskin'));
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
