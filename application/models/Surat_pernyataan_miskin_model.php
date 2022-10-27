@@ -37,6 +37,31 @@ class Surat_pernyataan_miskin_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_deleted()
+    {
+        $this->db->select('surat_pernyataan_miskin.id_surat_pernyataan_miskin, surat_pernyataan_miskin.nik, surat_pernyataan_miskin.name, surat_pernyataan_miskin.signature_image, surat_pernyataan_miskin.created_at, surat_pernyataan_miskin.is_readed');
+
+        $this->db->where('surat_pernyataan_miskin.is_delete', '1');
+
+        $this->db->order_by('surat_pernyataan_miskin.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_deleted_for_masteradmin()
+    {
+        $this->db->select('surat_pernyataan_miskin.id_surat_pernyataan_miskin, surat_pernyataan_miskin.nik, surat_pernyataan_miskin.name, surat_pernyataan_miskin.signature_image, surat_pernyataan_miskin.created_at, surat_pernyataan_miskin.is_readed_masteradmin');
+
+        $this->db->where('surat_pernyataan_miskin.is_delete', '1');
+        $this->db->where('surat_pernyataan_miskin.no_surat !=', NULL);
+
+        $this->db->order_by('surat_pernyataan_miskin.is_readed_masteradmin', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
     function total_rows_is_not_readed()
     {
         $this->db->where('surat_pernyataan_miskin.is_readed', '0');
@@ -76,5 +101,11 @@ class Surat_pernyataan_miskin_model extends CI_Model
     {
         $this->db->where($this->id, $id);
         $this->db->update($this->table, $data);
+    }
+
+    function delete($id)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->delete($this->table);
     }
 }

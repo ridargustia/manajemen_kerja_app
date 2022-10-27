@@ -442,6 +442,75 @@ class Surat_pernyataan_miskin extends CI_Controller
         }
     }
 
+    function delete_permanent($id_surat_pernyataan_miskin)
+    {
+        is_delete();
+
+        //TODO Get data surat_pernyataan_miskin by id
+        $delete = $this->Surat_pernyataan_miskin_model->get_by_id($id_surat_pernyataan_miskin);
+
+        //TODO Jika data surat_pernyataan_miskin yg akan dihapus ditemukan
+        if ($delete) {
+            //TODO Jalankan proses delete dengan model
+            $this->Surat_pernyataan_miskin_model->delete($id_surat_pernyataan_miskin);
+
+            write_log();
+
+            //TODO Kirim notifikasi berhasil dihapus permanen
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/surat_pernyataan_miskin/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_pernyataan_miskin');
+        }
+    }
+
+    function deleted_list()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        //TODO Get data Surat Pernyataan Miskin dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Surat_pernyataan_miskin_model->get_all_deleted_for_masteradmin();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Surat_pernyataan_miskin_model->get_all_deleted();
+        }
+
+        $this->load->view('back/surat_pernyataan_miskin/surat_pernyataan_miskin_deleted_list', $this->data);
+    }
+
+    function restore($id_surat_pernyataan_miskin)
+    {
+        is_restore();
+
+        //TODO Get data surat_pernyataan_miskin by id
+        $row = $this->Surat_pernyataan_miskin_model->get_by_id($id_surat_pernyataan_miskin);
+
+        //TODO Jika data ditemukan
+        if ($row) {
+            $data = array(
+                'is_delete'   => '0',
+                'deleted_by'  => NULL,
+                'deleted_at'  => NULL,
+            );
+
+            //TODO Jalankan proses update dengan model
+            $this->Surat_pernyataan_miskin_model->update($id_surat_pernyataan_miskin, $data);
+
+            write_log();
+
+            //TODO Kirim notifikasi data berhasil dikembalikan
+            $this->session->set_flashdata('message', 'dikembalikan');
+            redirect('admin/surat_pernyataan_miskin/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_pernyataan_miskin');
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
