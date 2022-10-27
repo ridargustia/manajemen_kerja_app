@@ -163,11 +163,11 @@
                   <?php
                   }
                 } elseif ($m->menu_controller === 'surat_pernyataan_miskin') {
-                  // if (is_masteradmin()) {
-                  //   $count = $this->Surat_pernyataan_miskin_model->total_rows_is_not_readed_masteradmin();
-                  // } elseif (is_superadmin()) {
-                  $count = $this->Surat_pernyataan_miskin_model->total_rows_is_not_readed();
-                  // }
+                  if (is_masteradmin()) {
+                    $count = $this->Surat_pernyataan_miskin_model->total_rows_is_not_readed_masteradmin();
+                  } elseif (is_superadmin()) {
+                    $count = $this->Surat_pernyataan_miskin_model->total_rows_is_not_readed();
+                  }
                   if ($count > 0) {
                   ?>
                     <span class="badge" style="margin-top: -9px; font-size:11px; padding: 3px 6px; background-color:firebrick;"><?php echo $count ?></span>
