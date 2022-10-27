@@ -80,6 +80,14 @@ class Surat_pernyataan_miskin_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id_for_document($id)
+    {
+        $this->db->join('agama', 'surat_pernyataan_miskin.agama_id = agama.id_agama');
+
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);
