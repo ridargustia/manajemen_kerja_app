@@ -33,10 +33,16 @@ class Surat_pernyataan_miskin extends CI_Controller
     {
         //TODO Authentication hak akses usertype
         is_read();
+
         //TODO Inisialisasi variabel judul
         $this->data['page_title'] = 'Data ' . $this->data['module'];
-        //TODO Get data SKCK dari database
-        $this->data['get_all'] = $this->Surat_pernyataan_miskin_model->get_all();
+
+        //TODO Get data Surat Pernyataan Miskin dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Surat_pernyataan_miskin_model->get_all_by_numbering();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Surat_pernyataan_miskin_model->get_all();
+        }
 
         $this->load->view('back/surat_pernyataan_miskin/surat_pernyataan_miskin_list', $this->data);
     }
