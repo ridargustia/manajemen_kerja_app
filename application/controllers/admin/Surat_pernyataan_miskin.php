@@ -209,6 +209,150 @@ class Surat_pernyataan_miskin extends CI_Controller
         }
     }
 
+    function update($id_surat_pernyataan_miskin)
+    {
+        is_update();
+
+        //TODO Get by id data surat_pernyataan_miskin
+        $this->data['surat_pernyataan_miskin']     = $this->Surat_pernyataan_miskin_model->get_by_id($id_surat_pernyataan_miskin);
+
+        //TODO Jika surat_pernyataan_miskin ditemukan
+        if ($this->data['surat_pernyataan_miskin']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'Update Data ' . $this->data['module'];
+            $this->data['action']     = 'admin/surat_pernyataan_miskin/update_action';
+
+            //TODO Get data untuk dropdown reference
+            $this->data['get_all_combobox_agama'] = $this->Agama_model->get_all_combobox();
+
+            //TODO Rancangan form
+            $this->data['id_surat_pernyataan_miskin'] = [
+                'name'          => 'id_surat_pernyataan_miskin',
+                'type'          => 'hidden',
+            ];
+            $this->data['name'] = [
+                'name'          => 'name',
+                'id'            => 'name',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['nik'] = [
+                'name'          => 'nik',
+                'id'            => 'nik',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthplace'] = [
+                'name'          => 'birthplace',
+                'id'            => 'birthplace',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthdate'] = [
+                'name'          => 'birthdate',
+                'id'            => 'birthdate',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['phone'] = [
+                'name'          => 'phone',
+                'id'            => 'phone',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['gender'] = [
+                'name'          => 'gender',
+                'id'            => 'gender',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['gender_value'] = [
+                ''              => '- Pilih Jenis Kelamin -',
+                '1'             => 'Laki-laki',
+                '2'             => 'Perempuan',
+            ];
+            $this->data['kebangsaan'] = [
+                'name'          => 'kebangsaan',
+                'id'            => 'kebangsaan',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['kebangsaan_value'] = [
+                ''              => '- Pilih Kebangsaan -',
+                '1'             => 'Warga Negara Indonesia',
+                '2'             => 'Warga Negara Asing',
+            ];
+            $this->data['agama'] = [
+                'name'          => 'agama',
+                'id'            => 'agama',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['address'] = [
+                'name'          => 'address',
+                'id'            => 'address',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+
+            $this->load->view('back/surat_pernyataan_miskin/surat_pernyataan_miskin_edit', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_pernyataan_miskin');
+        }
+    }
+
+    function update_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
+        $this->form_validation->set_rules('agama', 'Agama', 'required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //TODO Jika data tidak lolos validasi
+        if ($this->form_validation->run() === FALSE) {
+            $this->update($this->input->post('id_surat_pernyataan_miskin'));
+        } else {
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'nik'                   => $this->input->post('nik'),
+                'phone'                 => $this->input->post('phone'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'gender'                => $this->input->post('gender'),
+                'kebangsaan'            => $this->input->post('kebangsaan'),
+                'agama_id'              => $this->input->post('agama'),
+                'address'               => $this->input->post('address'),
+                'modified_by'           => $this->session->username,
+            );
+
+            //TODO Jalankan proses update
+            $this->Surat_pernyataan_miskin_model->update($this->input->post('id_surat_pernyataan_miskin'), $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/surat_pernyataan_miskin');
+        }
+    }
+
     function delete($id_surat_pernyataan_miskin)
     {
         is_delete();
