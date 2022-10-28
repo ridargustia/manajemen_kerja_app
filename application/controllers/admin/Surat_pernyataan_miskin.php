@@ -626,8 +626,8 @@ class Surat_pernyataan_miskin extends CI_Controller
 
         if (!empty($row->signature_image)) {
             //TODO Image
-            $pdf->Cell(50, 6, $pdf->Image($stempel, $pdf->GetX() + 100, $pdf->GetY() - 15, 35, 35), 0, 1, 'C');
-            $pdf->Cell(50, 6, $pdf->Image($ttd_kades, $pdf->GetX() + 120, $pdf->GetY() - 17, 35, 25), 0, 1, 'C');
+            $pdf->Cell(50, 6, $pdf->Image($stempel, $pdf->GetX() + 0, $pdf->GetY() - 15, 35, 35), 0, 1, 'C');
+            $pdf->Cell(50, 6, $pdf->Image($ttd_kades, $pdf->GetX() + 23, $pdf->GetY() - 17, 35, 25), 0, 1, 'C');
         }
 
         $pdf->SetFont('Arial', 'BU', '12');
@@ -636,6 +636,67 @@ class Surat_pernyataan_miskin extends CI_Controller
         $pdf->Cell(80, 8, strtoupper($row->name), 0, 1, 'C');
 
         $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
+    }
+
+    function signature($id_surat_pernyataan_miskin)
+    {
+        //TODO Authentikasi hak akses usertype
+        if (is_superadmin()) {
+            $this->session->set_flashdata('message', 'tidak memiliki akses');
+            redirect('admin/dashboard');
+        }
+
+        //TODO Get data surat_pernyataan_miskin by id
+        $this->data['surat_pernyataan_miskin'] = $this->Surat_pernyataan_miskin_model->get_by_id($id_surat_pernyataan_miskin);
+
+        //TODO Cek apakah data surat_pernyataan_miskin ada
+        if ($this->data['surat_pernyataan_miskin']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'ACC Dokumen ' . $this->data['module'];
+
+            //TODO Rancangan form
+            $this->data['id_surat_pernyataan_miskin'] = [
+                'name'          => 'id_surat_pernyataan_miskin',
+                'id'            => 'id_surat_pernyataan_miskin',
+                'type'          => 'hidden',
+            ];
+
+            //TODO load view tampilan signature
+            $this->load->view('back/surat_pernyataan_miskin/surat_pernyataan_miskin_signature', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_pernyataan_miskin');
+        }
+    }
+
+    function signature_action()
+    {
+        //TODO Dekripsi chipertext dengan metode base64
+        $data = base64_decode($this->input->post('image'));
+
+        //TODO Set direktori tempat menyimpan tanda tangan
+        $file = './assets/signature_images/' . uniqid() . '.png';
+        //TODO Jalankan proses penyimpanan file image ke direktori
+        file_put_contents($file, $data);
+
+        //TODO Hilangkan karakter './' pada variabel direktori file
+        $image = str_replace('./', '', $file);
+
+        //TODO Simpan pada array
+        $data = array(
+            'signature_image'       => $image,
+            'is_readed_masteradmin' => '1',
+            'token'                 => substr(md5(random_bytes(10)), 0, 10),
+            'acc_by'                => $this->session->username,
+            'acc_at'                => date('Y-m-d H:i:a'),
+        );
+
+        //TODO Jalankan proses update
+        $this->Surat_pernyataan_miskin_model->update($this->input->post('id_surat_pernyataan_miskin'), $data);
+
+        write_log();
+
+        $this->session->set_flashdata('message', 'Sukses');
     }
 
     function check_format_phone()
