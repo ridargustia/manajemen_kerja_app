@@ -80,6 +80,16 @@ class Surat_rekomendasi_model extends CI_Model
         return $this->db->get($this->table)->num_rows();
     }
 
+    function get_by_id_for_document($id)
+    {
+        $this->db->join('status', 'surat_rekomendasi.status_id = status.id_status');
+        $this->db->join('agama', 'surat_rekomendasi.agama_id = agama.id_agama');
+        $this->db->join('pekerjaan', 'surat_rekomendasi.pekerjaan_id = pekerjaan.id_pekerjaan');
+
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);
