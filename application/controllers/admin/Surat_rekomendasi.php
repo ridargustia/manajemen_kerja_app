@@ -430,8 +430,10 @@ class Surat_rekomendasi extends CI_Controller
     {
         is_delete();
 
+        //TODO Get surat_rekomendasi by id
         $delete = $this->Surat_rekomendasi_model->get_by_id($id_surat_rekomendasi);
 
+        //TODO Jika data surat_rekomendasi ditemukan
         if ($delete) {
             $data = array(
                 'is_delete'   => '1',
@@ -439,13 +441,16 @@ class Surat_rekomendasi extends CI_Controller
                 'deleted_at'  => date('Y-m-d H:i:a'),
             );
 
+            //TODO Jalankan proses softdelete
             $this->Surat_rekomendasi_model->soft_delete($id_surat_rekomendasi, $data);
 
             write_log();
 
+            //TODO Kirim notifikasi berhasil dihapus
             $this->session->set_flashdata('message', 'dihapus');
             redirect('admin/surat_rekomendasi');
         } else {
+            //TODO Kirim notifikasi data tidak ditemukan
             $this->session->set_flashdata('message', 'tidak ditemukan');
             redirect('admin/surat_rekomendasi');
         }
