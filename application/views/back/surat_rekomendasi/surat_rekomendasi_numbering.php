@@ -95,9 +95,9 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Status Pernikahan</td>
+                                        <td>Status</td>
                                         <td>:</td>
-                                        <td class="text-left"><?php echo $status->status_name ?></td>
+                                        <td class="text-left"><?php echo $pekerjaan->pekerjaan_name ?></td>
                                     </tr>
                                     <tr>
                                         <td>Kewarganegaraan</td>

@@ -214,6 +214,58 @@ class Surat_rekomendasi extends CI_Controller
         }
     }
 
+    function auth_download()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Authentikasi Download Dokumen';
+        $this->data['action']     = 'surat_rekomendasi/auth_download_action';
+
+        //TODO Kondisi menampilkan halaman Auth download dokumen
+        $this->data['token'] = [
+            'name'              => 'token',
+            'id'                => 'token',
+            'class'             => 'form-control',
+            'autocomplete'      => 'off',
+            'required'          => '',
+            'value'             => $this->form_validation->set_value('token'),
+        ];
+
+        //TODO Load view halaman login
+        $this->load->view('front/surat/auth_download_surat_rekomendasi', $this->data);
+    }
+
+    function auth_download_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('token', 'Token', 'trim|required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //?Apakah validasi gagal?
+        if ($this->form_validation->run() === FALSE) {
+            //TODO Kondisi validasi gagal, redirect ke halaman create
+            redirect('surat_rekomendasi/auth_download');
+        } else {
+            $this->data['surat_rekomendasi'] = $this->Surat_rekomendasi_model->get_by_token($this->input->post('token'));
+
+            if ($this->data['surat_rekomendasi']) {
+                $this->data['page_title'] = 'Download ' . $this->data['module'];
+
+                $this->data['status'] = $this->Status_model->get_by_id($this->data['surat_rekomendasi']->status_id);
+                $this->data['agama'] = $this->Agama_model->get_by_id($this->data['surat_rekomendasi']->agama_id);
+                $this->data['pekerjaan'] = $this->Pekerjaan_model->get_by_id($this->data['surat_rekomendasi']->pekerjaan_id);
+
+                $this->load->view('front/surat/download_surat_rekomendasi', $this->data);
+            } else {
+                //TODO Tampilkan notifikasi dan redirect
+                $this->session->set_flashdata('message', '<div class="alert alert-danger">Akses gagal, silahkan hubungi Admin.</div>');
+                redirect('surat_rekomendasi/auth_download');
+            }
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
