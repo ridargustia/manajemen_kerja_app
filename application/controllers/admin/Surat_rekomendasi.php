@@ -517,6 +517,75 @@ class Surat_rekomendasi extends CI_Controller
         }
     }
 
+    function delete_permanent($id_surat_rekomendasi)
+    {
+        is_delete();
+
+        //TODO Get data surat_rekomendasi by id
+        $delete = $this->Surat_rekomendasi_model->get_by_id($id_surat_rekomendasi);
+
+        //TODO Jika data surat_rekomendasi yg akan dihapus ditemukan
+        if ($delete) {
+            //TODO Jalankan proses delete dengan model
+            $this->Surat_rekomendasi_model->delete($id_surat_rekomendasi);
+
+            write_log();
+
+            //TODO Kirim notifikasi berhasil dihapus permanen
+            $this->session->set_flashdata('message', 'dihapus');
+            redirect('admin/surat_rekomendasi/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_rekomendasi');
+        }
+    }
+
+    function deleted_list()
+    {
+        //TODO Inisialisasi variabel
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        //TODO Get data Surat Rekomendasi dari database
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Surat_rekomendasi_model->get_all_deleted_for_masteradmin();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Surat_rekomendasi_model->get_all_deleted();
+        }
+
+        $this->load->view('back/surat_rekomendasi/surat_rekomendasi_deleted_list', $this->data);
+    }
+
+    function restore($id_surat_rekomendasi)
+    {
+        is_restore();
+
+        //TODO Get data surat_rekomendasi by id
+        $row = $this->Surat_rekomendasi_model->get_by_id($id_surat_rekomendasi);
+
+        //TODO Jika data ditemukan
+        if ($row) {
+            $data = array(
+                'is_delete'   => '0',
+                'deleted_by'  => NULL,
+                'deleted_at'  => NULL,
+            );
+
+            //TODO Jalankan proses update dengan model
+            $this->Surat_rekomendasi_model->update($id_surat_rekomendasi, $data);
+
+            write_log();
+
+            //TODO Kirim notifikasi data berhasil dikembalikan
+            $this->session->set_flashdata('message', 'dikembalikan');
+            redirect('admin/surat_rekomendasi/deleted_list');
+        } else {
+            //TODO Kirim notifikasi data tidak ditemukan
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_rekomendasi');
+        }
+    }
+
     function check_format_phone()
     {
         $phone = $this->input->post('phone');
