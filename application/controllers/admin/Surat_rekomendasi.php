@@ -33,10 +33,16 @@ class Surat_rekomendasi extends CI_Controller
     {
         //TODO Authentication hak akses usertype
         is_read();
+
         //TODO Inisialisasi variabel judul
         $this->data['page_title'] = 'Data ' . $this->data['module'];
+
         //TODO Get data Surat Rekomendasi dari database
-        $this->data['get_all'] = $this->Surat_rekomendasi_model->get_all();
+        if (is_masteradmin()) {
+            $this->data['get_all'] = $this->Surat_rekomendasi_model->get_all_by_numbering();
+        } elseif (is_superadmin() or is_grandadmin()) {
+            $this->data['get_all'] = $this->Surat_rekomendasi_model->get_all();
+        }
 
         $this->load->view('back/surat_rekomendasi/surat_rekomendasi_list', $this->data);
     }

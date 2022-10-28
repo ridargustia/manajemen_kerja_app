@@ -14,10 +14,24 @@ class Surat_rekomendasi_model extends CI_Model
 
     function get_all()
     {
-        $this->db->select('surat_rekomendasi.id_surat_rekomendasi, surat_rekomendasi.nik, surat_rekomendasi.name, surat_rekomendasi.created_at, surat_rekomendasi.is_readed');
+        $this->db->select('surat_rekomendasi.id_surat_rekomendasi, surat_rekomendasi.nik, surat_rekomendasi.name, surat_rekomendasi.signature_image, surat_rekomendasi.created_at, surat_rekomendasi.is_readed');
 
         $this->db->where('surat_rekomendasi.is_delete', '0');
 
+        $this->db->order_by('surat_rekomendasi.is_readed', 'ASC');
+        $this->db->order_by($this->id, $this->order);
+
+        return $this->db->get($this->table)->result();
+    }
+
+    function get_all_by_numbering()
+    {
+        $this->db->select('surat_rekomendasi.id_surat_rekomendasi, surat_rekomendasi.nik, surat_rekomendasi.name, surat_rekomendasi.signature_image, surat_rekomendasi.created_at, surat_rekomendasi.is_readed_masteradmin');
+
+        $this->db->where('surat_rekomendasi.is_delete', '0');
+        $this->db->where('surat_rekomendasi.no_surat !=', NULL);
+
+        $this->db->order_by('surat_rekomendasi.is_readed_masteradmin', 'ASC');
         $this->db->order_by($this->id, $this->order);
 
         return $this->db->get($this->table)->result();
