@@ -245,6 +245,187 @@ class Surat_rekomendasi extends CI_Controller
         }
     }
 
+    function update($id_surat_rekomendasi)
+    {
+        is_update();
+
+        //TODO Get by id data surat_rekomendasi
+        $this->data['surat_rekomendasi']     = $this->Surat_rekomendasi_model->get_by_id($id_surat_rekomendasi);
+
+        //TODO Jika surat_rekomendasi ditemukan
+        if ($this->data['surat_rekomendasi']) {
+            //TODO Inisialisasi variabel
+            $this->data['page_title'] = 'Update Data ' . $this->data['module'];
+            $this->data['action']     = 'admin/surat_rekomendasi/update_action';
+
+            //TODO Get data untuk dropdown reference
+            $this->data['get_all_combobox_status'] = $this->Status_model->get_all_combobox();
+            $this->data['get_all_combobox_agama'] = $this->Agama_model->get_all_combobox();
+            $this->data['get_all_combobox_pekerjaan'] = $this->Pekerjaan_model->get_all_combobox();
+
+            //TODO Rancangan form
+            $this->data['id_surat_rekomendasi'] = [
+                'name'          => 'id_surat_rekomendasi',
+                'type'          => 'hidden',
+            ];
+            $this->data['name'] = [
+                'name'          => 'name',
+                'id'            => 'name',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['nik'] = [
+                'name'          => 'nik',
+                'id'            => 'nik',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthplace'] = [
+                'name'          => 'birthplace',
+                'id'            => 'birthplace',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['birthdate'] = [
+                'name'          => 'birthdate',
+                'id'            => 'birthdate',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['phone'] = [
+                'name'          => 'phone',
+                'id'            => 'phone',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['gender'] = [
+                'name'          => 'gender',
+                'id'            => 'gender',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['gender_value'] = [
+                ''              => '- Pilih Jenis Kelamin -',
+                '1'             => 'Laki-laki',
+                '2'             => 'Perempuan',
+            ];
+            $this->data['status'] = [
+                'name'          => 'status',
+                'id'            => 'status',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['kebangsaan'] = [
+                'name'          => 'kebangsaan',
+                'id'            => 'kebangsaan',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['kebangsaan_value'] = [
+                ''              => '- Pilih Kebangsaaan -',
+                '1'             => 'Warga Negara Indonesia',
+                '2'             => 'Warga Negara Asing',
+            ];
+            $this->data['agama'] = [
+                'name'          => 'agama',
+                'id'            => 'agama',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['pekerjaan'] = [
+                'name'          => 'pekerjaan',
+                'id'            => 'pekerjaan',
+                'class'         => 'form-control',
+                'required'      => '',
+            ];
+            $this->data['address'] = [
+                'name'          => 'address',
+                'id'            => 'address',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['perguruan_tinggi'] = [
+                'name'          => 'perguruan_tinggi',
+                'id'            => 'perguruan_tinggi',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+            $this->data['address_pt'] = [
+                'name'          => 'address_pt',
+                'id'            => 'address_pt',
+                'class'         => 'form-control',
+                'autocomplete'  => 'off',
+                'required'      => '',
+            ];
+
+            $this->load->view('back/surat_rekomendasi/surat_rekomendasi_edit', $this->data);
+        } else {
+            $this->session->set_flashdata('message', 'tidak ditemukan');
+            redirect('admin/surat_rekomendasi');
+        }
+    }
+
+    function update_action()
+    {
+        //TODO sistem validasi data inputan
+        $this->form_validation->set_rules('name', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
+        $this->form_validation->set_rules('birthplace', 'Tempat Lahir', 'trim|required');
+        $this->form_validation->set_rules('birthdate', 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('phone', 'No HP/Telepon', 'required|is_numeric');
+        $this->form_validation->set_rules('gender', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('status', 'Status Pernikahan', 'required');
+        $this->form_validation->set_rules('kebangsaan', 'Kebangsaan', 'required');
+        $this->form_validation->set_rules('agama', 'Agama', 'required');
+        $this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required');
+        $this->form_validation->set_rules('address', 'Alamat', 'required');
+        $this->form_validation->set_rules('perguruan_tinggi', 'Perguruan Tinggi', 'required');
+        $this->form_validation->set_rules('address_pt', 'Alamat Perguruan Tinggi', 'required');
+
+        $this->form_validation->set_message('required', '{field} wajib diisi');
+        $this->form_validation->set_message('is_numeric', '{field} harus angka');
+
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+
+        //TODO Jika data tidak lolos validasi
+        if ($this->form_validation->run() === FALSE) {
+            $this->update($this->input->post('id_surat_rekomendasi'));
+        } else {
+            //TODO Simpan data ke array
+            $data = array(
+                'name'                  => $this->input->post('name'),
+                'nik'                   => $this->input->post('nik'),
+                'birthplace'            => $this->input->post('birthplace'),
+                'birthdate'             => $this->input->post('birthdate'),
+                'phone'                 => $this->input->post('phone'),
+                'gender'                => $this->input->post('gender'),
+                'status_id'             => $this->input->post('status'),
+                'kebangsaan'            => $this->input->post('kebangsaan'),
+                'agama_id'              => $this->input->post('agama'),
+                'pekerjaan_id'          => $this->input->post('pekerjaan'),
+                'address'               => $this->input->post('address'),
+                'perguruan_tinggi'      => $this->input->post('perguruan_tinggi'),
+                'address_pt'            => $this->input->post('address_pt'),
+                'modified_by'           => $this->session->username,
+            );
+
+            //TODO Jalankan proses update
+            $this->Surat_rekomendasi_model->update($this->input->post('id_surat_rekomendasi'), $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', 'Sukses');
+            redirect('admin/surat_rekomendasi');
+        }
+    }
+
     function delete($id_surat_rekomendasi)
     {
         is_delete();
