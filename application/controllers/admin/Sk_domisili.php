@@ -561,9 +561,9 @@ class Sk_domisili extends CI_Controller
         require FCPATH . '/vendor/autoload.php';
         require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
 
-        $image = FCPATH . 'assets\images\kop_surat.png';
-        $ttd_kades = base_url($row->signature_image);
-        $stempel = base_url('assets/images/stempel.png');
+        $image = 'assets\images\kop_surat.png';
+        $ttd_kades = $row->signature_image;
+        $stempel = 'assets/images/stempel.png';
 
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->SetTitle($this->data['module'] . ' a.n ' . $row->name);
