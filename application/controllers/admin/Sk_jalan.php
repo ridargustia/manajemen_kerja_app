@@ -787,7 +787,7 @@ class Sk_jalan extends CI_Controller
         $data = array(
             'signature_image'       => $image,
             'is_readed_masteradmin' => '1',
-            'token'                 => substr(md5(random_bytes(10)), 0, 10),
+            'token'                 => rand(),
             'acc_by'                => $this->session->username,
             'acc_at'                => date('Y-m-d H:i:a'),
         );
