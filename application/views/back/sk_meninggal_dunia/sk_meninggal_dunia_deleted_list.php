@@ -82,11 +82,11 @@
             $('#dataTable').DataTable({
                 "rowCallback": function(row, data, index) {
                     if (data[5] == "0") {
-                        $('td', row).css('background-color', '#DCDCDC');
+                        $('td', row).css('background-color', '#9FE2BF');
                     }
 
                     if (data[4] == "0") {
-                        $('td', row).css('background-color', '#DCDCDC');
+                        $('td', row).css('background-color', '#9FE2BF');
                     }
                 }
             });
