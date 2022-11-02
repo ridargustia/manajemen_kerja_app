@@ -37,6 +37,8 @@
   			hideClass: {
   				popup: 'animate__animated animate__fadeOutUp'
   			},
+  		}).then((result) => {
+  			window.location.replace('https://saobi.eduarsip.id/index.php/surat/');
   		});
   	} else if (flashData === 'no HP/Telephone salah') {
   		Swal.fire({
