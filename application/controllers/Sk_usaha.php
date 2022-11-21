@@ -378,7 +378,7 @@ class Sk_usaha extends CI_Controller
         $pdf->Cell(107);
         $pdf->Cell(60, 8, strtoupper($data_master->name), 0, 1, 'C');
 
-        $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
+        $pdf->Output('D', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
     }
 
     function check_format_phone()

@@ -376,7 +376,7 @@ class Sk_hilang_ktp extends CI_Controller
         $pdf->Cell(80, 8, strtoupper($row->name), 0, 0, 'C');
         $pdf->Cell(65, 8, strtoupper($data_master->name), 0, 1, 'R');
 
-        $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
+        $pdf->Output('D', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
     }
 
     function check_format_phone()

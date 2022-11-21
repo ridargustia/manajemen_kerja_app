@@ -415,7 +415,7 @@ class Sk_nikah extends CI_Controller
         $pdf->Cell(80, 8, strtoupper($row->suami_name), 0, 0, 'C');
         $pdf->Cell(65, 8, strtoupper($data_master->name), 0, 1, 'R');
 
-        $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->suami_name . '.pdf');
+        $pdf->Output('D', $this->data['module'] . ' a.n ' . $row->suami_name . '.pdf');
     }
 
     function check_format_phone()

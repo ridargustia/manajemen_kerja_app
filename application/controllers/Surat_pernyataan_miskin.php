@@ -352,7 +352,7 @@ class Surat_pernyataan_miskin extends CI_Controller
         $pdf->Cell(13, 8, '', 0, 0, 'C');
         $pdf->Cell(80, 8, strtoupper($row->name), 0, 1, 'C');
 
-        $pdf->Output('I', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
+        $pdf->Output('D', $this->data['module'] . ' a.n ' . $row->name . '.pdf');
     }
 
     function check_format_phone()
